@@ -17,6 +17,11 @@ resource "aws_instance" "default" {
   key_name = "${aws_key_pair.default.key_name}"
 }
 
+resource "aws_eip" "lb" {
+  instance = "${aws_instance.default.id}"
+  vpc      = true
+}
+
 # Apply the tf_github_authorized_keys module for this resource
 module "github_authorized_keys" {
   source              = "git::https://github.com/cloudposse/tf_github_authorized_keys?ref=init"
