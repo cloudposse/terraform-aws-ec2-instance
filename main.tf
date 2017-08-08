@@ -3,18 +3,13 @@
 resource "aws_key_pair" "default" {
   key_name   = "admin-key"
   public_key = "${var.ssh_key}"
-  tags = "${module.tf_label.tags}"
 }
 
 resource "aws_instance" "default" {
   ami           = "ami-408c7f28"
   instance_type = "t1.micro"
-
-  tags {
-    Name = "admin"
-  }
-
-  key_name = "${aws_key_pair.default.key_name}"
+  tags          = "${module.tf_label.tags}"
+  key_name      = "${aws_key_pair.default.key_name}"
 }
 
 resource "aws_eip" "lb" {

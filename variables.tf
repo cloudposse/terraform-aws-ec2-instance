@@ -8,8 +8,14 @@ variable "github_team" {}
 
 variable "playbook" {}
 
-variable "namespace" { default = "global" }
+variable "namespace" {
+  default = "global"
+}
 
-variable "stage" { default = "default" }
+variable "stage" {
+  default = "default"
+}
 
-variable "name" { default = "admin" }
+variable "name" {
+  default = "admin"
+}
