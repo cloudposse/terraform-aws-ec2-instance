@@ -19,3 +19,7 @@ variable "stage" {
 variable "name" {
   default = "admin"
 }
+
+variable "ec2_ami" {
+  default = "ami-408c7f28"
+}

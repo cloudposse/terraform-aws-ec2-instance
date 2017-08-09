@@ -3,5 +3,9 @@ output "ssh_key" {
 }
 
 output "ip" {
-  value = "${aws_eip.lb.public_ip}"
+  value = "${aws_eip.default.public_ip}"
+}
+
+output "public_hostname" {
+  value = "${aws_instance.default.public_dns}"
 }
