@@ -27,14 +27,14 @@ module "github_authorized_keys" {
 
 # Apply the provisioner module for this resource
 module "ansible_provisioner" {
-  source   = "git::https://github.com/cloudposse/tf_ansible?ref=0.1.0"
+  source   = "git::https://github.com/cloudposse/tf_ansible?ref=tags/0.1.0"
   envs     = ["host=${aws_instance.default.private_ip}"]
   playbook = "${var.playbook}"
 }
 
 # Apply the tf_label module for this resource
 module "tf_label" {
-  source    = "git::https://github.com/cloudposse/tf_label?ref=0.1.0"
+  source    = "git::https://github.com/cloudposse/tf_label?ref=tags/0.1.0"
   namespace = "${var.namespace}"
   stage     = "${var.stage}"
   name      = "${var.name}"
