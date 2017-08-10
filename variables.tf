@@ -1,4 +1,4 @@
-variable "ssh_key" {}
+variable "ssh_key_pair" {}
 
 variable "github_api_token" {}
 

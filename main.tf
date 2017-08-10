@@ -2,7 +2,7 @@
 
 resource "aws_key_pair" "default" {
   key_name   = "${module.tf_label.id}"
-  public_key = "${var.ssh_key}"
+  public_key = "${var.ssh_key_pair}"
 }
 
 resource "aws_instance" "default" {
@@ -10,6 +10,9 @@ resource "aws_instance" "default" {
   instance_type = "t1.micro"
   tags          = "${module.tf_label.tags}"
   key_name      = "${aws_key_pair.default.key_name}"
+  user_data     = {
+    "${module.tf_github_authorized_keys.user_data}",
+  }
 }
 
 resource "aws_eip" "default" {
