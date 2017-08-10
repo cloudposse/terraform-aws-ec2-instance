@@ -10,9 +10,7 @@ resource "aws_instance" "default" {
   instance_type = "t1.micro"
   tags          = "${module.tf_label.tags}"
   key_name      = "${aws_key_pair.default.key_name}"
-  user_data     = {
-    "${module.tf_github_authorized_keys.user_data}",
-  }
+  user_data     = "${module.tf_github_authorized_keys.user_data}"
 }
 
 resource "aws_eip" "default" {
@@ -21,7 +19,7 @@ resource "aws_eip" "default" {
 }
 
 # Apply the tf_github_authorized_keys module for this resource
-module "github_authorized_keys" {
+module "tf_github_authorized_keys" {
   source              = "git::https://github.com/cloudposse/tf_github_authorized_keys.git?ref=0.1.0"
   github_api_token    = "${var.github_api_token}"
   github_organization = "${var.github_organization}"
