@@ -8,6 +8,8 @@ variable "github_team" {}
 
 variable "playbook" {}
 
+variable "instance_type" {}
+
 variable "namespace" {
   default = "global"
 }

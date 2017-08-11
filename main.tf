@@ -2,7 +2,7 @@
 
 resource "aws_instance" "default" {
   ami           = "${var.ec2_ami}"
-  instance_type = "t1.micro"
+  instance_type = "var.instance_type"
   tags          = "${module.tf_label.tags}"
   key_name      = "${var.ssh_key_pair}"
   user_data     = "${module.tf_github_authorized_keys.user_data}"
