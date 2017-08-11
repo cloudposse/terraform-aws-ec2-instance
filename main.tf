@@ -1,15 +1,10 @@
 # Using tf_ansible module
 
-resource "aws_key_pair" "default" {
-  key_name   = "${module.tf_label.id}"
-  public_key = "${var.ssh_key_pair}"
-}
-
 resource "aws_instance" "default" {
   ami           = "${var.ec2_ami}"
   instance_type = "t1.micro"
   tags          = "${module.tf_label.tags}"
-  key_name      = "${aws_key_pair.default.key_name}"
+  key_name      = "${var.ssh_key_pair}"
   user_data     = "${module.tf_github_authorized_keys.user_data}"
 }
 
