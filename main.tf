@@ -22,7 +22,7 @@ module "tf_github_authorized_keys" {
 }
 
 # Apply the provisioner module for this resource
-module "ansible_provisioner" {
+module "tf_ansible_provisioner" {
   source   = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.1.0"
   envs     = ["host=${aws_instance.default.private_ip}"]
   playbook = "${var.playbook}"
