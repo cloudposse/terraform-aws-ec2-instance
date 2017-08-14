@@ -6,7 +6,15 @@ variable "github_organization" {}
 
 variable "github_team" {}
 
-variable "playbook" {}
+variable "ansible_playbook" {}
+
+variable "associate_public_ip_address" {
+  default = "true"
+}
+
+variable "ansible_arguments" {
+  type = "list"
+}
 
 variable "instance_type" {
   default = "t2.micro"

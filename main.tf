@@ -56,6 +56,16 @@ resource "aws_security_group" "default" {
     Stage     = "${var.stage}"
   }
 
+  egress {
+    protocol  = "-1"
+    from_port = 0
+    to_port   = 0
+
+    cidr_blocks = [
+      "0.0.0.0/0",
+    ]
+  }
+
   ingress {
     protocol  = "tcp"
     from_port = 22
@@ -85,11 +95,12 @@ resource "aws_instance" "default" {
   user_data = "${module.tf_github_authorized_keys.user_data}"
 
   vpc_security_group_ids = [
-    "${compact(concat(list(aws_security_group.default.id), var.security_groups))}",
+    "${aws_security_group.default.id}",
+    "${var.security_groups}",
   ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
-  associate_public_ip_address = "true"
+  associate_public_ip_address = "${var.associate_public_ip_address}"
 
   key_name = "${var.ssh_key_pair}"
 
@@ -103,13 +114,15 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
+  count    = "${signum(length(var.associate_public_ip_address)) == 1 ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
 }
 
 # Apply the provisioner module for this resource
 module "tf_ansible_provisioner" {
-  source   = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.1.0"
-  envs     = ["host=${aws_eip.default.public_ip}"]
-  playbook = "${var.playbook}"
+  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.2.0"
+  arguments = "${var.ansible_arguments}"
+  envs      = ["host=${aws_eip.default.public_ip}"]
+  playbook  = "${var.ansible_playbook}"
 }
