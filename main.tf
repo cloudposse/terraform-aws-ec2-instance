@@ -33,13 +33,6 @@ module "tf_github_authorized_keys" {
   github_team         = "${var.github_team}"
 }
 
-# Apply the provisioner module for this resource
-module "tf_ansible_provisioner" {
-  source   = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.1.0"
-  envs     = ["host=${aws_instance.default.private_ip}"]
-  playbook = "${var.playbook}"
-}
-
 resource "aws_iam_instance_profile" "default" {
   name = "${module.label.id}"
   role = "${aws_iam_role.default.name}"
@@ -112,4 +105,11 @@ resource "aws_instance" "default" {
 resource "aws_eip" "default" {
   instance = "${aws_instance.default.id}"
   vpc      = true
+}
+
+# Apply the provisioner module for this resource
+module "tf_ansible_provisioner" {
+  source   = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.1.0"
+  envs     = ["host=${aws_eip.default.public_ip}"]
+  playbook = "${var.playbook}"
 }
