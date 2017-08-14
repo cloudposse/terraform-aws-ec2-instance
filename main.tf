@@ -55,7 +55,7 @@ resource "aws_iam_role" "default" {
 resource "aws_security_group" "default" {
   name        = "${module.label.id}"
   vpc_id      = "${var.vpc_id}"
-  description = "Bastion security group (only SSH inbound access is allowed)"
+  description = "Instance security group (only SSH inbound access is allowed)"
 
   tags {
     Name      = "${module.label.id}"
