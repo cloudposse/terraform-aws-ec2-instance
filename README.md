@@ -9,12 +9,15 @@ Include this repository as a module in your existing terraform code:
 ```
 module "admin_tier" {
   source              = "git::https://github.com/cloudposse/tf_instance.git?ref=tags/0.1.0"
-  playbook            = "../ansible/playbooks/admin_tier.yml"
+  playbook            = "${var.playbook}"
   ssh_key_pair        = "${var.ssh_key_pair}"
   github_api_token    = "${var.github_api_token}"
   github_organization = "${var.github_organization}"
   github_team         = "${var.github_team}"
   instance_type       = "${var.instance_type}"
+  vpc_id              = "${var.vpc_id}"
+  security_groups     = ["${var.security_groups}"]
+  subnets             = ["${var.subnets}"]
 }
 ```
 
@@ -43,13 +46,16 @@ resource "aws_ami_from_instance" "example" {
 | namespace                    | `global`       | Namespace (e.g. `cp` or `cloudposse`) - required for tf_label module | Yes |
 | stage                        | `default`      | Stage (e.g. `prod`, `dev`, `staging` - required for tf_label module  | Yes |
 | name                         | `admin`        | Name  (e.g. `bastion` or `db`) - required for tf_label module        | Yes |
-| ec2_ami                      | `ami-408c7f28` | By default it is an AMI provided by Amazon with Ubuntu 14.04         | Yes |
+| ec2_ami                      | `ami-408c7f28` | By default it is an AMI provided by Amazon with Ubuntu 14.04         | No  |
 | ssh_key_pair                 | ``             | SSH key pair to be provisioned on instance                           | Yes |
 | github_api_token             | ``             | GitHub API token                                                     | Yes |
 | github_organization          | ``             | GitHub organization name                                             | Yes |
 | github_team                  | ``             | GitHub team                                                          | Yes |
-| playbook                     | ``             | Path to the playbook - required for ansible_provisioner              | Yes |
-| instance_type                | ``             | The type of the creating instance (e.g. `t1.micro`)                  | Yes |
+| playbook                     | ``             | Path to the playbook - required for ansible_provisioner (e.g. `./admin_tier.yml`)|Yes|
+| instance_type                | `t2.micro`     | The type of the creating instance (e.g. `t2.micro`)                  | No  |
+| vpc_id                       | ``             | The id of the VPC that the creating instance security group belongs to| Yes|
+| security_groups              | []             | List of Security Group IDs allowed to connect to creating instance   | Yes |
+| subnets                      | []             | List of VPC Subnet IDs creating instance launched in                 | Yes |
 
 ## Outputs
 
@@ -58,5 +64,10 @@ resource "aws_ami_from_instance" "example" {
 | id                | Disambiguated ID      |
 | public_hostname   | Normalized name       |
 | public_ip         | Normalized namespace  |
+| ssh_key_pair      | Name of used AWS SSH key|
+| security_group_id | ID on the new AWS Security Group associated with creating instance|
+| role              | Name of AWS IAM Role associated with creating instance|
 
 
+## References
+* Thanks to https://github.com/cloudposse/tf_bastion for the inspiration
