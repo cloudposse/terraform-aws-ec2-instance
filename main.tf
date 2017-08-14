@@ -26,7 +26,7 @@ module "label" {
 }
 
 # Apply the tf_github_authorized_keys module for this resource
-module "tf_github_authorized_keys" {
+module "github_authorized_keys" {
   source              = "git::https://github.com/cloudposse/tf_github_authorized_keys.git?ref=tags/0.1.0"
   github_api_token    = "${var.github_api_token}"
   github_organization = "${var.github_organization}"
@@ -92,7 +92,7 @@ resource "aws_instance" "default" {
   ami           = "${var.ec2_ami}"
   instance_type = "${var.instance_type}"
 
-  user_data = "${module.tf_github_authorized_keys.user_data}"
+  user_data = "${module.github_authorized_keys.user_data}"
 
   vpc_security_group_ids = [
     "${aws_security_group.default.id}",
@@ -120,7 +120,7 @@ resource "aws_eip" "default" {
 }
 
 # Apply the provisioner module for this resource
-module "tf_ansible_provisioner" {
+module "ansible" {
   source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.2.0"
   arguments = "${var.ansible_arguments}"
   envs      = ["host=${aws_eip.default.public_ip}"]
