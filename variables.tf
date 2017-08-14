@@ -35,5 +35,5 @@ variable "name" {
 }
 
 variable "ec2_ami" {
-  default = "ami-408c7f28"
+  default = "ami-cd0f5cb6"
 }
