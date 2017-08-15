@@ -77,7 +77,9 @@ resource "aws_instance" "default" {
 
   user_data = "${module.github_authorized_keys.user_data}"
 
-  vpc_security_group_ids = "${compact(concat(list(aws_security_group.default.id), var.security_groups))}"
+  vpc_security_group_ids = [
+    "${compact(concat(list(aws_security_group.default.id), var.security_groups))}"
+  ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
