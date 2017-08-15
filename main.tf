@@ -76,6 +76,30 @@ resource "aws_security_group" "default" {
     ]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# Apply the tf_label module for this resource
+module "label_additional" {
+  source    = "git::https://github.com/cloudposse/tf_label.git?ref=tags/0.1.0"
+  namespace = "${var.namespace}"
+  stage     = "${var.stage}"
+  name      = "${var.name}-additional"
+}
+
+resource "aws_security_group" "additional" {
+  name        = "${module.label_additional.id}"
+  vpc_id      = "${var.vpc_id}"
+  description = "Instance security group (allow access from additional Security Groups)"
+
+  tags {
+    Name      = "${module.label_additional.id}"
+    Namespace = "${var.namespace}"
+    Stage     = "${var.stage}"
+  }
+
   ingress {
     from_port       = 0
     to_port         = 0
@@ -96,7 +120,7 @@ resource "aws_instance" "default" {
 
   vpc_security_group_ids = [
     "${aws_security_group.default.id}",
-    "${var.security_groups}",
+    "${aws_security_group.additional.id}",
   ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"

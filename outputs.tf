@@ -18,6 +18,10 @@ output "security_group_id" {
   value = "${aws_security_group.default.id}"
 }
 
+output "additional_security_group_id" {
+  value = "${aws_security_group.additional.id}"
+}
+
 output "role" {
   value = "${aws_iam_role.default.name}"
 }
