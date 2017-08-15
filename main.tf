@@ -66,47 +66,6 @@ resource "aws_security_group" "default" {
     ]
   }
 
-  ingress {
-    protocol  = "tcp"
-    from_port = 22
-    to_port   = 22
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# Apply the tf_label module for this resource
-module "label_additional" {
-  source    = "git::https://github.com/cloudposse/tf_label.git?ref=tags/0.1.0"
-  namespace = "${var.namespace}"
-  stage     = "${var.stage}"
-  name      = "${var.name}-additional"
-}
-
-resource "aws_security_group" "additional" {
-  name        = "${module.label_additional.id}"
-  vpc_id      = "${var.vpc_id}"
-  description = "Instance security group (allow access from additional Security Groups)"
-
-  tags {
-    Name      = "${module.label_additional.id}"
-    Namespace = "${var.namespace}"
-    Stage     = "${var.stage}"
-  }
-
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = -1
-    security_groups = ["${var.security_groups}"]
-  }
-
   lifecycle {
     create_before_destroy = true
   }
@@ -118,10 +77,7 @@ resource "aws_instance" "default" {
 
   user_data = "${module.github_authorized_keys.user_data}"
 
-  vpc_security_group_ids = [
-    "${aws_security_group.default.id}",
-    "${aws_security_group.additional.id}",
-  ]
+  vpc_security_group_ids = "${compact(concat(list(aws_security_group.default.id), var.security_groups))}"
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
