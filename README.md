@@ -4,6 +4,8 @@ Terraform Module for providing a server capable of running admin tasks. Use `tf_
 
 ## Usage
 
+Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
+
 Include this repository as a module in your existing terraform code:
 
 ```
