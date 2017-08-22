@@ -25,14 +25,6 @@ module "label" {
   name      = "${var.name}"
 }
 
-# Apply the tf_github_authorized_keys module for this resource
-module "github_authorized_keys" {
-  source              = "git::https://github.com/cloudposse/tf_github_authorized_keys.git?ref=tags/0.1.0"
-  github_api_token    = "${var.github_api_token}"
-  github_organization = "${var.github_organization}"
-  github_team         = "${var.github_team}"
-}
-
 resource "aws_iam_instance_profile" "default" {
   name = "${module.label.id}"
   role = "${aws_iam_role.default.name}"
@@ -71,11 +63,29 @@ resource "aws_security_group" "default" {
   }
 }
 
+# Apply the tf_github_authorized_keys module for this resource
+module "github_authorized_keys" {
+  source              = "git::https://github.com/cloudposse/tf_github_authorized_keys.git?ref=tags/0.1.0"
+  github_api_token    = "${var.github_api_token}"
+  github_organization = "${var.github_organization}"
+  github_team         = "${var.github_team}"
+}
+
+data "template_file" "user_data" {
+  template = "${file("${path.module}/user_data.sh")}"
+
+  vars {
+    user_data        = "${join("\n", compact(concat(var.user_data, list(module.github_authorized_keys.user_data))))}"
+    welcome_message  = "${var.welcome_message}"
+    ssh_user         = "${var.ssh_user}"
+  }
+}
+
 resource "aws_instance" "default" {
   ami           = "${var.ec2_ami}"
   instance_type = "${var.instance_type}"
 
-  user_data = "${module.github_authorized_keys.user_data}"
+  user_data = "${data.template_file.user_data.rendered}"
 
   vpc_security_group_ids = [
     "${compact(concat(list(aws_security_group.default.id), var.security_groups))}"
@@ -103,7 +113,7 @@ resource "aws_eip" "default" {
 
 # Apply the provisioner module for this resource
 module "ansible" {
-  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.2.0"
+  source    = "git::https://github.com/cloudposse/tf_ansible.git"
   arguments = "${var.ansible_arguments}"
   envs      = ["host=${aws_eip.default.public_ip}"]
   playbook  = "${var.ansible_playbook}"
