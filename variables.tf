@@ -16,6 +16,7 @@ variable "associate_public_ip_address" {
 
 variable "ansible_arguments" {
   type = "list"
+  default = []
 }
 
 variable "instance_type" {
