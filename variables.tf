@@ -6,7 +6,9 @@ variable "github_organization" {}
 
 variable "github_team" {}
 
-variable "ansible_playbook" {}
+variable "ansible_playbook" {
+  default = ""
+}
 
 variable "associate_public_ip_address" {
   default = "true"
@@ -14,6 +16,7 @@ variable "associate_public_ip_address" {
 
 variable "ansible_arguments" {
   type = "list"
+  default = []
 }
 
 variable "instance_type" {
@@ -44,4 +47,17 @@ variable "name" {
 
 variable "ec2_ami" {
   default = "ami-cd0f5cb6"
+}
+
+variable "user_data" {
+  type    = "list"
+  default = []
+}
+
+variable "ssh_user" {
+  default = "ubuntu"
+}
+
+variable "welcome_message" {
+  default = ""
 }
