@@ -21,3 +21,7 @@ output "security_group_id" {
 output "role" {
   value = "${aws_iam_role.default.name}"
 }
+
+output "alarm" {
+  value = "${aws_cloudwatch_metric_alarm.reboot.id}"
+}

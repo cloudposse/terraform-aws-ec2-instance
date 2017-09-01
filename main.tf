@@ -75,9 +75,9 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    user_data        = "${join("\n", compact(concat(var.user_data, list(module.github_authorized_keys.user_data))))}"
-    welcome_message  = "${var.welcome_message}"
-    ssh_user         = "${var.ssh_user}"
+    user_data       = "${join("\n", compact(concat(var.user_data, list(module.github_authorized_keys.user_data))))}"
+    welcome_message = "${var.welcome_message}"
+    ssh_user        = "${var.ssh_user}"
   }
 }
 
@@ -88,7 +88,7 @@ resource "aws_instance" "default" {
   user_data = "${data.template_file.user_data.rendered}"
 
   vpc_security_group_ids = [
-    "${compact(concat(list(aws_security_group.default.id), var.security_groups))}"
+    "${compact(concat(list(aws_security_group.default.id), var.security_groups))}",
   ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
@@ -117,4 +117,30 @@ module "ansible" {
   arguments = "${var.ansible_arguments}"
   envs      = ["host=${aws_eip.default.public_ip}"]
   playbook  = "${var.ansible_playbook}"
+}
+
+# Restart dead or hung instance
+
+resource "null_resource" "check_alarm" {
+  triggers = {
+    action = "arn:aws:swf:${var.aws_region}:${var.aws_account_id}:${var.default_alarm_action}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "reboot" {
+  alarm_name          = "${module.label.id}-status-check-failed"
+  comparison_operator = "${var.comparison_operator}"
+  evaluation_periods  = "${var.evaluation_periods}"
+  metric_name         = "${var.metric_name}"
+  namespace           = "${var.metric_namespace}"
+  period              = "${var.applying_period}"
+  statistic           = "${var.statistic_level}"
+  threshold           = "${var.metric_threshold}"
+  depends_on          = ["null_resource.check_alarm"]
+
+  dimensions {
+    InstanceId = "${aws_instance.default.id}"
+  }
+
+  alarm_actions = ["${null_resource.check_alarm.triggers.action}"]
 }
