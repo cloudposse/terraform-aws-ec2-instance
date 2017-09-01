@@ -142,5 +142,7 @@ resource "aws_cloudwatch_metric_alarm" "reboot" {
     InstanceId = "${aws_instance.default.id}"
   }
 
-  alarm_actions = ["${null_resource.check_alarm.triggers.action}"]
+  alarm_actions = [
+    "${null_resource.check_alarm.triggers.action}",
+  ]
 }
