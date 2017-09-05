@@ -77,7 +77,7 @@ resource "aws_ami_from_instance" "example" {
 
 ## Outputs
 
-| Name                | Description                                                         |
+| Name                | Description                                                        |
 |:--------------------|:-------------------------------------------------------------------|
 | `id`                | Disambiguated ID                                                   |
 | `public_hostname`   | Normalized name                                                    |
