@@ -19,6 +19,15 @@ variable "ansible_arguments" {
   default = []
 }
 
+variable "ansible_envs" {
+  type = "list"
+  default = []
+}
+
+variable "ansible_dry_run" {
+  default = false
+}
+
 variable "instance_type" {
   default = "t2.micro"
 }

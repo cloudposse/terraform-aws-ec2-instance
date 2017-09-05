@@ -8,9 +8,9 @@ Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
 
 Include this repository as a module in your existing terraform code:
 
-```terraform
+```
 module "admin_tier" {
-  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=master"
+  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=tags/0.1.0"
   ansible_playbook            = "${var.ansible_playbook}"
   ansible_arguments           = "${var.ansible_arguments}"
   ssh_key_pair                = "${var.ssh_key_pair}"
@@ -22,9 +22,6 @@ module "admin_tier" {
   security_groups             = ["${var.security_groups}"]
   subnets                     = ["${var.subnets}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  name                        = "${var.name}"
-  namespace                   = "${var.namespace}"
-  stage                       = "${var.stage}"
 }
 ```
 
@@ -39,7 +36,7 @@ This module depends on these modules:
 It is necessary to run `terraform get` to download those modules.
 
 Now reference the label when creating an instance (for example):
-```terraform
+```
 resource "aws_ami_from_instance" "example" {
   name               = "terraform-example"
   source_instance_id = "${module.admin_tier.id}"
@@ -83,8 +80,10 @@ resource "aws_ami_from_instance" "example" {
 | Name                | Description                                                        |
 |:--------------------|:-------------------------------------------------------------------|
 | `id`                | Disambiguated ID                                                   |
-| `public_hostname`   | Normalized name                                                    |
-| `public_ip`         | Normalized namespace                                               |
+| `public_dns`        | Normalized name                                                    |
+| `public_ip`         | Normalized namespace    |
+| `private_dns`       | Normalized name         |
+| `private_ip`        | Normalized namespace                                               |
 | `ssh_key_pair`      | Name of used AWS SSH key                                           |
 | `security_group_id` | ID on the new AWS Security Group associated with creating instance |
 | `role`              | Name of AWS IAM Role associated with creating instance             |
