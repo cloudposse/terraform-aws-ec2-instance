@@ -23,5 +23,5 @@ output "role" {
 }
 
 output "alarm" {
-  value = "${aws_cloudwatch_metric_alarm.reboot.id}"
+  value = "${aws_cloudwatch_metric_alarm.default.id}"
 }

@@ -69,7 +69,7 @@ resource "aws_ami_from_instance" "example" {
 | `applying_period`            | `60`                                         | Period in seconds over which the specified statistic is applied                  | Yes      |
 | `statistic_level`            | `Maximum`                                    | Statistic to apply to the alarm's associated metric                              | Yes      |
 | `metric_threshold`           | `1`                                          | Value against which the specified statistic is compared                          | Yes      |
-| `default_alarm_action`       |`action/actions/AWS_EC2.InstanceId.Reboot/1.0`|  List of actions to execute when this alarm transitions into an ALARM state      | Yes      |
+| `default_alarm_action`       |`action/actions/AWS_EC2.InstanceId.Reboot/1.0`| String of action to execute when this alarm transitions into an ALARM state      | Yes      |
 
 
 

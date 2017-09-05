@@ -121,14 +121,20 @@ module "ansible" {
 
 # Restart dead or hung instance
 
+data "aws_region" "current" {
+  current = true
+}
+
+data "aws_caller_identity" "current" {}
+
 resource "null_resource" "check_alarm" {
   triggers = {
-    action = "arn:aws:swf:${var.aws_region}:${var.aws_account_id}:${var.default_alarm_action}"
+    action = "arn:aws:swf:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.default_alarm_action}"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "reboot" {
-  alarm_name          = "${module.label.id}-status-check-failed"
+resource "aws_cloudwatch_metric_alarm" "default" {
+  alarm_name          = "${module.label.id}"
   comparison_operator = "${var.comparison_operator}"
   evaluation_periods  = "${var.evaluation_periods}"
   metric_name         = "${var.metric_name}"

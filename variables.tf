@@ -100,7 +100,3 @@ variable "metric_threshold" {
 variable "default_alarm_action" {
   default = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
 }
-
-variable "aws_account_id" {}
-
-variable "aws_region" {}
