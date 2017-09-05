@@ -46,7 +46,7 @@ resource "aws_ami_from_instance" "example" {
 ## Variables
 
 |  Name                        |  Default                                     |  Description                                                                     | Required |
-|:----------------------------:|:--------------------------------------------:|:--------------------------------------------------------------------------------:|:--------:|
+|:-----------------------------|:--------------------------------------------:|:---------------------------------------------------------------------------------|:--------:|
 | `namespace`                  | `global`                                     | Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module           | Yes      |
 | `stage`                      | `default`                                    | Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module            | Yes      |
 | `name`                       | `admin`                                      | Name  (e.g. `bastion` or `db`) - required for `tf_label` module                  | Yes      |
@@ -77,8 +77,8 @@ resource "aws_ami_from_instance" "example" {
 
 ## Outputs
 
-| Name                | Decription                                                         |
-|:-------------------:|:------------------------------------------------------------------:|
+| Name                | Description                                                         |
+|:--------------------|:-------------------------------------------------------------------|
 | `id`                | Disambiguated ID                                                   |
 | `public_hostname`   | Normalized name                                                    |
 | `public_ip`         | Normalized namespace                                               |
