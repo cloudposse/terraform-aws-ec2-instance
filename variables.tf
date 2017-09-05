@@ -11,7 +11,7 @@ variable "ansible_playbook" {
 }
 
 variable "associate_public_ip_address" {
-  default = "true"
+  default = true
 }
 
 variable "ansible_arguments" {
