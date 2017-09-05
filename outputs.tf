@@ -10,7 +10,7 @@ output "private_dns" {
   value = "${aws_instance.default.private_dns}"
 }
 
-output "public_hostname" {
+output "public_dns" {
   value = "${aws_instance.default.public_dns}"
 }
 
