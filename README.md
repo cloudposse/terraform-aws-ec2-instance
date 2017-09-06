@@ -13,6 +13,8 @@ module "admin_tier" {
   source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=master"
   ansible_playbook            = "${var.ansible_playbook}"
   ansible_arguments           = "${var.ansible_arguments}"
+  ansible_envs                = "${var.ansible_envs}"
+  ansible_dry_run             = "${var.ansible_dry_run}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   github_api_token            = "${var.github_api_token}"
   github_organization         = "${var.github_organization}"
@@ -60,6 +62,8 @@ resource "aws_ami_from_instance" "example" {
 | `github_team`                | ``                                           | GitHub team                                                                      | Yes      |
 | `ansible_playbook`           | ``                                           | Path to the playbook - required for `tf_ansible` (e.g. `./admin_tier.yml`)       | Yes      |
 | `ansible_arguments`          | []                                           | List of ansible arguments (e.g. `["--user=ubuntu"]`)                             | No       |
+| `ansible_envs`               | []                                           | List of ansible envs (e.g. `["ansible_ssh_pass=${var.ansible_ssh_password}"]`)   | No       |
+| `ansible_dry_run`            | `false`                                      | The Ansible run without changes                                                  | No       |
 | `instance_type`              | `t2.micro`                                   | The type of the creating instance (e.g. `t2.micro`)                              | No       |
 | `vpc_id`                     | ``                                           | The id of the VPC that the creating instance security group belongs to           | Yes      |
 | `security_groups`            | []                                           | List of Security Group IDs allowed to connect to creating instance               | Yes      |
@@ -84,8 +88,8 @@ resource "aws_ami_from_instance" "example" {
 |:--------------------|:-------------------------------------------------------------------|
 | `id`                | Disambiguated ID                                                   |
 | `public_dns`        | Normalized name                                                    |
-| `public_ip`         | Normalized namespace    |
-| `private_dns`       | Normalized name         |
+| `public_ip`         | Normalized namespace                                               |
+| `private_dns`       | Normalized name                                                    |
 | `private_ip`        | Normalized namespace                                               |
 | `ssh_key_pair`      | Name of used AWS SSH key                                           |
 | `security_group_id` | ID on the new AWS Security Group associated with creating instance |
