@@ -20,7 +20,7 @@ variable "ansible_arguments" {
 }
 
 variable "ansible_envs" {
-  type = "list"
+  type    = "list"
   default = []
 }
 
