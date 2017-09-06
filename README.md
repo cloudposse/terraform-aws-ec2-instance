@@ -10,7 +10,7 @@ Include this repository as a module in your existing terraform code:
 
 ```terraform
 module "admin_tier" {
-  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=tags/0.1.0"
+  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=master"
   ansible_playbook            = "${var.ansible_playbook}"
   ansible_arguments           = "${var.ansible_arguments}"
   ssh_key_pair                = "${var.ssh_key_pair}"
@@ -22,6 +22,9 @@ module "admin_tier" {
   security_groups             = ["${var.security_groups}"]
   subnets                     = ["${var.subnets}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
+  name                        = "${var.name}"
+  namespace                   = "${var.namespace}"
+  stage                       = "${var.stage}"
 }
 ```
 

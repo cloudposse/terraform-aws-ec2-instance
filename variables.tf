@@ -33,17 +33,11 @@ variable "subnets" {
   type = "list"
 }
 
-variable "namespace" {
-  default = "global"
-}
+variable "namespace" {}
 
-variable "stage" {
-  default = "default"
-}
+variable "stage" {}
 
-variable "name" {
-  default = "admin"
-}
+variable "name" {}
 
 variable "ec2_ami" {
   default = "ami-cd0f5cb6"
