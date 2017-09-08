@@ -1,5 +1,5 @@
 output "public_ip" {
-  value = "${aws_eip.default.public_ip}"
+  value = "${coalesce(aws_eip.default.public_ip, aws_instance.default.public_ip)}"
 }
 
 output "private_ip" {
