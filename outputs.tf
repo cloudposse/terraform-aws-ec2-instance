@@ -11,7 +11,7 @@ output "private_dns" {
 }
 
 output "public_dns" {
-  value = "${aws_instance.default.public_dns}"
+  value = "${coalesce(null_resource.eip.triggers.dns, aws_instance.default.public_dns)}"
 }
 
 output "id" {
