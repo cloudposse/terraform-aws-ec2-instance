@@ -113,10 +113,11 @@ resource "aws_eip" "default" {
 
 # Apply the provisioner module for this resource
 module "ansible" {
-  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.0"
+  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.4"
   arguments = "${var.ansible_arguments}"
-  envs      = ["host=${aws_eip.default.public_ip}"]
+  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? aws_instance.default.public_dns : aws_instance.default.private_dns }")))}"
   playbook  = "${var.ansible_playbook}"
+  dry_run   = "${var.ansible_dry_run}"
 }
 
 # Restart dead or hung instance

@@ -11,12 +11,21 @@ variable "ansible_playbook" {
 }
 
 variable "associate_public_ip_address" {
-  default = "true"
+  default = true
 }
 
 variable "ansible_arguments" {
   type    = "list"
   default = []
+}
+
+variable "ansible_envs" {
+  type    = "list"
+  default = []
+}
+
+variable "ansible_dry_run" {
+  default = false
 }
 
 variable "instance_type" {
