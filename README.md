@@ -87,10 +87,11 @@ resource "aws_ami_from_instance" "example" {
 | Name                | Description                                                        |
 |:--------------------|:-------------------------------------------------------------------|
 | `id`                | Disambiguated ID                                                   |
-| `public_dns`        | Normalized name                                                    |
-| `public_ip`         | Normalized namespace                                               |
 | `private_dns`       | Normalized name                                                    |
 | `private_ip`        | Normalized namespace                                               |
+| `public_hostname`   | Normalized name                                                    |
+| `public_ip`         | Public IP of instance (or EIP )                                    |
+| `public_dns`        | Public DNS of instance (or DNS of EIP)                             |
 | `ssh_key_pair`      | Name of used AWS SSH key                                           |
 | `security_group_id` | ID on the new AWS Security Group associated with creating instance |
 | `role`              | Name of AWS IAM Role associated with creating instance             |
