@@ -89,7 +89,6 @@ resource "aws_ami_from_instance" "example" {
 | `id`                | Disambiguated ID                                                   |
 | `private_dns`       | Normalized name                                                    |
 | `private_ip`        | Normalized namespace                                               |
-| `public_hostname`   | Normalized name                                                    |
 | `public_ip`         | Public IP of instance (or EIP )                                    |
 | `public_dns`        | Public DNS of instance (or DNS of EIP)                             |
 | `ssh_key_pair`      | Name of used AWS SSH key                                           |
