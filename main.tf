@@ -106,22 +106,21 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count    = "${signum(length(var.associate_public_ip_address)) == 1 ? 1 : 0}"
+  count    = "${var.associate_public_ip_address ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
 }
 
 # Apply the provisioner module for this resource
 module "ansible" {
-  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.4"
+  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.6"
   arguments = "${var.ansible_arguments}"
-  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? aws_instance.default.public_dns : aws_instance.default.private_dns }")))}"
+  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? join("", aws_eip.default.*.public_ip) : aws_instance.default.private_ip }")))}"
   playbook  = "${var.ansible_playbook}"
   dry_run   = "${var.ansible_dry_run}"
 }
 
 # Restart dead or hung instance
-
 data "aws_region" "default" {
   current = true
 }
@@ -152,4 +151,12 @@ resource "aws_cloudwatch_metric_alarm" "default" {
   alarm_actions = [
     "${null_resource.check_alarm_action.triggers.action}",
   ]
+}
+
+resource "null_resource" "eip" {
+  count = "${var.associate_public_ip_address ? 1 : 0}"
+
+  triggers {
+    public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${data.aws_region.default.name == "us-east-1" ? "compute-1" : "${data.aws_region.default.name}.compute"}.amazonaws.com"
+  }
 }
