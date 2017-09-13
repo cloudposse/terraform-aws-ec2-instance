@@ -115,7 +115,7 @@ resource "aws_eip" "default" {
 module "ansible" {
   source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.4"
   arguments = "${var.ansible_arguments}"
-  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? aws_eip.default.public_ip : aws_instance.default.private_dns }")))}"
+  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? aws_eip.default.public_ip : aws_instance.default.private_ip }")))}"
   playbook  = "${var.ansible_playbook}"
   dry_run   = "${var.ansible_dry_run}"
 }
