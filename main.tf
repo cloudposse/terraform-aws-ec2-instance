@@ -113,7 +113,7 @@ resource "aws_eip" "default" {
 
 # Apply the provisioner module for this resource
 module "ansible" {
-  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.6"
+  source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.7"
   arguments = "${var.ansible_arguments}"
   envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? join("", aws_eip.default.*.public_ip) : aws_instance.default.private_ip }")))}"
   playbook  = "${var.ansible_playbook}"
