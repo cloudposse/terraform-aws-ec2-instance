@@ -1,6 +1,6 @@
-# tf_instance
+# terraform-aws-ec2-instance
 
-Terraform Module for providing a server capable of running admin tasks. Use `tf_instance` to create and manage an admin instance.
+Terraform Module for providing a server capable of running admin tasks. Use `terraform-aws-ec2-instance` to create and manage an admin instance.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Include this repository as a module in your existing terraform code:
 
 ```terraform
 module "admin_tier" {
-  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=master"
+  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ansible_playbook            = "${var.ansible_playbook}"
   ansible_arguments           = "${var.ansible_arguments}"
   ansible_envs                = "${var.ansible_envs}"
@@ -56,6 +56,7 @@ resource "aws_ami_from_instance" "example" {
 | `stage`                      | `default`                                    | Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module            | Yes      |
 | `name`                       | `admin`                                      | Name  (e.g. `bastion` or `db`) - required for `tf_label` module                  | Yes      |
 | `ec2_ami`                    | `ami-cd0f5cb6`                               | By default it is an AMI provided by Amazon with Ubuntu 16.04                     | No       |
+| `create_instance`            | `true`                                       | Flag for creating an instance. Set to `false` if need skip an instance creation  | No       |
 | `ssh_key_pair`               | ``                                           | SSH key pair to be provisioned on instance                                       | Yes      |
 | `github_api_token`           | ``                                           | GitHub API token                                                                 | Yes      |
 | `github_organization`        | ``                                           | GitHub organization name                                                         | Yes      |

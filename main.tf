@@ -19,20 +19,23 @@ data "aws_iam_policy_document" "default" {
 
 # Apply the tf_label module for this resource
 module "label" {
-  source    = "git::https://github.com/cloudposse/tf_label.git?ref=tags/0.1.0"
-  namespace = "${var.namespace}"
-  stage     = "${var.stage}"
-  name      = "${var.name}"
+  source     = "git::https://github.com/cloudposse/tf_label.git?ref=tags/0.2.0"
+  namespace  = "${var.namespace}"
+  stage      = "${var.stage}"
+  name       = "${var.name}"
+  name       = "${var.name}"
+  delimiter  = "${var.delimiter}"
+  attributes = ["${var.create_instance ? var.create_instance : ""}"]
 }
 
 resource "aws_iam_instance_profile" "default" {
-  count = "${var.create}"
+  count = "${var.create_instance}"
   name  = "${module.label.id}"
   role  = "${aws_iam_role.default.name}"
 }
 
 resource "aws_iam_role" "default" {
-  count = "${var.create}"
+  count = "${var.create_instance}"
   name  = "${module.label.id}"
   path  = "/"
 
@@ -40,7 +43,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_security_group" "default" {
-  count       = "${var.create_default_security_group}"
+  count       = "${var.create_instance_default_security_group}"
   name        = "${module.label.id}"
   vpc_id      = "${var.vpc_id}"
   description = "Instance default security group (only egress access is allowed)"
@@ -85,14 +88,14 @@ data "template_file" "user_data" {
 }
 
 resource "aws_instance" "default" {
-  count         = "${var.create}"
+  count         = "${var.create_instance}"
   ami           = "${var.ec2_ami}"
   instance_type = "${var.instance_type}"
 
   user_data = "${data.template_file.user_data.rendered}"
 
   vpc_security_group_ids = [
-    "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
+    "${compact(concat(list(var.create_instance_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
   ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
@@ -110,7 +113,7 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count    = "${var.associate_public_ip_address && var.create ? 1 : 0}"
+  count    = "${var.associate_public_ip_address && var.create_instance ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
 }
@@ -119,7 +122,7 @@ resource "aws_eip" "default" {
 module "ansible" {
   source    = "git::https://github.com/cloudposse/tf_ansible.git?ref=tags/0.3.7"
   arguments = "${var.ansible_arguments}"
-  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? join("", aws_eip.default.*.public_ip) : aws_instance.default.private_ip }")))}"
+  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? join("", aws_eip.default.*.public_ip) : join("", aws_instance.default.*.private_ip)}")))}"
   playbook  = "${var.ansible_playbook}"
   dry_run   = "${var.ansible_dry_run}"
 }
@@ -132,7 +135,7 @@ data "aws_region" "default" {
 data "aws_caller_identity" "default" {}
 
 resource "null_resource" "check_alarm_action" {
-  count = "${var.create}"
+  count = "${var.create_instance}"
 
   triggers = {
     action = "arn:aws:swf:${data.aws_region.default.name}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
@@ -140,7 +143,7 @@ resource "null_resource" "check_alarm_action" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "default" {
-  count               = "${var.create}"
+  count               = "${var.create_instance}"
   alarm_name          = "${module.label.id}"
   comparison_operator = "${var.comparison_operator}"
   evaluation_periods  = "${var.evaluation_periods}"
@@ -161,7 +164,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
 }
 
 resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address && var.create ? 1 : 0}"
+  count = "${var.associate_public_ip_address && var.create_instance ? 1 : 0}"
 
   triggers {
     public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${data.aws_region.default.name == "us-east-1" ? "compute-1" : "${data.aws_region.default.name}.compute"}.amazonaws.com"

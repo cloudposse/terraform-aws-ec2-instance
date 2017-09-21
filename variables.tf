@@ -39,7 +39,7 @@ variable "instance_type" {
 variable "vpc_id" {}
 
 variable "security_groups" {
-  type = "list"
+  type    = "list"
   default = []
 }
 
@@ -111,5 +111,10 @@ variable "default_alarm_action" {
 
 variable "create_default_security_group" {
   description = "Create default Security Group with Egress traffic allowed only"
-  default = true
+  default     = true
+}
+
+variable "create_instance" {
+  description = "Flag for creating an instance. Set to `false` if need skip an instance creation"
+  default     = true
 }
