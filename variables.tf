@@ -28,6 +28,10 @@ variable "ansible_dry_run" {
   default = false
 }
 
+variable "create" {
+  default = "true"
+}
+
 variable "instance_type" {
   default = "t2.micro"
 }

@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-apt-get update
-apt-get -y install figlet
-
+if [ "$(. /etc/os-release; echo $NAME)" = "Ubuntu" ]; then
+  apt-get update
+  apt-get -y install figlet
+else
+  yum install epel-release -y
+  yum install figlet -y
+fi
 # Generate system banner
 figlet "${welcome_message}" > /etc/motd
 
