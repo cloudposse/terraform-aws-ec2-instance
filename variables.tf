@@ -106,6 +106,6 @@ variable "default_alarm_action" {
 }
 
 variable "create_security_group" {
-  description = "Should be created a security group for new instance"
+  description = "Create default Security Group with Egress traffic allowed only"
   default = true
 }
