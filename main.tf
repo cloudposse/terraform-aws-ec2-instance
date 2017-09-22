@@ -38,7 +38,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_security_group" "default" {
-  count       = "${var.create_security_group}"
+  count       = "${var.create_default_security_group}"
   name        = "${module.label.id}"
   vpc_id      = "${var.vpc_id}"
   description = "Instance default security group (only egress access is allowed)"
@@ -89,7 +89,7 @@ resource "aws_instance" "default" {
   user_data = "${data.template_file.user_data.rendered}"
 
   vpc_security_group_ids = [
-    "${compact(concat(list(var.create_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
+    "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
   ]
 
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
