@@ -36,6 +36,7 @@ variable "vpc_id" {}
 
 variable "security_groups" {
   type = "list"
+  default = []
 }
 
 variable "subnets" {
@@ -102,4 +103,9 @@ variable "metric_threshold" {
 
 variable "default_alarm_action" {
   default = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
+}
+
+variable "create_security_group" {
+  description = "Should be created a security group for new instance"
+  default = true
 }

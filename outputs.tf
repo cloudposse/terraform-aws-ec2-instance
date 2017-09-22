@@ -23,7 +23,7 @@ output "ssh_key_pair" {
 }
 
 output "security_group_id" {
-  value = "${aws_security_group.default.id}"
+  value = "${var.create_security_group ? join("", aws_security_group.default.*.id)  : ""}"
 }
 
 output "role" {
