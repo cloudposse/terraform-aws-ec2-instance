@@ -22,8 +22,8 @@ output "ssh_key_pair" {
   value = "${var.ssh_key_pair}"
 }
 
-output "security_group_id" {
-  value = "${aws_security_group.default.id}"
+output "security_group_ids" {
+  value = "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
 }
 
 output "role" {
