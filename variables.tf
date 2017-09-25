@@ -28,10 +28,6 @@ variable "ansible_dry_run" {
   default = false
 }
 
-variable "instance_count" {
-  default = true
-}
-
 variable "instance_type" {
   default = "t2.micro"
 }
@@ -52,6 +48,20 @@ variable "namespace" {}
 variable "stage" {}
 
 variable "name" {}
+
+variable "delimiter" {
+  default = "-"
+}
+
+variable "attributes" {
+  type    = "list"
+  default = []
+}
+
+variable "tags" {
+  type    = "map"
+  default = {}
+}
 
 variable "ec2_ami" {
   default = "ami-cd0f5cb6"
