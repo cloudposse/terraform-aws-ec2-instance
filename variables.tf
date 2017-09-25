@@ -28,7 +28,7 @@ variable "ansible_dry_run" {
   default = false
 }
 
-variable "create" {
+variable "instance_count" {
   default = true
 }
 

@@ -79,10 +79,6 @@ resource "aws_ami_from_instance" "example" {
 | `metric_threshold`           | `1`                                          | Value against which the specified statistic is compared                          | Yes      |
 | `default_alarm_action`       |`action/actions/AWS_EC2.InstanceId.Reboot/1.0`| String of action to execute when this alarm transitions into an ALARM state      | Yes      |
 
-
-
-
-
 ## Outputs
 
 | Name                | Description                                                        |

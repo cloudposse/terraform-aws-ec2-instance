@@ -23,9 +23,15 @@ module "label" {
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
-  name       = "${var.name}"
   delimiter  = "${var.delimiter}"
   attributes = ["${var.create_instance ? var.create_instance : ""}"]
+}
+
+resource "aws_iam_instance_profile" "default" {
+  count      = "${var.create_instance}"
+  delimiter  = "${var.delimiter}"
+  attributes = ["${var.instance_count ? var.instance_count : ""}"]
+  tags       = "${var.tags}"
 }
 
 resource "aws_iam_instance_profile" "default" {
