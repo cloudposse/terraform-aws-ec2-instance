@@ -26,13 +26,15 @@ module "label" {
 }
 
 resource "aws_iam_instance_profile" "default" {
-  name = "${module.label.id}"
-  role = "${aws_iam_role.default.name}"
+  count = "${var.create}"
+  name  = "${module.label.id}"
+  role  = "${aws_iam_role.default.name}"
 }
 
 resource "aws_iam_role" "default" {
-  name = "${module.label.id}"
-  path = "/"
+  count = "${var.create}"
+  name  = "${module.label.id}"
+  path  = "/"
 
   assume_role_policy = "${data.aws_iam_policy_document.default.json}"
 }
@@ -83,6 +85,7 @@ data "template_file" "user_data" {
 }
 
 resource "aws_instance" "default" {
+  count         = "${var.create}"
   ami           = "${var.ec2_ami}"
   instance_type = "${var.instance_type}"
 
@@ -107,7 +110,7 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count    = "${var.associate_public_ip_address ? 1 : 0}"
+  count    = "${var.associate_public_ip_address && var.create ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
 }
@@ -129,12 +132,15 @@ data "aws_region" "default" {
 data "aws_caller_identity" "default" {}
 
 resource "null_resource" "check_alarm_action" {
+  count = "${var.create}"
+
   triggers = {
     action = "arn:aws:swf:${data.aws_region.default.name}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "default" {
+  count               = "${var.create}"
   alarm_name          = "${module.label.id}"
   comparison_operator = "${var.comparison_operator}"
   evaluation_periods  = "${var.evaluation_periods}"
@@ -155,7 +161,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
 }
 
 resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address ? 1 : 0}"
+  count = "${var.associate_public_ip_address && var.create ? 1 : 0}"
 
   triggers {
     public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${data.aws_region.default.name == "us-east-1" ? "compute-1" : "${data.aws_region.default.name}.compute"}.amazonaws.com"

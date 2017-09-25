@@ -3,11 +3,11 @@ output "public_ip" {
 }
 
 output "private_ip" {
-  value = "${aws_instance.default.private_ip}"
+  value = "${aws_instance.default.*.private_ip}"
 }
 
 output "private_dns" {
-  value = "${aws_instance.default.private_dns}"
+  value = "${aws_instance.default.*.private_dns}"
 }
 
 output "public_dns" {
@@ -15,7 +15,7 @@ output "public_dns" {
 }
 
 output "id" {
-  value = "${aws_instance.default.id}"
+  value = "${aws_instance.default.*.id}"
 }
 
 output "ssh_key_pair" {
@@ -27,9 +27,9 @@ output "security_group_ids" {
 }
 
 output "role" {
-  value = "${aws_iam_role.default.name}"
+  value = "${aws_iam_role.default.*.name}"
 }
 
 output "alarm" {
-  value = "${aws_cloudwatch_metric_alarm.default.id}"
+  value = "${aws_cloudwatch_metric_alarm.default.*.id}"
 }

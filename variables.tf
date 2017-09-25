@@ -29,7 +29,7 @@ variable "ansible_dry_run" {
 }
 
 variable "create" {
-  default = "true"
+  default = true
 }
 
 variable "instance_type" {
