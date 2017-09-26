@@ -1,6 +1,6 @@
-# tf_instance
+# terraform-aws-ec2-instance
 
-Terraform Module for providing a server capable of running admin tasks. Use `tf_instance` to create and manage an admin instance.
+Terraform Module for providing a server capable of running admin tasks. Use `terraform-aws-ec2-instance` to create and manage an admin instance.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Include this repository as a module in your existing terraform code:
 
 ```terraform
 module "admin_tier" {
-  source                      = "git::https://github.com/cloudposse/tf_instance.git?ref=master"
+  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ansible_playbook            = "${var.ansible_playbook}"
   ansible_arguments           = "${var.ansible_arguments}"
   ansible_envs                = "${var.ansible_envs}"
@@ -34,9 +34,9 @@ This will create a `id`, `public_hostname` and `public_ip`.
 
 This module depends on these modules:
 
-* [tf_label](https://github.com/cloudposse/tf_label)
+* [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
 * [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys)
-* [tf_ansible](https://github.com/cloudposse/tf_ansible)
+* [terraform-null-ansible](https://github.com/cloudposse/terraform-null-ansible)
 
 It is necessary to run `terraform get` to download those modules.
 
@@ -50,37 +50,37 @@ resource "aws_ami_from_instance" "example" {
 
 ## Variables
 
-|  Name                        |  Default                                     |  Description                                                                     | Required |
-|:-----------------------------|:--------------------------------------------:|:---------------------------------------------------------------------------------|:--------:|
-| `namespace`                  | `global`                                     | Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module           | Yes      |
-| `stage`                      | `default`                                    | Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module            | Yes      |
-| `name`                       | `admin`                                      | Name  (e.g. `bastion` or `db`) - required for `tf_label` module                  | Yes      |
-| `ec2_ami`                    | `ami-cd0f5cb6`                               | By default it is an AMI provided by Amazon with Ubuntu 16.04                     | No       |
-| `ssh_key_pair`               | ``                                           | SSH key pair to be provisioned on instance                                       | Yes      |
-| `github_api_token`           | ``                                           | GitHub API token                                                                 | Yes      |
-| `github_organization`        | ``                                           | GitHub organization name                                                         | Yes      |
-| `github_team`                | ``                                           | GitHub team                                                                      | Yes      |
-| `ansible_playbook`           | ``                                           | Path to the playbook - required for `tf_ansible` (e.g. `./admin_tier.yml`)       | Yes      |
-| `ansible_arguments`          | []                                           | List of ansible arguments (e.g. `["--user=ubuntu"]`)                             | No       |
-| `ansible_envs`               | []                                           | List of ansible envs (e.g. `["ansible_ssh_pass=${var.ansible_ssh_password}"]`)   | No       |
-| `ansible_dry_run`            | `false`                                      | The Ansible run without changes                                                  | No       |
-| `instance_type`              | `t2.micro`                                   | The type of the creating instance (e.g. `t2.micro`)                              | No       |
-| `vpc_id`                     | ``                                           | The id of the VPC that the creating instance security group belongs to           | Yes      |
-| `security_groups`            | []                                           | List of Security Group IDs allowed to connect to creating instance               | Yes      |
-| `subnets`                    | []                                           | List of VPC Subnet IDs creating instance launched in                             | Yes      |
-| `associate_public_ip_address`| `true`                                       | Associate a public ip address with the creating instance. Boolean value          | No       |
-| `comparison_operator`        | `GreaterThanOrEqualToThreshold`              | Arithmetic operation to use when comparing the specified Statistic and Threshold | Yes      |
-| `metric_name`                | `StatusCheckFailed_Instance`                 | Name for the alarm's associated metric                                           | Yes      |
-| `evaluation_periods`         | `5`                                          | Number of periods over which data is compared to the specified threshold         | Yes      |
-| `metric_namespace`           | `AWS/EC2`                                    | Namespace for the alarm's associated metric                                      | Yes      |
-| `applying_period`            | `60`                                         | Period in seconds over which the specified statistic is applied                  | Yes      |
-| `statistic_level`            | `Maximum`                                    | Statistic to apply to the alarm's associated metric                              | Yes      |
-| `metric_threshold`           | `1`                                          | Value against which the specified statistic is compared                          | Yes      |
-| `default_alarm_action`       |`action/actions/AWS_EC2.InstanceId.Reboot/1.0`| String of action to execute when this alarm transitions into an ALARM state      | Yes      |
-
-
-
-
+| Name                            |                    Default                     | Description                                                                              | Required |
+|:--------------------------------|:----------------------------------------------:|:-----------------------------------------------------------------------------------------|:--------:|
+| `namespace`                     |                    `global`                    | Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module                   |   Yes    |
+| `stage`                         |                   `default`                    | Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module                    |   Yes    |
+| `name`                          |                    `admin`                     | Name  (e.g. `bastion` or `db`) - required for `tf_label` module                          |   Yes    |
+| `attributes`                    |                       []                       | Additional attributes (e.g. `policy` or `role`)                                          |    No    |
+| `tags`                          |                       {}                       | Additional tags  (e.g. `map("BusinessUnit","XYZ")`                                       |    No    |
+| `ec2_ami`                       |                 `ami-cd0f5cb6`                 | By default it is an AMI provided by Amazon with Ubuntu 16.04                             |    No    |
+| `instance_enabled`              |                     `true`                     | Flag for creating an instance. Set to false if it is necessary to skip instance creation |    No    |
+| `create_default_security_group` |                     `true`                     | Flag for creation default Security Group with Egress traffic allowed only                |    No    |
+| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on instance                                               |   Yes    |
+| `github_api_token`              |                       ``                       | GitHub API token                                                                         |   Yes    |
+| `github_organization`           |                       ``                       | GitHub organization name                                                                 |   Yes    |
+| `github_team`                   |                       ``                       | GitHub team                                                                              |   Yes    |
+| `ansible_playbook`              |                       ``                       | Path to the playbook - required for `tf_ansible` (e.g. `./admin_tier.yml`)               |   Yes    |
+| `ansible_arguments`             |                       []                       | List of ansible arguments (e.g. `["--user=ubuntu"]`)                                     |    No    |
+| `ansible_envs`                  |                       []                       | List of ansible envs (e.g. `["ansible_ssh_pass=${var.ansible_ssh_password}"]`)           |    No    |
+| `ansible_dry_run`               |                    `false`                     | The Ansible run without changes                                                          |    No    |
+| `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                      |    No    |
+| `vpc_id`                        |                       ``                       | The id of the VPC that the creating instance security group belongs to                   |   Yes    |
+| `security_groups`               |                       []                       | List of Security Group IDs allowed to connect to creating instance                       |   Yes    |
+| `subnets`                       |                       []                       | List of VPC Subnet IDs creating instance launched in                                     |   Yes    |
+| `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                  |    No    |
+| `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold         |   Yes    |
+| `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                   |   Yes    |
+| `evaluation_periods`            |                      `5`                       | Number of periods over which data is compared to the specified threshold                 |   Yes    |
+| `metric_namespace`              |                   `AWS/EC2`                    | Namespace for the alarm's associated metric                                              |   Yes    |
+| `applying_period`               |                      `60`                      | Period in seconds over which the specified statistic is applied                          |   Yes    |
+| `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                      |   Yes    |
+| `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                  |   Yes    |
+| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state              |   Yes    |
 
 ## Outputs
 

@@ -35,7 +35,7 @@ variable "instance_type" {
 variable "vpc_id" {}
 
 variable "security_groups" {
-  type = "list"
+  type    = "list"
   default = []
 }
 
@@ -48,6 +48,20 @@ variable "namespace" {}
 variable "stage" {}
 
 variable "name" {}
+
+variable "delimiter" {
+  default = "-"
+}
+
+variable "attributes" {
+  type    = "list"
+  default = []
+}
+
+variable "tags" {
+  type    = "map"
+  default = {}
+}
 
 variable "ec2_ami" {
   default = "ami-cd0f5cb6"
@@ -107,5 +121,10 @@ variable "default_alarm_action" {
 
 variable "create_default_security_group" {
   description = "Create default Security Group with Egress traffic allowed only"
-  default = true
+  default     = true
+}
+
+variable "instance_enabled" {
+  description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
+  default     = true
 }
