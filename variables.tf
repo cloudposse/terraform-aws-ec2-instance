@@ -124,7 +124,7 @@ variable "create_default_security_group" {
   default     = true
 }
 
-variable "create_instance" {
+variable "instance_enabled" {
   description = "Flag for creating an instance. Set to `false` if need skip an instance creation"
   default     = true
 }

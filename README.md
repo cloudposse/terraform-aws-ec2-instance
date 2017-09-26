@@ -34,9 +34,9 @@ This will create a `id`, `public_hostname` and `public_ip`.
 
 This module depends on these modules:
 
-* [tf_label](https://github.com/cloudposse/tf_label)
+* [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
 * [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys)
-* [tf_ansible](https://github.com/cloudposse/tf_ansible)
+* [terraform-null-ansible](https://github.com/cloudposse/terraform-null-ansible)
 
 It is necessary to run `terraform get` to download those modules.
 
@@ -58,7 +58,7 @@ resource "aws_ami_from_instance" "example" {
 | `attributes`                    |                       []                       | Additional attributes (e.g. `policy` or `role`)                                  |    No    |
 | `tags`                          |                       {}                       | Additional tags  (e.g. `map("BusinessUnit","XYZ")`                               |    No    |
 | `ec2_ami`                       |                 `ami-cd0f5cb6`                 | By default it is an AMI provided by Amazon with Ubuntu 16.04                     |    No    |
-| `create_instance`               |                     `true`                     | Flag for creating an instance. Set to `false` if need skip an instance creation  |    No    |
+| `instance_enabled`              |                     `true`                     | Flag for creating an instance. Set to `false` if need skip an instance creation  |    No    |
 | `create_default_security_group` |                     `true`                     | Flag for creation default Security Group with Egress traffic allowed only        |    No    |
 | `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on instance                                       |   Yes    |
 | `github_api_token`              |                       ``                       | GitHub API token                                                                 |   Yes    |
