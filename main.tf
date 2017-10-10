@@ -29,7 +29,7 @@ module "label" {
 }
 
 locals {
-  instance_count = "${var.instance_enabled == true ? 1 : 0}"
+  instance_count = "${var.instance_enabled ? 1 : 0}"
 }
 
 resource "aws_iam_instance_profile" "default" {
@@ -117,7 +117,7 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count    = "${var.associate_public_ip_address && local.instance_count ? 1 : 0}"
+  count    = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
 }
@@ -168,7 +168,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
 }
 
 resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address && local.instance_count ? 1 : 0}"
+  count = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
 
   triggers {
     public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${data.aws_region.default.name == "us-east-1" ? "compute-1" : "${data.aws_region.default.name}.compute"}.amazonaws.com"
