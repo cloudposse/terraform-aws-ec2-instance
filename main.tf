@@ -29,8 +29,8 @@ module "label" {
 }
 
 locals {
-  instance_count        = "${var.instance_enabled ? 1 : 0}"
-  create_security_group = "${var.create_default_security_group ? 1 : 0}"
+  instance_count       = "${var.instance_enabled ? 1 : 0}"
+  security_group_count = "${var.create_default_security_group ? 1 : 0}"
 }
 
 resource "aws_iam_instance_profile" "default" {
@@ -48,7 +48,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_security_group" "default" {
-  count       = "${local.create_security_group}"
+  count       = "${local.security_group_count}"
   name        = "${module.label.id}"
   vpc_id      = "${var.vpc_id}"
   description = "Instance default security group (only egress access is allowed)"
