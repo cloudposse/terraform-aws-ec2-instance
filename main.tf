@@ -28,14 +28,19 @@ module "label" {
   tags       = "${var.tags}"
 }
 
+locals {
+  instance_count       = "${var.instance_enabled ? 1 : 0}"
+  security_group_count = "${var.create_default_security_group ? 1 : 0}"
+}
+
 resource "aws_iam_instance_profile" "default" {
-  count = "${var.instance_enabled}"
+  count = "${local.instance_count}"
   name  = "${module.label.id}"
   role  = "${aws_iam_role.default.name}"
 }
 
 resource "aws_iam_role" "default" {
-  count = "${var.instance_enabled}"
+  count = "${local.instance_count}"
   name  = "${module.label.id}"
   path  = "/"
 
@@ -43,7 +48,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_security_group" "default" {
-  count       = "${var.create_default_security_group}"
+  count       = "${local.security_group_count}"
   name        = "${module.label.id}"
   vpc_id      = "${var.vpc_id}"
   description = "Instance default security group (only egress access is allowed)"
@@ -88,7 +93,7 @@ data "template_file" "user_data" {
 }
 
 resource "aws_instance" "default" {
-  count         = "${var.instance_enabled}"
+  count         = "${local.instance_count}"
   ami           = "${var.ec2_ami}"
   instance_type = "${var.instance_type}"
 
@@ -135,7 +140,7 @@ data "aws_region" "default" {
 data "aws_caller_identity" "default" {}
 
 resource "null_resource" "check_alarm_action" {
-  count = "${var.instance_enabled}"
+  count = "${local.instance_count}"
 
   triggers = {
     action = "arn:aws:swf:${data.aws_region.default.name}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
@@ -143,7 +148,7 @@ resource "null_resource" "check_alarm_action" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "default" {
-  count               = "${var.instance_enabled}"
+  count               = "${local.instance_count}"
   alarm_name          = "${module.label.id}"
   comparison_operator = "${var.comparison_operator}"
   evaluation_periods  = "${var.evaluation_periods}"
