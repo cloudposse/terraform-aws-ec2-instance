@@ -35,7 +35,7 @@ This will create a `id`, `public_hostname` and `public_ip`.
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-* [terraform-template-user-data-github-authorized-keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
+* [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys)
 * [terraform-null-ansible](https://github.com/cloudposse/terraform-null-ansible)
 
 It is necessary to run `terraform get` to download those modules.
