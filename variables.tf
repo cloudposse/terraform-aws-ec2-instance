@@ -128,3 +128,8 @@ variable "instance_enabled" {
   description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
   default     = true
 }
+
+variable "role_arn" {
+  type = "list"
+  default = []
+}

@@ -47,6 +47,16 @@ resource "aws_iam_role" "default" {
   assume_role_policy = "${data.aws_iam_policy_document.default.json}"
 }
 
+locals {
+  iam_role_policy_attachment_count = "${signum(length(var.role_arn)) == 1 ? length(var.role_arn) : 0}"
+}
+
+resource "aws_iam_role_policy_attachment" "default" {
+  count      = "${local.iam_role_policy_attachment_count}"
+  role       = "${aws_iam_role.default.name}"
+  policy_arn = "${element(var.role_arn, count.index)}"
+}
+
 resource "aws_security_group" "default" {
   count       = "${local.security_group_count}"
   name        = "${module.label.id}"
