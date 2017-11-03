@@ -6,26 +6,8 @@ variable "github_organization" {}
 
 variable "github_team" {}
 
-variable "ansible_playbook" {
-  default = ""
-}
-
 variable "associate_public_ip_address" {
   default = true
-}
-
-variable "ansible_arguments" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_envs" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_dry_run" {
-  default = false
 }
 
 variable "instance_type" {
