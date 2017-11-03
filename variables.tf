@@ -6,26 +6,8 @@ variable "github_organization" {}
 
 variable "github_team" {}
 
-variable "ansible_playbook" {
-  default = ""
-}
-
 variable "associate_public_ip_address" {
   default = true
-}
-
-variable "ansible_arguments" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_envs" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_dry_run" {
-  default = false
 }
 
 variable "instance_type" {
@@ -121,10 +103,10 @@ variable "default_alarm_action" {
 
 variable "create_default_security_group" {
   description = "Create default Security Group with Egress traffic allowed only"
-  default     = true
+  default     = "true"
 }
 
 variable "instance_enabled" {
   description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
-  default     = true
+  default     = "true"
 }

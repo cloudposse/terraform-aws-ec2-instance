@@ -1,5 +1,3 @@
-# Using tf_ansible module
-
 data "aws_iam_policy_document" "default" {
   statement {
     sid = ""
@@ -121,15 +119,6 @@ resource "aws_eip" "default" {
   count    = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
   instance = "${aws_instance.default.id}"
   vpc      = true
-}
-
-# Apply the provisioner module for this resource
-module "ansible" {
-  source    = "git::https://github.com/cloudposse/terraform-null-ansible.git?ref=tags/0.3.9"
-  arguments = "${var.ansible_arguments}"
-  envs      = "${compact(concat(var.ansible_envs, list("host=${var.associate_public_ip_address ? join("", aws_eip.default.*.public_ip) : join("", aws_instance.default.*.private_ip)}")))}"
-  playbook  = "${var.ansible_playbook}"
-  dry_run   = "${var.ansible_dry_run}"
 }
 
 # Restart dead or hung instance

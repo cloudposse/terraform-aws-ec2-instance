@@ -11,10 +11,6 @@ Include this repository as a module in your existing terraform code:
 ```terraform
 module "admin_tier" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
-  ansible_playbook            = "${var.ansible_playbook}"
-  ansible_arguments           = "${var.ansible_arguments}"
-  ansible_envs                = "${var.ansible_envs}"
-  ansible_dry_run             = "${var.ansible_dry_run}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   github_api_token            = "${var.github_api_token}"
   github_organization         = "${var.github_organization}"
@@ -36,7 +32,6 @@ This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
 * [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys)
-* [terraform-null-ansible](https://github.com/cloudposse/terraform-null-ansible)
 
 It is necessary to run `terraform get` to download those modules.
 
@@ -64,10 +59,6 @@ resource "aws_ami_from_instance" "example" {
 | `github_api_token`              |                       ``                       | GitHub API token                                                                         |   Yes    |
 | `github_organization`           |                       ``                       | GitHub organization name                                                                 |   Yes    |
 | `github_team`                   |                       ``                       | GitHub team                                                                              |   Yes    |
-| `ansible_playbook`              |                       ``                       | Path to the playbook - required for `tf_ansible` (e.g. `./admin_tier.yml`)               |   Yes    |
-| `ansible_arguments`             |                       []                       | List of ansible arguments (e.g. `["--user=ubuntu"]`)                                     |    No    |
-| `ansible_envs`                  |                       []                       | List of ansible envs (e.g. `["ansible_ssh_pass=${var.ansible_ssh_password}"]`)           |    No    |
-| `ansible_dry_run`               |                    `false`                     | The Ansible run without changes                                                          |    No    |
 | `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                      |    No    |
 | `vpc_id`                        |                       ``                       | The id of the VPC that the creating instance security group belongs to                   |   Yes    |
 | `security_groups`               |                       []                       | List of Security Group IDs allowed to connect to creating instance                       |   Yes    |
