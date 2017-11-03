@@ -1,5 +1,3 @@
-# Using tf_ansible module
-
 data "aws_iam_policy_document" "default" {
   statement {
     sid = ""

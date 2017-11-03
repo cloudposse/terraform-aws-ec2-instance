@@ -103,10 +103,10 @@ variable "default_alarm_action" {
 
 variable "create_default_security_group" {
   description = "Create default Security Group with Egress traffic allowed only"
-  default     = true
+  default     = "true"
 }
 
 variable "instance_enabled" {
   description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
-  default     = true
+  default     = "true"
 }
