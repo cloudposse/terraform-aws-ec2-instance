@@ -110,3 +110,8 @@ variable "instance_enabled" {
   description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
   default     = "true"
 }
+
+variable "additional_ips_count" {
+  description = "Count of additional EIPs"
+  default     = "0"
+}

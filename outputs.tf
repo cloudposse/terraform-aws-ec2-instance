@@ -33,3 +33,7 @@ output "role" {
 output "alarm" {
   value = "${join("", aws_cloudwatch_metric_alarm.default.*.id)}"
 }
+
+output "additional_eni_ids" {
+  value = "${zipmap(aws_network_interface.default.*.id, aws_eip.additional.*.public_ip)}"
+}

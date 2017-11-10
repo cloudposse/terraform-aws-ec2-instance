@@ -116,9 +116,9 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count    = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
-  instance = "${aws_instance.default.id}"
-  vpc      = true
+  count             = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
+  network_interface = "${aws_instance.default.primary_network_interface_id}"
+  vpc               = true
 }
 
 # Restart dead or hung instance
