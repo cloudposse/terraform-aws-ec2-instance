@@ -6,26 +6,8 @@ variable "github_organization" {}
 
 variable "github_team" {}
 
-variable "ansible_playbook" {
-  default = ""
-}
-
 variable "associate_public_ip_address" {
-  default = true
-}
-
-variable "ansible_arguments" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_envs" {
-  type    = "list"
-  default = []
-}
-
-variable "ansible_dry_run" {
-  default = false
+  default = "true"
 }
 
 variable "instance_type" {
@@ -39,37 +21,140 @@ variable "security_groups" {
   default = []
 }
 
-variable "subnets" {
-  type = "list"
+variable "subnet" {}
+
+variable "namespace" {
+  description = "Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module"
 }
 
-variable "namespace" {}
+variable "stage" {
+  description = "Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module"
+}
 
-variable "stage" {}
-
-variable "name" {}
+variable "name" {
+  description = "Name  (e.g. `bastion` or `db`) - required for `tf_label` module"
+}
 
 variable "delimiter" {
   default = "-"
 }
 
 variable "attributes" {
-  type    = "list"
-  default = []
+  description = "Additional attributes (e.g. `policy` or `role`)"
+  type        = "list"
+  default     = []
 }
 
 variable "tags" {
-  type    = "map"
-  default = {}
+  description = "Additional tags"
+  type        = "map"
+  default     = {}
 }
 
-variable "ec2_ami" {
-  default = "ami-cd0f5cb6"
+variable "region" {
+  description = "Region of instance launched in"
+  default     = ""
+}
+
+variable "availability_zone" {
+  description = "Availability Zone of instance launched in. If not set will be launched in frist AZ of region"
+  default     = ""
+}
+
+variable "ami" {
+  description = "The AMI to use for the instance. By default it is an AMI provided by Amazon with Ubuntu 16.04"
+  default     = ""
+}
+
+variable "ebs_optimized" {
+  description = "Launched EC2 instance will be EBS-optimized"
+  default     = "false"
+}
+
+variable "disable_api_termination" {
+  description = "Enable EC2 Instance Termination Protection"
+  default     = "false"
+}
+
+variable "monitoring" {
+  description = "Launched EC2 instance will have detailed monitoring enabled"
+  default     = "true"
 }
 
 variable "user_data" {
-  type    = "list"
-  default = []
+  description = "User data to provide when launching the instance"
+  type        = "list"
+  default     = []
+}
+
+variable "private_ip" {
+  description = "Private IP address to associate with the instance in a VPC"
+  default     = ""
+}
+
+variable "source_dest_check" {
+  description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs"
+  default     = "true"
+}
+
+variable "ipv6_address_count" {
+  description = "A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet"
+  default     = "0"
+}
+
+variable "ipv6_addresses" {
+  description = "List of IPv6 addresses from the range of the subnet to associate with the primary network interface"
+  default     = []
+}
+
+variable "root_volume_type" {
+  description = "The type of root volume. Can be standard, gp2 or io1"
+  default     = ""
+}
+
+variable "root_volume_size" {
+  description = "Size of the root volume in gigabytes"
+  default     = "10"
+}
+
+variable "root_iops" {
+  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  default     = ""
+}
+
+variable "ebs_device_name" {
+  description = "Name of the ebs device to mount"
+  default     = ""
+}
+
+variable "ebs_volume_type" {
+  description = "The type of ebs volume. Can be standard, gp2 or io1"
+  default     = "gp2"
+}
+
+variable "ebs_volume_size" {
+  description = "Size of the ebs volume in gigabytes"
+  default     = "0"
+}
+
+variable "ebs_snapshot_id" {
+  description = "Snapshot ID to use for ebs device"
+  default     = ""
+}
+
+variable "ebs_iops" {
+  description = " Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  default     = ""
+}
+
+variable "ebs_encrypted" {
+  description = "Enables EBS encryption on the volume. Cannot be used with snapshot_id"
+  default     = "false"
+}
+
+variable "delete_on_termination" {
+  description = "Whether the volume should be destroyed on instance termination"
+  default     = "true"
 }
 
 variable "ssh_user" {
@@ -121,15 +206,15 @@ variable "default_alarm_action" {
 
 variable "create_default_security_group" {
   description = "Create default Security Group with Egress traffic allowed only"
-  default     = true
+  default     = "true"
 }
 
 variable "instance_enabled" {
   description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
-  default     = true
+  default     = "true"
 }
 
-variable "role_arn" {
-  type = "list"
-  default = []
+variable "additional_ips_count" {
+  description = "Count of additional EIPs"
+  default     = "0"
 }
