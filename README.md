@@ -1,4 +1,4 @@
-# terraform-aws-ec2-instance
+# terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
 
 Terraform Module for providing a server capable of running admin tasks. Use `terraform-aws-ec2-instance` to create and manage an admin instance.
 
@@ -18,7 +18,7 @@ module "admin_tier" {
   instance_type               = "${var.instance_type}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
-  subnets                     = ["${var.subnets}"]
+  subnet                      = ["${var.subnet}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
   name                        = "${var.name}"
   namespace                   = "${var.namespace}"
@@ -62,30 +62,34 @@ resource "aws_ami_from_instance" "example" {
 | `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                      |    No    |
 | `vpc_id`                        |                       ``                       | The id of the VPC that the creating instance security group belongs to                   |   Yes    |
 | `security_groups`               |                       []                       | List of Security Group IDs allowed to connect to creating instance                       |   Yes    |
-| `subnets`                       |                       []                       | List of VPC Subnet IDs creating instance launched in                                     |   Yes    |
+| `subnet`                        |                       ``                       | VPC Subnet ID creating instance launched in                                              |   Yes    |
 | `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                  |    No    |
-| `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold         |   Yes    |
-| `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                   |   Yes    |
-| `evaluation_periods`            |                      `5`                       | Number of periods over which data is compared to the specified threshold                 |   Yes    |
-| `metric_namespace`              |                   `AWS/EC2`                    | Namespace for the alarm's associated metric                                              |   Yes    |
-| `applying_period`               |                      `60`                      | Period in seconds over which the specified statistic is applied                          |   Yes    |
-| `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                      |   Yes    |
-| `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                  |   Yes    |
-| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state              |   Yes    |
+| `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold         |    No    |
+| `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                   |    No    |
+| `evaluation_periods`            |                      `5`                       | Number of periods over which data is compared to the specified threshold                 |    No    |
+| `metric_namespace`              |                   `AWS/EC2`                    | Namespace for the alarm's associated metric                                              |    No    |
+| `applying_period`               |                      `60`                      | Period in seconds over which the specified statistic is applied                          |    No    |
+| `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                      |    No    |
+| `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                  |    No    |
+| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state              |    No    |
+| `additional_ips_count`          |                      `0`                       | Count of additional EIPs                                                                 |    No    |
+
 
 ## Outputs
 
-| Name                | Description                                                        |
-|:--------------------|:-------------------------------------------------------------------|
-| `id`                | Disambiguated ID                                                   |
-| `private_dns`       | Normalized name                                                    |
-| `private_ip`        | Normalized namespace                                               |
-| `public_ip`         | Public IP of instance (or EIP )                                    |
-| `public_dns`        | Public DNS of instance (or DNS of EIP)                             |
-| `ssh_key_pair`      | Name of used AWS SSH key                                           |
-| `security_group_id` | ID on the new AWS Security Group associated with creating instance |
-| `role`              | Name of AWS IAM Role associated with creating instance             |
-| `alarm`             | CloudWatch Alarm ID                                                |
+| Name                 | Description                                                        |
+|:---------------------|:-------------------------------------------------------------------|
+| `id`                 | Disambiguated ID                                                   |
+| `private_dns`        | Normalized name                                                    |
+| `private_ip`         | Normalized namespace                                               |
+| `public_ip`          | Public IP of instance (or EIP )                                    |
+| `public_dns`         | Public DNS of instance (or DNS of EIP)                             |
+| `ssh_key_pair`       | Name of used AWS SSH key                                           |
+| `security_group_id`  | ID on the new AWS Security Group associated with creating instance |
+| `role`               | Name of AWS IAM Role associated with creating instance             |
+| `alarm`              | CloudWatch Alarm ID                                                |
+| `additional_eni_ids` | Map of ENI with EIP                                                |
+
 
 ## References
 * Thanks to https://github.com/cloudposse/tf_bastion for the inspiration
