@@ -18,7 +18,7 @@ module "admin_tier" {
   instance_type               = "${var.instance_type}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
-  subnets                     = ["${var.subnets}"]
+  subnet                      = ["${var.subnet}"]
   associate_public_ip_address = "${var.associate_public_ip_address}"
   name                        = "${var.name}"
   namespace                   = "${var.namespace}"
@@ -62,7 +62,7 @@ resource "aws_ami_from_instance" "example" {
 | `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                      |    No    |
 | `vpc_id`                        |                       ``                       | The id of the VPC that the creating instance security group belongs to                   |   Yes    |
 | `security_groups`               |                       []                       | List of Security Group IDs allowed to connect to creating instance                       |   Yes    |
-| `subnets`                       |                       []                       | List of VPC Subnet IDs creating instance launched in                                     |   Yes    |
+| `subnet`                        |                       ``                       | VPC Subnet ID creating instance launched in                                              |   Yes    |
 | `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                  |    No    |
 | `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold         |    No    |
 | `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                   |    No    |

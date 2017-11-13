@@ -35,5 +35,5 @@ output "alarm" {
 }
 
 output "additional_eni_ids" {
-  value = "${zipmap(aws_network_interface.default.*.id, aws_eip.additional.*.public_ip)}"
+  value = "${zipmap(aws_network_interface.additional.*.id, aws_eip.additional.*.public_ip)}"
 }

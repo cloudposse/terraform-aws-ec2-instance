@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "default" {
 
 # Apply the tf_label module for this resource
 module "label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.0"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
@@ -106,7 +106,7 @@ resource "aws_instance" "default" {
 
   key_name = "${var.ssh_key_pair}"
 
-  subnet_id = "${var.subnets[0]}"
+  subnet_id = "${var.subnet}"
 
   tags {
     Name      = "${module.label.id}"
@@ -118,7 +118,7 @@ resource "aws_instance" "default" {
 resource "aws_eip" "default" {
   count             = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
   network_interface = "${aws_instance.default.primary_network_interface_id}"
-  vpc               = true
+  vpc               = "true"
 }
 
 # Restart dead or hung instance

@@ -21,9 +21,7 @@ variable "security_groups" {
   default = []
 }
 
-variable "subnets" {
-  type = "list"
-}
+variable "subnet" {}
 
 variable "namespace" {}
 
