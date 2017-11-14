@@ -1,6 +1,6 @@
 # terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
 
-Terraform Module for providing a server capable of running admin tasks. Use `terraform-aws-ec2-instance` to create and manage an admin instance.
+Terraform Module for providing a server capable of running admin tasks.
 
 ## Usage
 
