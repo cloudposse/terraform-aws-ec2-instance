@@ -1,27 +1,45 @@
-variable "ssh_key_pair" {}
+variable "ssh_key_pair" {
+  description = "SSH key pair to be provisioned on instance"
+}
 
-variable "github_api_token" {}
+variable "github_api_token" {
+  description = "GitHub API token"
+  default     = ""
+}
 
-variable "github_organization" {}
+variable "github_organization" {
+  description = "GitHub organization name"
+  default     = ""
+}
 
-variable "github_team" {}
+variable "github_team" {
+  description = "GitHub team"
+  default     = ""
+}
 
 variable "associate_public_ip_address" {
-  default = "true"
+  description = "Associate a public ip address with the creating instance"
+  default     = "true"
 }
 
 variable "instance_type" {
-  default = "t2.micro"
+  description = "The type of the creating instance"
+  default     = "t2.micro"
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+  description = "The ID of the VPC that the creating instance security group belongs to"
+}
 
 variable "security_groups" {
-  type    = "list"
-  default = []
+  description = "List of Security Group IDs allowed to connect to creating instance"
+  type        = "list"
+  default     = []
 }
 
-variable "subnet" {}
+variable "subnet" {
+  description = "VPC Subnet ID creating instance launched in"
+}
 
 variable "namespace" {
   description = "Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module"
@@ -98,7 +116,7 @@ variable "source_dest_check" {
 }
 
 variable "ipv6_address_count" {
-  description = "A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet"
+  description = "Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet"
   default     = "0"
 }
 
@@ -108,8 +126,8 @@ variable "ipv6_addresses" {
 }
 
 variable "root_volume_type" {
-  description = "The type of root volume. Can be standard, gp2 or io1"
-  default     = ""
+  description = "Type of root volume. Can be standard, gp2 or io1"
+  default     = "gp2"
 }
 
 variable "root_volume_size" {
@@ -118,13 +136,13 @@ variable "root_volume_size" {
 }
 
 variable "root_iops" {
-  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
-  default     = ""
+  description = "Amount of provisioned IOPS. This must be set with a root_volume_type of io1"
+  default     = "0"
 }
 
 variable "ebs_device_name" {
   description = "Name of the ebs device to mount"
-  default     = ""
+  default     = "/dev/sdz"
 }
 
 variable "ebs_volume_type" {
@@ -134,22 +152,17 @@ variable "ebs_volume_type" {
 
 variable "ebs_volume_size" {
   description = "Size of the ebs volume in gigabytes"
-  default     = "0"
-}
-
-variable "ebs_snapshot_id" {
-  description = "Snapshot ID to use for ebs device"
-  default     = ""
+  default     = "10"
 }
 
 variable "ebs_iops" {
-  description = " Amount of provisioned IOPS. This must be set with a volume_type of io1"
-  default     = ""
+  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  default     = "0"
 }
 
-variable "ebs_encrypted" {
-  description = "Enables EBS encryption on the volume. Cannot be used with snapshot_id"
-  default     = "false"
+variable "ebs_volume_count" {
+  description = "Count of EBS which will be attched to instance"
+  default     = "0"
 }
 
 variable "delete_on_termination" {

@@ -8,7 +8,6 @@ locals {
   ebs_iops  = "${var.ebs_volume_type == "io1" ? var.ebs_iops : "0"}"
 
   # Encryption cannot be used with snapshot_id
-  ebs_encrypted     = "${var.ebs_snapshot_id == "" ? var.ebs_encrypted : "false"}"
   availability_zone = "${var.availability_zone != "" ? var.availability_zone : data.aws_availability_zones.default.names[0]}"
   ami               = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
   root_volume_type  = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
@@ -61,10 +60,6 @@ data "aws_ami" "info" {
     values = ["${local.ami}"]
   }
 }
-
-data "aws_ebs_snapshot" "root_volume" {}
-
-data "aws_ebs_snapshot" "ebs_volume" {}
 
 # Apply the tf_label module for this resource
 module "label" {
@@ -164,16 +159,6 @@ resource "aws_instance" "default" {
     delete_on_termination = "${var.delete_on_termination}"
   }
 
-  ebs_block_device {
-    device_name           = "${var.ebs_device_name}"
-    volume_type           = "${var.ebs_volume_type}"
-    volume_size           = "${var.ebs_volume_size}"
-    snapshot_id           = "${var.ebs_snapshot_id}"
-    iops                  = "${local.ebs_iops}"
-    delete_on_termination = "${var.delete_on_termination}"
-    encrypted             = "${local.ebs_encrypted}"
-  }
-
   tags {
     Name      = "${module.label.id}"
     Namespace = "${var.namespace}"
@@ -187,41 +172,18 @@ resource "aws_eip" "default" {
   vpc               = "true"
 }
 
-# Restart dead or hung instance
-
-resource "null_resource" "check_alarm_action" {
-  count = "${local.instance_count}"
-
-  triggers = {
-    action = "arn:aws:swf:${local.region}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
-  }
+resource "aws_ebs_volume" "default" {
+  count             = "${var.ebs_volume_count}"
+  availability_zone = "${local.availability_zone}"
+  size              = "${var.ebs_volume_size}"
+  iops              = "${local.ebs_iops}"
+  type              = "${var.ebs_volume_type}"
+  tags              = "${module.label.tags}"
 }
 
-resource "aws_cloudwatch_metric_alarm" "default" {
-  count               = "${local.instance_count}"
-  alarm_name          = "${module.label.id}"
-  comparison_operator = "${var.comparison_operator}"
-  evaluation_periods  = "${var.evaluation_periods}"
-  metric_name         = "${var.metric_name}"
-  namespace           = "${var.metric_namespace}"
-  period              = "${var.applying_period}"
-  statistic           = "${var.statistic_level}"
-  threshold           = "${var.metric_threshold}"
-  depends_on          = ["null_resource.check_alarm_action"]
-
-  dimensions {
-    InstanceId = "${aws_instance.default.id}"
-  }
-
-  alarm_actions = [
-    "${null_resource.check_alarm_action.triggers.action}",
-  ]
-}
-
-resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
-
-  triggers {
-    public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
-  }
+resource "aws_volume_attachment" "default" {
+  count       = "${var.ebs_volume_count}"
+  device_name = "${var.ebs_device_name}${1 + count.index}"
+  volume_id   = "${element(aws_ebs_volume.default.*.id, count.index)}"
+  instance_id = "${aws_instance.default.id}"
 }

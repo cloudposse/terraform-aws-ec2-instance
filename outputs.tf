@@ -1,39 +1,54 @@
 output "public_ip" {
-  value = "${coalesce(join("", aws_eip.default.*.public_ip), aws_instance.default.public_ip)}"
+  description = "Public IP of instance (or EIP )"
+  value       = "${coalesce(join("", aws_eip.default.*.public_ip), aws_instance.default.public_ip)}"
 }
 
 output "private_ip" {
-  value = "${join("", aws_instance.default.*.private_ip)}"
+  description = "Private IP of instance"
+  value       = "${join("", aws_instance.default.*.private_ip)}"
 }
 
 output "private_dns" {
-  value = "${join("", aws_instance.default.*.private_dns)}"
+  description = "Private DNS of instance"
+  value       = "${join("", aws_instance.default.*.private_dns)}"
 }
 
 output "public_dns" {
-  value = "${coalesce(join("", null_resource.eip.*.triggers.public_dns), aws_instance.default.public_dns)}"
+  description = "Public DNS of instance (or DNS of EIP)"
+  value       = "${coalesce(join("", null_resource.eip.*.triggers.public_dns), aws_instance.default.public_dns)}"
 }
 
 output "id" {
-  value = "${join("", aws_instance.default.*.id)}"
+  description = "Disambiguated ID"
+  value       = "${join("", aws_instance.default.*.id)}"
 }
 
 output "ssh_key_pair" {
-  value = "${var.ssh_key_pair}"
+  description = "Name of used AWS SSH key"
+  value       = "${var.ssh_key_pair}"
 }
 
 output "security_group_ids" {
-  value = "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
+  description = "ID on the new AWS Security Group associated with creating instance"
+  value       = "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
 }
 
 output "role" {
-  value = "${join("", aws_iam_role.default.*.name)}"
+  description = "Name of AWS IAM Role associated with creating instance"
+  value       = "${join("", aws_iam_role.default.*.name)}"
 }
 
 output "alarm" {
-  value = "${join("", aws_cloudwatch_metric_alarm.default.*.id)}"
+  description = "CloudWatch Alarm ID"
+  value       = "${join("", aws_cloudwatch_metric_alarm.default.*.id)}"
 }
 
 output "additional_eni_ids" {
-  value = "${zipmap(aws_network_interface.additional.*.id, aws_eip.additional.*.public_ip)}"
+  description = "Map of ENI with EIP"
+  value       = "${zipmap(aws_network_interface.additional.*.id, aws_eip.additional.*.public_ip)}"
+}
+
+output "ebs_ids" {
+  description = "ID of EBSs"
+  value       = "${aws_ebs_volume.default.*.id}"
 }

@@ -19,5 +19,3 @@ Host *
 __EOF__
 chmod 600 /home/${ssh_user}/.ssh/config
 chown ${ssh_user}:${ssh_user} /home/${ssh_user}/.ssh/config
-
-${user_data}
