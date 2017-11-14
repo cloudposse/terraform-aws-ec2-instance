@@ -1,7 +1,5 @@
 # terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
 
-Terraform Module for providing a server capable of running admin tasks.
-
 ## Usage
 
 Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
