@@ -92,7 +92,7 @@ resource "aws_ami_from_instance" "example" {
 
 
 ## References
-* Thanks to https://github.com/cloudposse/tf_bastion for the inspiration
+* https://github.com/cloudposse/terraform-aws-ec2-bastion-server
 
 ## Help
 
