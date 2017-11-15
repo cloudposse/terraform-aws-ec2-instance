@@ -2,15 +2,11 @@ locals {
   instance_count       = "${var.instance_enabled ? 1 : 0}"
   security_group_count = "${var.create_default_security_group ? 1 : 0}"
   region               = "${var.region != "" ? var.region : data.aws_region.default.name}"
-
-  # `iops` works only with volume_type = "io1"
-  root_iops = "${var.root_volume_type == "io1" ? var.root_iops : "0"}"
-  ebs_iops  = "${var.ebs_volume_type == "io1" ? var.ebs_iops : "0"}"
-
-  # Encryption cannot be used with snapshot_id
-  availability_zone = "${var.availability_zone != "" ? var.availability_zone : data.aws_availability_zones.default.names[0]}"
-  ami               = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
-  root_volume_type  = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
+  root_iops            = "${var.root_volume_type == "io1" ? var.root_iops : "0"}"
+  ebs_iops             = "${var.ebs_volume_type == "io1" ? var.ebs_iops : "0"}"
+  availability_zone    = "${var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone}"
+  ami                  = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
+  root_volume_type     = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
 }
 
 data "aws_caller_identity" "default" {}
@@ -19,7 +15,9 @@ data "aws_region" "default" {
   current = "true"
 }
 
-data "aws_availability_zones" "default" {}
+data "aws_subnet" "default" {
+  id = "${var.subnet}"
+}
 
 data "aws_iam_policy_document" "default" {
   statement {
@@ -85,49 +83,12 @@ resource "aws_iam_role" "default" {
   assume_role_policy = "${data.aws_iam_policy_document.default.json}"
 }
 
-resource "aws_security_group" "default" {
-  count       = "${local.security_group_count}"
-  name        = "${module.label.id}"
-  vpc_id      = "${var.vpc_id}"
-  description = "Instance default security group (only egress access is allowed)"
-
-  tags {
-    Name      = "${module.label.id}"
-    Namespace = "${var.namespace}"
-    Stage     = "${var.stage}"
-  }
-
-  egress {
-    protocol  = "-1"
-    from_port = 0
-    to_port   = 0
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 # Apply the tf_github_authorized_keys module for this resource
 module "github_authorized_keys" {
   source              = "git::https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys.git?ref=tags/0.1.1"
   github_api_token    = "${var.github_api_token}"
   github_organization = "${var.github_organization}"
   github_team         = "${var.github_team}"
-}
-
-data "template_file" "user_data" {
-  template = "${file("${path.module}/user_data.sh")}"
-
-  vars {
-    user_data       = "${join("\n", compact(concat(var.user_data, list(module.github_authorized_keys.user_data))))}"
-    welcome_message = "${var.welcome_message}"
-    ssh_user        = "${var.ssh_user}"
-  }
 }
 
 resource "aws_instance" "default" {
@@ -159,11 +120,7 @@ resource "aws_instance" "default" {
     delete_on_termination = "${var.delete_on_termination}"
   }
 
-  tags {
-    Name      = "${module.label.id}"
-    Namespace = "${var.namespace}"
-    Stage     = "${var.stage}"
-  }
+  tags = "${module.label.tags}"
 }
 
 resource "aws_eip" "default" {
@@ -183,7 +140,7 @@ resource "aws_ebs_volume" "default" {
 
 resource "aws_volume_attachment" "default" {
   count       = "${var.ebs_volume_count}"
-  device_name = "${var.ebs_device_name}${1 + count.index}"
+  device_name = "${element(var.ebs_device_name, count.index)}"
   volume_id   = "${element(aws_ebs_volume.default.*.id, count.index)}"
   instance_id = "${aws_instance.default.id}"
 }

@@ -142,7 +142,7 @@ variable "root_iops" {
 
 variable "ebs_device_name" {
   description = "Name of the ebs device to mount"
-  default     = "/dev/sdz"
+  default     = ["/dev/xvdb", "/dev/xvdc", "/dev/xvdd", "/dev/xvde", "/dev/xvdf", "/dev/xvdg", "/dev/xvdh", "/dev/xvdi", "/dev/xvdj", "/dev/xvdk", "/dev/xvdl", "/dev/xvdm", "/dev/xvdn", "/dev/xvdo", "/dev/xvdp", "/dev/xvdq", "/dev/xvdr", "/dev/xvds", "/dev/xvdt", "/dev/xvdu", "/dev/xvdv", "/dev/xvdw", "/dev/xvdx", "/dev/xvdy", "/dev/xvdz"]
 }
 
 variable "ebs_volume_type" {
@@ -168,10 +168,6 @@ variable "ebs_volume_count" {
 variable "delete_on_termination" {
   description = "Whether the volume should be destroyed on instance termination"
   default     = "true"
-}
-
-variable "ssh_user" {
-  default = "ubuntu"
 }
 
 variable "welcome_message" {

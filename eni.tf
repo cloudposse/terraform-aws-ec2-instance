@@ -1,5 +1,5 @@
 locals {
-  additional_ips_count = "${var.associate_public_ip_address && var.instance_enabled && var.additional_ips_count != "0" ? var.additional_ips_count : 0}"
+  additional_ips_count = "${var.associate_public_ip_address && var.instance_enabled && var.additional_ips_count > 0 ? var.additional_ips_count : 0}"
 }
 
 resource "aws_network_interface" "additional" {
@@ -10,11 +10,7 @@ resource "aws_network_interface" "additional" {
     "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
   ]
 
-  tags {
-    Name      = "${module.label.id}"
-    Namespace = "${var.namespace}"
-    Stage     = "${var.stage}"
-  }
+  tags = "${module.label.tags}"
 }
 
 resource "aws_network_interface_attachment" "additional" {
