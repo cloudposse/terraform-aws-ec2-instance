@@ -11,7 +11,7 @@ Include this repository as a module in your existing terraform code.
 ### Simple example:
 
 ```terraform
-module "admin_tier" {
+module "instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ssh_key_pair                = "${var.ssh_key_pair}"
   instance_type               = "${var.instance_type}"
@@ -47,7 +47,7 @@ module "instance_github" {
 ### Example with additional volumes and EIP
 
 ```terraform
-module "admin_tier" {
+module "kafka_instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ssh_key_pair                = "${var.ssh_key_pair}"
   github_api_token            = "${var.github_api_token}"
