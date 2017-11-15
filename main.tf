@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "default" {
 
 # Apply the tf_label module for this resource
 module "label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.1"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
@@ -74,7 +74,7 @@ resource "aws_security_group" "default" {
 
 # Apply the tf_github_authorized_keys module for this resource
 module "github_authorized_keys" {
-  source              = "git::https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys.git?ref=tags/0.1.1"
+  source              = "git::https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys.git?ref=tags/0.1.2"
   github_api_token    = "${var.github_api_token}"
   github_organization = "${var.github_organization}"
   github_team         = "${var.github_team}"
