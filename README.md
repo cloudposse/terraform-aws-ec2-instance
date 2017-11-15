@@ -1,5 +1,14 @@
 # terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
 
+Terraform Module for providing a general purpose EC2 host.
+
+Included features:
+* Automatically create a Security Group
+* Option to switch EIP attachment
+* CloudWatch monitoring and automatic reboot if instance hangs
+* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
+* Assume Role capability
+
 ## Usage
 
 Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
