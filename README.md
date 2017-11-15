@@ -27,7 +27,7 @@ module "admin_tier" {
 ### Example with [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys):
 
 ```terraform
-module "admin_tier" {
+module "instance_github" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ssh_key_pair                = "${var.ssh_key_pair}"
   github_api_token            = "${var.github_api_token}"
@@ -41,6 +41,27 @@ module "admin_tier" {
   name                        = "${var.name}"
   namespace                   = "${var.namespace}"
   stage                       = "${var.stage}"
+}
+```
+
+### Example with additional volumes and EIP
+
+```terraform
+module "admin_tier" {
+  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  ssh_key_pair                = "${var.ssh_key_pair}"
+  github_api_token            = "${var.github_api_token}"
+  github_organization         = "${var.github_organization}"
+  github_team                 = "${var.github_team}"
+  vpc_id                      = "${var.vpc_id}"
+  security_groups             = ["${var.security_groups}"]
+  subnet                      = "${var.subnet}"
+  associate_public_ip_address = "true"
+  name                        = "kafka"
+  namespace                   = "cp"
+  stage                       = "dev"
+  additional_ips_count        = "1"
+  ebs_volume_count            = "2"
 }
 ```
 
@@ -63,9 +84,9 @@ resource "aws_ami_from_instance" "example" {
 
 | Name                            |                    Default                     | Description                                                                                            | Required |
 |:--------------------------------|:----------------------------------------------:|:-------------------------------------------------------------------------------------------------------|:--------:|
-| `namespace`                     |                    `global`                    | Namespace (e.g. `cp` or `cloudposse`)                                                                  |   Yes    |
-| `stage`                         |                   `default`                    | Stage (e.g. `prod`, `dev`, `staging`                                                                   |   Yes    |
-| `name`                          |                    `admin`                     | Name  (e.g. `bastion` or `db`)                                                                         |   Yes    |
+| `namespace`                     |                       ``                       | Namespace (e.g. `cp` or `cloudposse`)                                                                  |   Yes    |
+| `stage`                         |                       ``                       | Stage (e.g. `prod`, `dev`, `staging`                                                                   |   Yes    |
+| `name`                          |                       ``                       | Name  (e.g. `bastion` or `db`)                                                                         |   Yes    |
 | `attributes`                    |                      `[]`                      | Additional attributes (e.g. `policy` or `role`)                                                        |    No    |
 | `tags`                          |                      `{}`                      | Additional tags  (e.g. `map("BusinessUnit","XYZ")`                                                     |    No    |
 | `ami`                           |                       ``                       | By default it is an AMI provided by Amazon with Ubuntu 16.04                                           |    No    |
@@ -88,7 +109,7 @@ resource "aws_ami_from_instance" "example" {
 | `root_volume_type`              |                     `gp2`                      | Type of root volume. Can be `standard`, `gp2` or `io1`                                                 |    No    |
 | `root_volume_size`              |                      `10`                      | Size of the root volume in gigabytes                                                                   |    No    |
 | `root_iops`                     |                      `0`                       | Amount of provisioned IOPS. This must be set with a `root_volume_type` of `io1`                        |    No    |
-| `ebs_device_name`               |                   `/dev/sdz`                   | Name of the ebs device to mount                                                                        |    No    |
+| `ebs_device_name`               |                 `[/dev/xvdb]`                  | Name of the ebs device to mount                                                                        |    No    |
 | `ebs_volume_type`               |                     `gp2`                      | Type of EBS volume. Can be standard, `gp2` or `io1`                                                    |    No    |
 | `ebs_volume_size`               |                      `10`                      | Size of the EBS volume in gigabytes                                                                    |    No    |
 | `ebs_iops`                      |                      `0`                       | Amount of provisioned IOPS. This must be set with a `ebs_volume_type` of `io1`                         |    No    |
