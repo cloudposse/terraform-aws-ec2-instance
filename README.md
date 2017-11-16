@@ -31,26 +31,6 @@ module "instance" {
 }
 ```
 
-### Example with [tf_github_authorized_keys](https://github.com/cloudposse/tf_github_authorized_keys):
-
-```terraform
-module "instance_github" {
-  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
-  ssh_key_pair                = "${var.ssh_key_pair}"
-  github_api_token            = "${var.github_api_token}"
-  github_organization         = "${var.github_organization}"
-  github_team                 = "${var.github_team}"
-  instance_type               = "${var.instance_type}"
-  vpc_id                      = "${var.vpc_id}"
-  security_groups             = ["${var.security_groups}"]
-  subnet                      = "${var.subnet}"
-  associate_public_ip_address = "${var.associate_public_ip_address}"
-  name                        = "${var.name}"
-  namespace                   = "${var.namespace}"
-  stage                       = "${var.stage}"
-}
-```
-
 ### Example with additional volumes and EIP
 
 ```terraform
