@@ -5,17 +5,26 @@ resource "aws_security_group" "default" {
   description = "Instance default security group (only egress access is allowed)"
   tags        = "${module.label.tags}"
 
-  egress {
-    protocol  = "-1"
-    from_port = 0
-    to_port   = 0
-
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
-  }
-
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_security_group_rule" "egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.default.id}"
+}
+
+resource "aws_security_group_rule" "ingress" {
+  count             = "${length(compact(var.allowed_ports))}"
+  type              = "ingress"
+  from_port         = "${element(var.allowed_ports, count.index)}"
+  to_port           = "${element(var.allowed_ports, count.index)}"
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = "${aws_security_group.default.id}"
 }

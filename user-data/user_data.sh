@@ -19,7 +19,7 @@ cat <<"__EOF__" > /home/SSH_USER/.ssh/config
 Host *
     StrictHostKeyChecking no
 __EOF__
-chmod 600 /home/SSH_USER/.ssh/config
-chown SSH_USER:SSH_USER /home/SSH_USER/.ssh/config
+chmod 600 /home/$SSH_USER/.ssh/config
+chown $SSH_USER:$SSH_USER /home/SSH_USER/.ssh/config
 
 ${user_data}

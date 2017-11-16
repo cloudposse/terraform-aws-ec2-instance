@@ -68,7 +68,7 @@ module "label" {
   attributes = "${var.attributes}"
   delimiter  = "${var.delimiter}"
   tags       = "${var.tags}"
-  enabled    = "${local.instance_count}"
+  enabled    = "${local.instance_count ? "true" : "false"}"
 }
 
 resource "aws_iam_instance_profile" "default" {

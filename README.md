@@ -62,6 +62,7 @@ module "kafka_instance" {
   stage                       = "dev"
   additional_ips_count        = "1"
   ebs_volume_count            = "2"
+  allowed_ports               = ["22", "80", "443"]
 }
 ```
 
@@ -99,6 +100,7 @@ resource "aws_ami_from_instance" "example" {
 | `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                                    |    No    |
 | `vpc_id`                        |                       ``                       | The ID of the VPC that the creating instance security group belongs to                                 |   Yes    |
 | `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to creating instance                                     |   Yes    |
+| `allowed_ports`                 |                      `[]`                      | List of allowed ingress ports e.g. ["22", "80", "443"]                                                 |    No    |
 | `subnet`                        |                       ``                       | VPC Subnet ID creating instance launched in                                                            |   Yes    |
 | `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                                |    No    |
 | `additional_ips_count`          |                      `0`                       | Count of additional EIPs                                                                               |    No    |

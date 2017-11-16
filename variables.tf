@@ -37,6 +37,11 @@ variable "security_groups" {
   default     = []
 }
 
+variable "allowed_ports" {
+  description = "List of allowed ingress ports"
+  default     = []
+}
+
 variable "subnet" {
   description = "VPC Subnet ID creating instance launched in"
 }
