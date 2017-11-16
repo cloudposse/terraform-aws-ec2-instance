@@ -1,4 +1,4 @@
-# terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
+# terraform-aws-ec2-instance [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-ec2-instance)
 
 Terraform Module for providing a `EC2` instance. Use `terraform-aws-ec2-instance` to create and manage an `EC2` instance.
 

@@ -67,7 +67,7 @@ module "label" {
   name       = "${var.name}"
   attributes = "${var.attributes}"
   delimiter  = "${var.delimiter}"
-  tags       = "${var.tags}"
+  tags       = "${merge(map("AZ", "${local.availability_zone}"), var.tags)}"
   enabled    = "${local.instance_count ? "true" : "false"}"
 }
 
