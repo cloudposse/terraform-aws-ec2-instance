@@ -1,59 +1,178 @@
-variable "ssh_key_pair" {}
+variable "ssh_key_pair" {
+  description = "SSH key pair to be provisioned on instance"
+}
 
-variable "github_api_token" {}
+variable "github_api_token" {
+  description = "GitHub API token"
+  default     = ""
+}
 
-variable "github_organization" {}
+variable "github_organization" {
+  description = "GitHub organization name"
+  default     = ""
+}
 
-variable "github_team" {}
+variable "github_team" {
+  description = "GitHub team"
+  default     = ""
+}
 
 variable "associate_public_ip_address" {
-  default = true
+  description = "Associate a public ip address with the creating instance"
+  default     = "true"
 }
 
 variable "instance_type" {
-  default = "t2.micro"
+  description = "The type of the creating instance"
+  default     = "t2.micro"
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+  description = "The ID of the VPC that the creating instance security group belongs to"
+}
 
 variable "security_groups" {
-  type    = "list"
-  default = []
+  description = "List of Security Group IDs allowed to connect to creating instance"
+  type        = "list"
+  default     = []
 }
 
-variable "subnet" {}
+variable "allowed_ports" {
+  description = "List of allowed ingress ports"
+  default     = []
+}
 
-variable "namespace" {}
+variable "subnet" {
+  description = "VPC Subnet ID creating instance launched in"
+}
 
-variable "stage" {}
+variable "namespace" {
+  description = "Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module"
+}
 
-variable "name" {}
+variable "stage" {
+  description = "Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module"
+}
+
+variable "name" {
+  description = "Name  (e.g. `bastion` or `db`) - required for `tf_label` module"
+}
 
 variable "delimiter" {
   default = "-"
 }
 
 variable "attributes" {
-  type    = "list"
-  default = []
+  description = "Additional attributes (e.g. `policy` or `role`)"
+  type        = "list"
+  default     = []
 }
 
 variable "tags" {
-  type    = "map"
-  default = {}
+  description = "Additional tags"
+  type        = "map"
+  default     = {}
 }
 
-variable "ec2_ami" {
-  default = "ami-cd0f5cb6"
+variable "region" {
+  description = "Region of instance launched in"
+  default     = ""
+}
+
+variable "availability_zone" {
+  description = "Availability Zone of instance launched in. If not set will be launched in frist AZ of region"
+  default     = ""
+}
+
+variable "ami" {
+  description = "The AMI to use for the instance. By default it is an AMI provided by Amazon with Ubuntu 16.04"
+  default     = ""
+}
+
+variable "ebs_optimized" {
+  description = "Launched EC2 instance will be EBS-optimized"
+  default     = "false"
+}
+
+variable "disable_api_termination" {
+  description = "Enable EC2 Instance Termination Protection"
+  default     = "false"
+}
+
+variable "monitoring" {
+  description = "Launched EC2 instance will have detailed monitoring enabled"
+  default     = "true"
 }
 
 variable "user_data" {
-  type    = "list"
-  default = []
+  description = "User data to provide when launching the instance"
+  type        = "list"
+  default     = []
 }
 
-variable "ssh_user" {
-  default = "ubuntu"
+variable "private_ip" {
+  description = "Private IP address to associate with the instance in a VPC"
+  default     = ""
+}
+
+variable "source_dest_check" {
+  description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs"
+  default     = "true"
+}
+
+variable "ipv6_address_count" {
+  description = "Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet"
+  default     = "0"
+}
+
+variable "ipv6_addresses" {
+  description = "List of IPv6 addresses from the range of the subnet to associate with the primary network interface"
+  default     = []
+}
+
+variable "root_volume_type" {
+  description = "Type of root volume. Can be standard, gp2 or io1"
+  default     = "gp2"
+}
+
+variable "root_volume_size" {
+  description = "Size of the root volume in gigabytes"
+  default     = "10"
+}
+
+variable "root_iops" {
+  description = "Amount of provisioned IOPS. This must be set with a root_volume_type of io1"
+  default     = "0"
+}
+
+variable "ebs_device_name" {
+  description = "Name of the ebs device to mount"
+  default     = ["/dev/xvdb", "/dev/xvdc", "/dev/xvdd", "/dev/xvde", "/dev/xvdf", "/dev/xvdg", "/dev/xvdh", "/dev/xvdi", "/dev/xvdj", "/dev/xvdk", "/dev/xvdl", "/dev/xvdm", "/dev/xvdn", "/dev/xvdo", "/dev/xvdp", "/dev/xvdq", "/dev/xvdr", "/dev/xvds", "/dev/xvdt", "/dev/xvdu", "/dev/xvdv", "/dev/xvdw", "/dev/xvdx", "/dev/xvdy", "/dev/xvdz"]
+}
+
+variable "ebs_volume_type" {
+  description = "The type of ebs volume. Can be standard, gp2 or io1"
+  default     = "gp2"
+}
+
+variable "ebs_volume_size" {
+  description = "Size of the ebs volume in gigabytes"
+  default     = "10"
+}
+
+variable "ebs_iops" {
+  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  default     = "0"
+}
+
+variable "ebs_volume_count" {
+  description = "Count of EBS which will be attched to instance"
+  default     = "0"
+}
+
+variable "delete_on_termination" {
+  description = "Whether the volume should be destroyed on instance termination"
+  default     = "true"
 }
 
 variable "welcome_message" {
