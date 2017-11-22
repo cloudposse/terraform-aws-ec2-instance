@@ -130,6 +130,14 @@ resource "aws_eip" "default" {
   vpc               = "true"
 }
 
+resource "null_resource" "eip" {
+  count = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
+
+  triggers {
+    public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
+  }
+}
+
 resource "aws_ebs_volume" "default" {
   count             = "${var.ebs_volume_count}"
   availability_zone = "${local.availability_zone}"

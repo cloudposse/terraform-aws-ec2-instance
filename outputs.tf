@@ -52,3 +52,13 @@ output "ebs_ids" {
   description = "ID of EBSs"
   value       = "${aws_ebs_volume.default.*.id}"
 }
+
+output "primary_network_interface_id" {
+  description = "ID of the instance's primary network interface"
+  value       = "${aws_instance.default.primary_network_interface_id}"
+}
+
+output "network_interface_id" {
+  description = "ID of the network interface that was created with the instance"
+  value       = "${aws_instance.default.network_interface_id}"
+}

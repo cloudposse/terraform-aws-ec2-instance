@@ -115,19 +115,21 @@ resource "aws_ami_from_instance" "example" {
 
 ## Outputs
 
-| Name                 | Description                                                        |
-|:---------------------|:-------------------------------------------------------------------|
-| `id`                 | Disambiguated ID                                                   |
-| `private_dns`        | Private DNS of instance                                            |
-| `private_ip`         | Private IP of instance                                             |
-| `public_ip`          | Public IP of instance (or EIP )                                    |
-| `public_dns`         | Public DNS of instance (or DNS of EIP)                             |
-| `ssh_key_pair`       | Name of used AWS SSH key                                           |
-| `security_group_id`  | ID on the new AWS Security Group associated with creating instance |
-| `role`               | Name of AWS IAM Role associated with creating instance             |
-| `alarm`              | CloudWatch Alarm ID                                                |
-| `additional_eni_ids` | Map of ENI with EIP                                                |
-| `ebs_ids`            | ID of EBSs                                                         |
+| Name                           | Description                                                        |
+|:-------------------------------|:-------------------------------------------------------------------|
+| `id`                           | Disambiguated ID                                                   |
+| `private_dns`                  | Private DNS of instance                                            |
+| `private_ip`                   | Private IP of instance                                             |
+| `public_ip`                    | Public IP of instance (or EIP )                                    |
+| `public_dns`                   | Public DNS of instance (or DNS of EIP)                             |
+| `ssh_key_pair`                 | Name of used AWS SSH key                                           |
+| `security_group_id`            | ID on the new AWS Security Group associated with creating instance |
+| `role`                         | Name of AWS IAM Role associated with creating instance             |
+| `alarm`                        | CloudWatch Alarm ID                                                |
+| `additional_eni_ids`           | Map of ENI with EIP                                                |
+| `ebs_ids`                      | ID of EBSs                                                         |
+| `primary_network_interface_id` | ID of the instance's primary network interface                     |
+| `network_interface_id`         | ID of the network interface that was created with the instance     |
 
 ## License
 
