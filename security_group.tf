@@ -11,6 +11,7 @@ resource "aws_security_group" "default" {
 }
 
 resource "aws_security_group_rule" "egress" {
+  count             = "${var.create_default_security_group ? 1 : 0}"
   type              = "egress"
   from_port         = 0
   to_port           = 65535
@@ -20,7 +21,7 @@ resource "aws_security_group_rule" "egress" {
 }
 
 resource "aws_security_group_rule" "ingress" {
-  count             = "${length(compact(var.allowed_ports))}"
+  count             = "${var.create_default_security_group ? length(compact(var.allowed_ports)) : 0}"
   type              = "ingress"
   from_port         = "${element(var.allowed_ports, count.index)}"
   to_port           = "${element(var.allowed_ports, count.index)}"
