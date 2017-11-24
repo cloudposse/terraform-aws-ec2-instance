@@ -110,6 +110,12 @@ variable "user_data" {
   default     = []
 }
 
+variable "custom_user_data" {
+  description = "User data to provide when launching the instance"
+  type        = "list"
+  default     = []
+}
+
 variable "private_ip" {
   description = "Private IP address to associate with the instance in a VPC"
   default     = ""
