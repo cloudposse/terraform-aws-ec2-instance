@@ -6,7 +6,7 @@ Included features:
 * Automatically create a Security Group
 * Option to switch EIP attachment
 * CloudWatch monitoring and automatic reboot if instance hangs
-* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
+* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-User Data-github-authorized-keys)
 * Assume Role capability
 
 ## Usage
@@ -56,7 +56,7 @@ module "kafka_instance" {
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-* [terraform-template-user-data-github-authorized-keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
+* [terraform-template-User Data-github-authorized-keys](https://github.com/cloudposse/terraform-template-User Data-github-authorized-keys)
 
 It is necessary to run `terraform get` to download those modules.
 
@@ -70,48 +70,51 @@ resource "aws_ami_from_instance" "example" {
 
 ## Variables
 
-| Name                            |                    Default                     | Description                                                                                            | Required |
-|:--------------------------------|:----------------------------------------------:|:-------------------------------------------------------------------------------------------------------|:--------:|
-| `namespace`                     |                       ``                       | Namespace (e.g. `cp` or `cloudposse`)                                                                  |   Yes    |
-| `stage`                         |                       ``                       | Stage (e.g. `prod`, `dev`, `staging`                                                                   |   Yes    |
-| `name`                          |                       ``                       | Name  (e.g. `bastion` or `db`)                                                                         |   Yes    |
-| `attributes`                    |                      `[]`                      | Additional attributes (e.g. `policy` or `role`)                                                        |    No    |
-| `tags`                          |                      `{}`                      | Additional tags  (e.g. `map("BusinessUnit","XYZ")`                                                     |    No    |
-| `ami`                           |                       ``                       | By default it is an AMI provided by Amazon with Ubuntu 16.04                                           |    No    |
-| `instance_enabled`              |                     `true`                     | Flag for creating an instance. Set to false if it is necessary to skip instance creation               |    No    |
-| `create_default_security_group` |                     `true`                     | Flag for creation default Security Group with Egress traffic allowed only                              |    No    |
-| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on instance                                                             |   Yes    |
-| `github_api_token`              |                       ``                       | GitHub API token                                                                                       |    No    |
-| `github_organization`           |                       ``                       | GitHub organization name                                                                               |    No    |
-| `github_team`                   |                       ``                       | GitHub team                                                                                            |    No    |
-| `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                                    |    No    |
-| `vpc_id`                        |                       ``                       | The ID of the VPC that the creating instance security group belongs to                                 |   Yes    |
-| `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to creating instance                                     |   Yes    |
-| `allowed_ports`                 |                      `[]`                      | List of allowed ingress ports e.g. ["22", "80", "443"]                                                 |    No    |
-| `subnet`                        |                       ``                       | VPC Subnet ID creating instance launched in                                                            |   Yes    |
-| `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                                |    No    |
-| `additional_ips_count`          |                      `0`                       | Count of additional EIPs                                                                               |    No    |
-| `private_ip`                    |                       ``                       | Private IP address to associate with the instance in a VPC                                             |    No    |
-| `source_dest_check`             |                     `true`                     | Controls if traffic is routed to the instance when the destination address does not match the instance |    No    |
-| `ipv6_address_count`            |                      `0`                       | Number of IPv6 addresses to associate with the primary network interface                               |    No    |
-| `ipv6_addresses`                |                      `[]`                      | List of IPv6 addresses from the range of the subnet to associate with the primary network interface    |    No    |
-| `root_volume_type`              |                     `gp2`                      | Type of root volume. Can be `standard`, `gp2` or `io1`                                                 |    No    |
-| `root_volume_size`              |                      `10`                      | Size of the root volume in gigabytes                                                                   |    No    |
-| `root_iops`                     |                      `0`                       | Amount of provisioned IOPS. This must be set with a `root_volume_type` of `io1`                        |    No    |
-| `ebs_device_name`               |                 `[/dev/xvdb]`                  | Name of the ebs device to mount                                                                        |    No    |
-| `ebs_volume_type`               |                     `gp2`                      | Type of EBS volume. Can be standard, `gp2` or `io1`                                                    |    No    |
-| `ebs_volume_size`               |                      `10`                      | Size of the EBS volume in gigabytes                                                                    |    No    |
-| `ebs_iops`                      |                      `0`                       | Amount of provisioned IOPS. This must be set with a `ebs_volume_type` of `io1`                         |    No    |
-| `ebs_volume_count`              |                      `0`                       | Count of EBS which will be attched to instance                                                         |    No    |
-| `delete_on_termination`         |                     `true`                     | Whether the volume should be destroyed on instance termination                                         |    No    |
-| `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold                       |    No    |
-| `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                                 |    No    |
-| `evaluation_periods`            |                      `5`                       | Number of periods over which data is compared to the specified threshold                               |    No    |
-| `metric_namespace`              |                   `AWS/EC2`                    | Namespace for the alarm's associated metric                                                            |    No    |
-| `applying_period`               |                      `60`                      | Period in seconds over which the specified statistic is applied                                        |    No    |
-| `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                                    |    No    |
-| `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                                |    No    |
-| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                            |    No    |
+| Name                            |                    Default                     | Description                                                                                                                  | Required |
+|:--------------------------------|:----------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------|:--------:|
+| `namespace`                     |                       ``                       | Namespace (e.g. `cp` or `cloudposse`)                                                                                        |   Yes    |
+| `stage`                         |                       ``                       | Stage (e.g. `prod`, `dev`, `staging`                                                                                         |   Yes    |
+| `name`                          |                       ``                       | Name  (e.g. `bastion` or `db`)                                                                                               |   Yes    |
+| `attributes`                    |                      `[]`                      | Additional attributes (e.g. `policy` or `role`)                                                                              |    No    |
+| `tags`                          |                      `{}`                      | Additional tags  (e.g. `map("BusinessUnit","XYZ")`                                                                           |    No    |
+| `ami`                           |                       ``                       | By default it is an AMI provided by Amazon with Ubuntu 16.04                                                                 |    No    |
+| `instance_enabled`              |                     `true`                     | Flag for creating an instance. Set to false if it is necessary to skip instance creation                                     |    No    |
+| `create_default_security_group` |                     `true`                     | Flag for creation default Security Group with Egress traffic allowed only                                                    |    No    |
+| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on instance                                                                                   |   Yes    |
+| `github_api_token`              |                       ``                       | GitHub API token                                                                                                             |    No    |
+| `github_organization`           |                       ``                       | GitHub organization name                                                                                                     |    No    |
+| `github_team`                   |                       ``                       | GitHub team                                                                                                                  |    No    |
+| `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                                                          |    No    |
+| `vpc_id`                        |                       ``                       | The ID of the VPC that the creating instance security group belongs to                                                       |   Yes    |
+| `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to creating instance                                                           |   Yes    |
+| `allowed_ports`                 |                      `[]`                      | List of allowed ingress ports e.g. ["22", "80", "443"]                                                                       |    No    |
+| `subnet`                        |                       ``                       | VPC Subnet ID creating instance launched in                                                                                  |   Yes    |
+| `associate_public_ip_address`   |                     `true`                     | Associate a public ip address with the creating instance. Boolean value                                                      |    No    |
+| `additional_ips_count`          |                      `0`                       | Count of additional EIPs                                                                                                     |    No    |
+| `private_ip`                    |                       ``                       | Private IP address to associate with the instance in a VPC                                                                   |    No    |
+| `source_dest_check`             |                     `true`                     | Controls if traffic is routed to the instance when the destination address does not match the instance                       |    No    |
+| `ipv6_address_count`            |                      `0`                       | Number of IPv6 addresses to associate with the primary network interface                                                     |    No    |
+| `ipv6_addresses`                |                      `[]`                      | List of IPv6 addresses from the range of the subnet to associate with the primary network interface                          |    No    |
+| `root_volume_type`              |                     `gp2`                      | Type of root volume. Can be `standard`, `gp2` or `io1`                                                                       |    No    |
+| `root_volume_size`              |                      `10`                      | Size of the root volume in gigabytes                                                                                         |    No    |
+| `root_iops`                     |                      `0`                       | Amount of provisioned IOPS. This must be set with a `root_volume_type` of `io1`                                              |    No    |
+| `ebs_device_name`               |                 `[/dev/xvdb]`                  | Name of the ebs device to mount                                                                                              |    No    |
+| `ebs_volume_type`               |                     `gp2`                      | Type of EBS volume. Can be standard, `gp2` or `io1`                                                                          |    No    |
+| `ebs_volume_size`               |                      `10`                      | Size of the EBS volume in gigabytes                                                                                          |    No    |
+| `ebs_iops`                      |                      `0`                       | Amount of provisioned IOPS. This must be set with a `ebs_volume_type` of `io1`                                               |    No    |
+| `ebs_volume_count`              |                      `0`                       | Count of EBS which will be attched to instance                                                                               |    No    |
+| `delete_on_termination`         |                     `true`                     | Whether the volume should be destroyed on instance termination                                                               |    No    |
+| `comparison_operator`           |        `GreaterThanOrEqualToThreshold`         | Arithmetic operation to use when comparing the specified Statistic and Threshold                                             |    No    |
+| `metric_name`                   |          `StatusCheckFailed_Instance`          | Name for the alarm's associated metric                                                                                       |    No    |
+| `evaluation_periods`            |                      `5`                       | Number of periods over which data is compared to the specified threshold                                                     |    No    |
+| `metric_namespace`              |                   `AWS/EC2`                    | Namespace for the alarm's associated metric                                                                                  |    No    |
+| `applying_period`               |                      `60`                      | Period in seconds over which the specified statistic is applied                                                              |    No    |
+| `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                                                          |    No    |
+| `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                                                      |    No    |
+| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                                                  |    No    |
+| `user_data`                     |                      `[]`                      | `User Data` which be concated with `terraform-template-User Data-github-authorized-keys`. Conflicts with  `custom_user_data` |    No    |
+| `custom_user_data`              |                      `[]`                      | Specific `User Data`, for example pfsense `AMI` doesn't support classic `User Data`. Conflicts with  `user_data`             |    No    |
+
 
 ## Outputs
 
@@ -126,7 +129,8 @@ resource "aws_ami_from_instance" "example" {
 | `security_group_id`            | ID on the new AWS Security Group associated with creating instance |
 | `role`                         | Name of AWS IAM Role associated with creating instance             |
 | `alarm`                        | CloudWatch Alarm ID                                                |
-| `additional_eni_ids`           | Map of ENI with EIP                                                |
+| `additional_eni_private`       | Map IDs of ENI with private IPs                                    |
+| `additional_eni_public`        | Map IDs of ENI with public IPs                                     |
 | `ebs_ids`                      | ID of EBSs                                                         |
 | `primary_network_interface_id` | ID of the instance's primary network interface                     |
 | `network_interface_id`         | ID of the network interface that was created with the instance     |

@@ -101,17 +101,17 @@ variable "disable_api_termination" {
 
 variable "monitoring" {
   description = "Launched EC2 instance will have detailed monitoring enabled"
-  default     = "true"
+  default     = "false"
 }
 
 variable "user_data" {
-  description = "User data to provide when launching the instance"
+  description = "User Data which be concated with `terraform-template-User Data-github-authorized-keys`"
   type        = "list"
   default     = []
 }
 
 variable "custom_user_data" {
-  description = "User data to provide when launching the instance"
+  description = "Specific  User Data, for example pfsense `AMI` doesn't support classic User Data"
   type        = "list"
   default     = []
 }
