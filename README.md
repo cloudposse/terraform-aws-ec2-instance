@@ -6,7 +6,7 @@ Included features:
 * Automatically create a Security Group
 * Option to switch EIP attachment
 * CloudWatch monitoring and automatic reboot if instance hangs
-* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-User Data-github-authorized-keys)
+* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
 * Assume Role capability
 
 ## Usage
@@ -56,7 +56,7 @@ module "kafka_instance" {
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-* [terraform-template-User Data-github-authorized-keys](https://github.com/cloudposse/terraform-template-User Data-github-authorized-keys)
+* [terraform-template-User Data-github-authorized-keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
 
 It is necessary to run `terraform get` to download those modules.
 
