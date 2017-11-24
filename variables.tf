@@ -105,7 +105,7 @@ variable "monitoring" {
 }
 
 variable "user_data" {
-  description = "User Data which be concated with `terraform-template-User Data-github-authorized-keys`"
+  description = "User Data which be concated with terraform-template-user-data-github-authorized-keys"
   type        = "list"
   default     = []
 }
