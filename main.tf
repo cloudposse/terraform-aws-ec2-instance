@@ -7,6 +7,7 @@ locals {
   availability_zone    = "${var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone}"
   ami                  = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
   root_volume_type     = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
+  user_data            = "${length(var.custom_user_data) > 0 ? var.custom_user_data : join("", data.template_file.user_data.*.rendered)}"
 }
 
 data "aws_caller_identity" "default" {}
@@ -99,7 +100,7 @@ resource "aws_instance" "default" {
   instance_type               = "${var.instance_type}"
   ebs_optimized               = "${var.ebs_optimized}"
   disable_api_termination     = "${var.disable_api_termination}"
-  user_data                   = "${data.template_file.user_data.rendered}"
+  user_data                   = "${local.user_data}"
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
   key_name                    = "${var.ssh_key_pair}"

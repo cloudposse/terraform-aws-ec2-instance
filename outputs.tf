@@ -43,9 +43,14 @@ output "alarm" {
   value       = "${join("", aws_cloudwatch_metric_alarm.default.*.id)}"
 }
 
-output "additional_eni_ids" {
-  description = "Map of ENI with EIP"
+output "additional_eni_public" {
+  description = "Map IDs of ENI with public IPs"
   value       = "${zipmap(aws_network_interface.additional.*.id, aws_eip.additional.*.public_ip)}"
+}
+
+output "additional_eni_private" {
+  description = "Map IDs of ENI with private IPs"
+  value       = "${zipmap(aws_network_interface.additional.*.id, aws_eip.additional.*.private_ip)}"
 }
 
 output "ebs_ids" {
