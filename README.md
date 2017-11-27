@@ -113,7 +113,7 @@ resource "aws_ami_from_instance" "example" {
 | `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                                                      |    No    |
 | `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                                                  |    No    |
 | `user_data`                     |                      `[]`                      | `User Data` which be concated with `terraform-template-user-data-github-authorized-keys`. Conflicts with  `custom_user_data` |    No    |
-| `custom_user_data`              |                      `[]`                      | Specific `User Data`, for example pfsense `AMI` doesn't support classic `User Data`. Conflicts with  `user_data`             |    No    |
+| `custom_user_data`              |                       ``                       | Specific `User Data`, for example pfsense `AMI` doesn't support classic `User Data`. Conflicts with  `user_data`             |    No    |
 
 
 ## Outputs

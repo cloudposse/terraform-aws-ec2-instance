@@ -112,8 +112,7 @@ variable "user_data" {
 
 variable "custom_user_data" {
   description = "Specific  User Data, for example pfsense `AMI` doesn't support classic User Data"
-  type        = "list"
-  default     = []
+  default     = ""
 }
 
 variable "private_ip" {
