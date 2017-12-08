@@ -2,24 +2,19 @@ variable "ssh_key_pair" {
   description = "SSH key pair to be provisioned on instance"
 }
 
-variable "github_api_token" {
-  description = "GitHub API token"
-  default     = ""
-}
-
-variable "github_organization" {
-  description = "GitHub organization name"
-  default     = ""
-}
-
-variable "github_team" {
-  description = "GitHub team"
-  default     = ""
-}
-
 variable "associate_public_ip_address" {
   description = "Associate a public ip address with the creating instance"
   default     = "true"
+}
+
+variable "user_data" {
+  description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument"
+  default     = ""
+}
+
+variable "user_data_base64" {
+  description = " Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string."
+  default     = ""
 }
 
 variable "instance_type" {
