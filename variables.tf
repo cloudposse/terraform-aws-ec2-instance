@@ -12,11 +12,6 @@ variable "user_data" {
   default     = ""
 }
 
-variable "user_data_base64" {
-  description = " Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string."
-  default     = ""
-}
-
 variable "instance_type" {
   description = "The type of the creating instance"
   default     = "t2.micro"
