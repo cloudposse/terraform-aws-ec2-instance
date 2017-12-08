@@ -2,24 +2,14 @@ variable "ssh_key_pair" {
   description = "SSH key pair to be provisioned on instance"
 }
 
-variable "github_api_token" {
-  description = "GitHub API token"
-  default     = ""
-}
-
-variable "github_organization" {
-  description = "GitHub organization name"
-  default     = ""
-}
-
-variable "github_team" {
-  description = "GitHub team"
-  default     = ""
-}
-
 variable "associate_public_ip_address" {
   description = "Associate a public ip address with the creating instance"
   default     = "true"
+}
+
+variable "user_data" {
+  description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument"
+  default     = ""
 }
 
 variable "instance_type" {
@@ -102,12 +92,6 @@ variable "disable_api_termination" {
 variable "monitoring" {
   description = "Launched EC2 instance will have detailed monitoring enabled"
   default     = "true"
-}
-
-variable "user_data" {
-  description = "User data to provide when launching the instance"
-  type        = "list"
-  default     = []
 }
 
 variable "private_ip" {

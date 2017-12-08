@@ -6,7 +6,6 @@ Included features:
 * Automatically create a Security Group
 * Option to switch EIP attachment
 * CloudWatch monitoring and automatic reboot if instance hangs
-* [Github Authorized Keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
 * Assume Role capability
 
 ## Usage
@@ -37,9 +36,6 @@ module "instance" {
 module "kafka_instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
   ssh_key_pair                = "${var.ssh_key_pair}"
-  github_api_token            = "${var.github_api_token}"
-  github_organization         = "${var.github_organization}"
-  github_team                 = "${var.github_team}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
@@ -56,7 +52,6 @@ module "kafka_instance" {
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-* [terraform-template-user-data-github-authorized-keys](https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys)
 
 It is necessary to run `terraform get` to download those modules.
 
@@ -81,9 +76,6 @@ resource "aws_ami_from_instance" "example" {
 | `instance_enabled`              |                     `true`                     | Flag for creating an instance. Set to false if it is necessary to skip instance creation               |    No    |
 | `create_default_security_group` |                     `true`                     | Flag for creation default Security Group with Egress traffic allowed only                              |    No    |
 | `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on instance                                                             |   Yes    |
-| `github_api_token`              |                       ``                       | GitHub API token                                                                                       |    No    |
-| `github_organization`           |                       ``                       | GitHub organization name                                                                               |    No    |
-| `github_team`                   |                       ``                       | GitHub team                                                                                            |    No    |
 | `instance_type`                 |                   `t2.micro`                   | The type of the creating instance (e.g. `t2.micro`)                                                    |    No    |
 | `vpc_id`                        |                       ``                       | The ID of the VPC that the creating instance security group belongs to                                 |   Yes    |
 | `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to creating instance                                     |   Yes    |

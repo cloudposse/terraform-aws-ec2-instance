@@ -84,14 +84,6 @@ resource "aws_iam_role" "default" {
   assume_role_policy = "${data.aws_iam_policy_document.default.json}"
 }
 
-# Apply the tf_github_authorized_keys module for this resource
-module "github_authorized_keys" {
-  source              = "git::https://github.com/cloudposse/terraform-template-user-data-github-authorized-keys.git?ref=tags/0.1.2"
-  github_api_token    = "${var.github_api_token}"
-  github_organization = "${var.github_organization}"
-  github_team         = "${var.github_team}"
-}
-
 resource "aws_instance" "default" {
   count                       = "${local.instance_count}"
   ami                         = "${local.ami}"
@@ -99,7 +91,7 @@ resource "aws_instance" "default" {
   instance_type               = "${var.instance_type}"
   ebs_optimized               = "${var.ebs_optimized}"
   disable_api_termination     = "${var.disable_api_termination}"
-  user_data                   = "${data.template_file.user_data.rendered}"
+  user_data                   = "${var.user_data}"
   iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
   key_name                    = "${var.ssh_key_pair}"
