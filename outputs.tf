@@ -30,7 +30,7 @@ output "ssh_key_pair" {
 
 output "security_group_ids" {
   description = "ID on the new AWS Security Group associated with creating instance"
-  value       = "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
+  value       = "${compact(concat(list(var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
 }
 
 output "role" {
