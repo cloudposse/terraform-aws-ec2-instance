@@ -67,6 +67,7 @@ resource "aws_ami_from_instance" "example" {
 
 | Name                            |                    Default                     | Description                                                                                            | Required |
 |:--------------------------------|:----------------------------------------------:|:-------------------------------------------------------------------------------------------------------|:--------:|
+| `region`                        |                       ``                       | AWS Region the instance is launched in. Optional. If not provided, the current region will be used     |   No     |
 | `namespace`                     |                       ``                       | Namespace (e.g. `cp` or `cloudposse`)                                                                  |   Yes    |
 | `stage`                         |                       ``                       | Stage (e.g. `prod`, `dev`, `staging`                                                                   |   Yes    |
 | `name`                          |                       ``                       | Name  (e.g. `bastion` or `db`)                                                                         |   Yes    |

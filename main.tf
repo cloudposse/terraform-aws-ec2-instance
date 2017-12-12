@@ -1,6 +1,6 @@
 locals {
-  instance_count       = "${var.instance_enabled ? 1 : 0}"
-  security_group_count = "${var.create_default_security_group ? 1 : 0}"
+  instance_count       = "${var.instance_enabled == "true" ? 1 : 0}"
+  security_group_count = "${var.create_default_security_group == "true" ? 1 : 0}"
   region               = "${var.region != "" ? var.region : data.aws_region.default.name}"
   root_iops            = "${var.root_volume_type == "io1" ? var.root_iops : "0"}"
   ebs_iops             = "${var.ebs_volume_type == "io1" ? var.ebs_iops : "0"}"
@@ -68,7 +68,7 @@ module "label" {
   attributes = "${var.attributes}"
   delimiter  = "${var.delimiter}"
   tags       = "${merge(map("AZ", "${local.availability_zone}"), var.tags)}"
-  enabled    = "${local.instance_count ? "true" : "false"}"
+  enabled    = "${local.instance_count > 0 ? "true" : "false"}"
 }
 
 resource "aws_iam_instance_profile" "default" {
@@ -103,7 +103,7 @@ resource "aws_instance" "default" {
   ipv6_addresses              = "${var.ipv6_addresses}"
 
   vpc_security_group_ids = [
-    "${compact(concat(list(var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
+    "${compact(concat(list(var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
   ]
 
   root_block_device {
@@ -117,13 +117,13 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count             = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
+  count             = "${var.associate_public_ip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
   network_interface = "${aws_instance.default.primary_network_interface_id}"
   vpc               = "true"
 }
 
 resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address && var.instance_enabled ? 1 : 0}"
+  count = "${var.associate_public_ip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
 
   triggers {
     public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
