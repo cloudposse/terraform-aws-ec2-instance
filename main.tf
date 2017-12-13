@@ -117,13 +117,13 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count             = "${var.associate_public_ip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
+  count             = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
   network_interface = "${aws_instance.default.primary_network_interface_id}"
   vpc               = "true"
 }
 
 resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
+  count = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
 
   triggers {
     public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
