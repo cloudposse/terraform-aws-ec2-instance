@@ -1,28 +1,33 @@
 variable "ssh_key_pair" {
-  description = "SSH key pair to be provisioned on instance"
+  description = "SSH key pair to be provisioned on the instance"
 }
 
 variable "associate_public_ip_address" {
-  description = "Associate a public ip address with the creating instance"
+  description = "Associate a public IP address with the instance"
+  default     = "true"
+}
+
+variable "assign_eip_address" {
+  description = "Assign an Elastic IP address to the instance"
   default     = "true"
 }
 
 variable "user_data" {
-  description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument"
+  description = "Instance user data. Do not pass gzip-compressed data via this argument"
   default     = ""
 }
 
 variable "instance_type" {
-  description = "The type of the creating instance"
+  description = "The type of the instance"
   default     = "t2.micro"
 }
 
 variable "vpc_id" {
-  description = "The ID of the VPC that the creating instance security group belongs to"
+  description = "The ID of the VPC that the instance security group belongs to"
 }
 
 variable "security_groups" {
-  description = "List of Security Group IDs allowed to connect to creating instance"
+  description = "List of Security Group IDs allowed to connect to the instance"
   type        = "list"
   default     = []
 }
@@ -34,7 +39,7 @@ variable "allowed_ports" {
 }
 
 variable "subnet" {
-  description = "VPC Subnet ID creating instance launched in"
+  description = "VPC Subnet ID the instance is launched in"
 }
 
 variable "namespace" {
@@ -71,12 +76,12 @@ variable "region" {
 }
 
 variable "availability_zone" {
-  description = "Availability Zone of instance launched in. If not set will be launched in frist AZ of region"
+  description = "Availability Zone the instance is launched in. If not set, will be launched in the first AZ of the region"
   default     = ""
 }
 
 variable "ami" {
-  description = "The AMI to use for the instance. By default it is an AMI provided by Amazon with Ubuntu 16.04"
+  description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 16.04"
   default     = ""
 }
 
@@ -96,7 +101,7 @@ variable "monitoring" {
 }
 
 variable "private_ip" {
-  description = "Private IP address to associate with the instance in a VPC"
+  description = "Private IP address to associate with the instance in the VPC"
   default     = ""
 }
 
@@ -133,17 +138,17 @@ variable "root_iops" {
 
 variable "ebs_device_name" {
   type        = "list"
-  description = "Name of the ebs device to mount"
+  description = "Name of the EBS device to mount"
   default     = ["/dev/xvdb", "/dev/xvdc", "/dev/xvdd", "/dev/xvde", "/dev/xvdf", "/dev/xvdg", "/dev/xvdh", "/dev/xvdi", "/dev/xvdj", "/dev/xvdk", "/dev/xvdl", "/dev/xvdm", "/dev/xvdn", "/dev/xvdo", "/dev/xvdp", "/dev/xvdq", "/dev/xvdr", "/dev/xvds", "/dev/xvdt", "/dev/xvdu", "/dev/xvdv", "/dev/xvdw", "/dev/xvdx", "/dev/xvdy", "/dev/xvdz"]
 }
 
 variable "ebs_volume_type" {
-  description = "The type of ebs volume. Can be standard, gp2 or io1"
+  description = "The type of EBS volume. Can be standard, gp2 or io1"
   default     = "gp2"
 }
 
 variable "ebs_volume_size" {
-  description = "Size of the ebs volume in gigabytes"
+  description = "Size of the EBS volume in gigabytes"
   default     = "10"
 }
 
@@ -153,7 +158,7 @@ variable "ebs_iops" {
 }
 
 variable "ebs_volume_count" {
-  description = "Count of EBS which will be attched to instance"
+  description = "Count of EBS volumes that will be attached to the instance"
   default     = "0"
 }
 
@@ -172,7 +177,7 @@ variable "comparison_operator" {
 }
 
 variable "metric_name" {
-  description = "The name for the alarm's associated metric. Possible values you can find in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ec2-metricscollected.html ."
+  description = "The name for the alarm's associated metric. Allowed values can be found in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ec2-metricscollected.html"
   default     = "StatusCheckFailed_Instance"
 }
 
@@ -182,22 +187,22 @@ variable "evaluation_periods" {
 }
 
 variable "metric_namespace" {
-  description = "The namespace for the alarm's associated metric. Possible values you can find in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-namespaces.html ."
+  description = "The namespace for the alarm's associated metric. Allowed values can be found in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-namespaces.html"
   default     = "AWS/EC2"
 }
 
 variable "applying_period" {
-  description = "The period in seconds over which the specified statistic is applied."
+  description = "The period in seconds over which the specified statistic is applied"
   default     = "60"
 }
 
 variable "statistic_level" {
-  description = "The statistic to apply to the alarm's associated metric. Possible values are: SampleCount, Average, Sum, Minimum, Maximum"
+  description = "The statistic to apply to the alarm's associated metric. Allowed values are: SampleCount, Average, Sum, Minimum, Maximum"
   default     = "Maximum"
 }
 
 variable "metric_threshold" {
-  description = "The value against which the specified statistic is compared."
+  description = "The value against which the specified statistic is compared"
   default     = "1"
 }
 
@@ -206,12 +211,12 @@ variable "default_alarm_action" {
 }
 
 variable "create_default_security_group" {
-  description = "Create default Security Group with Egress traffic allowed only"
+  description = "Create default Security Group with only Egress traffic allowed"
   default     = "true"
 }
 
 variable "instance_enabled" {
-  description = "Flag for creating an instance. Set to false if it is necessary to skip instance creation"
+  description = "Flag to control the instance creation. Set to false if it is necessary to skip instance creation"
   default     = "true"
 }
 
