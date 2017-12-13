@@ -132,7 +132,7 @@ variable "root_volume_size" {
 }
 
 variable "root_iops" {
-  description = "Amount of provisioned IOPS. This must be set with a root_volume_type of io1"
+  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set to `io1`"
   default     = "0"
 }
 
