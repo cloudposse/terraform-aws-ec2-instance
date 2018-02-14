@@ -1,6 +1,6 @@
 output "public_ip" {
   description = "Public IP of instance (or EIP )"
-  value       = "${coalesce(join("", aws_eip.default.*.public_ip), aws_instance.default.public_ip)}"
+  value       = "${coalescelist(aws_eip.default.*.public_ip, aws_instance.default.*.public_ip)}"
 }
 
 output "private_ip" {
@@ -15,7 +15,7 @@ output "private_dns" {
 
 output "public_dns" {
   description = "Public DNS of instance (or DNS of EIP)"
-  value       = "${coalesce(join("", null_resource.eip.*.triggers.public_dns), aws_instance.default.public_dns)}"
+  value       = "${local.public_dns}"
 }
 
 output "id" {
@@ -55,10 +55,10 @@ output "ebs_ids" {
 
 output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
-  value       = "${aws_instance.default.primary_network_interface_id}"
+  value       = "${aws_instance.default.*.primary_network_interface_id}"
 }
 
 output "network_interface_id" {
   description = "ID of the network interface that was created with the instance"
-  value       = "${aws_instance.default.network_interface_id}"
+  value       = "${aws_instance.default.*.network_interface_id}"
 }
