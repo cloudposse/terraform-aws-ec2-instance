@@ -1,5 +1,11 @@
 variable "ssh_key_pair" {
   description = "SSH key pair to be provisioned on the instance"
+  default = ""
+}
+
+variable "generate_ssh_key_pair" {
+  description = "if true, create a new key pair and save the pem for it to the current working directory"
+  default = "false"
 }
 
 variable "associate_public_ip_address" {
@@ -24,6 +30,7 @@ variable "instance_type" {
 
 variable "vpc_id" {
   description = "The ID of the VPC that the instance security group belongs to"
+  default = ""
 }
 
 variable "security_groups" {
@@ -40,6 +47,7 @@ variable "allowed_ports" {
 
 variable "subnet" {
   description = "VPC Subnet ID the instance is launched in"
+  default = ""
 }
 
 variable "namespace" {
@@ -223,4 +231,9 @@ variable "instance_enabled" {
 variable "additional_ips_count" {
   description = "Count of additional EIPs"
   default     = "0"
+}
+
+variable "instance_count" {
+  description = "Count of ec2 instances to create"
+  default     = "1"
 }

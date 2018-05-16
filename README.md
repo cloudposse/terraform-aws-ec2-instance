@@ -49,6 +49,26 @@ module "kafka_instance" {
 }
 ```
 
+### Example with additional EC2 servers and volumes and EIP
+
+```terraform
+module "kafka_instance" {
+  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  ssh_key_pair                = "${var.ssh_key_pair}"
+  vpc_id                      = "${var.vpc_id}"
+  security_groups             = ["${var.security_groups}"]
+  subnet                      = "${var.subnet}"
+  associate_public_ip_address = "true"
+  name                        = "kafka"
+  namespace                   = "cp"
+  stage                       = "dev"
+  additional_ips_count        = "1"
+  ebs_volume_count            = "2"
+  allowed_ports               = ["22", "80", "443"]
+  instance_count              = "3"
+}
+```
+
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
@@ -76,7 +96,8 @@ resource "aws_ami_from_instance" "example" {
 | `ami`                           |                       ``                       | By default it is the AMI provided by Amazon with Ubuntu 16.04                                          |    No    |
 | `instance_enabled`              |                     `true`                     | Flag to control the instance creation. Set to false if it is necessary to skip instance creation       |    No    |
 | `create_default_security_group` |                     `true`                     | Create default Security Group with only Egress traffic allowed                                         |    No    |
-| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on the instance                                                         |   Yes    |
+| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on the instance. If none provided, and `generate_ssh_key_pair` is true a new keypair is generated                                                         |   No    |
+| `generate_ssh_key_pair`                  |                       `false`                       | Should a new SSH key pair be generated.                                                         |   Yes    |
 | `instance_type`                 |                   `t2.micro`                   | The type of the instance (e.g. `t2.micro`)                                                             |    No    |
 | `vpc_id`                        |                       ``                       | The ID of the VPC that the instance security group belongs to                                          |   Yes    |
 | `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to the instance                                          |   Yes    |
@@ -106,6 +127,7 @@ resource "aws_ami_from_instance" "example" {
 | `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                                    |    No    |
 | `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                                |    No    |
 | `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                            |    No    |
+| `instance_count` | `1` | Number of EC2 instances to create - each will have the same settings |
 
 ## Outputs
 
@@ -115,7 +137,6 @@ resource "aws_ami_from_instance" "example" {
 | `private_dns`                  | Private DNS of the instance                                        |
 | `private_ip`                   | Private IP of the instance                                         |
 | `public_ip`                    | Public IP of the instance (or EIP )                                |
-| `public_dns`                   | Public DNS of the instance (or DNS of EIP)                         |
 | `ssh_key_pair`                 | Name of used AWS SSH key                                           |
 | `security_group_id`            | ID of the AWS Security Group associated with the instance          |
 | `role`                         | Name of the AWS IAM Role associated with the instance              |
@@ -124,6 +145,10 @@ resource "aws_ami_from_instance" "example" {
 | `ebs_ids`                      | IDs of EBSs                                                        |
 | `primary_network_interface_id` | ID of the instance's primary network interface                     |
 | `network_interface_id`         | ID of the network interface that was created with the instance     |
+
+## Removed output - as it causes a fault when instance size is 0 with terraform 0.11
+
+| `public_dns`                   | Public DNS of the instance (or DNS of EIP)                         |
 
 ## License
 
