@@ -136,16 +136,17 @@ resource "tls_private_key" "ssh" {
 locals {
   key_pair_path = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 0 && signum(var.instance_count) == 1 ? "${path.cwd}/${element(aws_key_pair.ssh.*.key_name, 0)}.pem" : "" }"
 }
+
 resource "aws_key_pair" "ssh" {
-  count = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 1 && signum(var.instance_count) == 1 ? 0 : 1}"
+  count           = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 1 && signum(var.instance_count) == 1 ? 0 : 1}"
   key_name_prefix = "${module.label.id}"
   public_key      = "${tls_private_key.ssh.public_key_openssh}"
 }
 
 resource "local_file" "keypair" {
-    count = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 0 && signum(var.instance_count) == 1 ? 1 : 0 }"
-    content     = "${tls_private_key.ssh.private_key_pem}"
-    filename = "${path.cwd}/${element(aws_key_pair.ssh.*.key_name, 0)}.pem"
+  count    = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 0 && signum(var.instance_count) == 1 ? 1 : 0 }"
+  content  = "${tls_private_key.ssh.private_key_pem}"
+  filename = "${path.cwd}/${element(aws_key_pair.ssh.*.key_name, 0)}.pem"
 }
 
 resource "aws_eip" "default" {
@@ -154,10 +155,8 @@ resource "aws_eip" "default" {
   vpc               = "true"
 }
 
-
-
 resource "null_resource" "eip" {
-  count             = "${local.additional_eips * local.instance_count}"
+  count = "${local.additional_eips * local.instance_count}"
 
   triggers {
     public_dns = "ec2-${replace(element(aws_eip.default.*.public_ip, count.index), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"

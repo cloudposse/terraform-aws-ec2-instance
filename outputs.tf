@@ -38,7 +38,7 @@ output "New ssh keypair generated" {
 
 output "ssh_key_pem_path" {
   description = "If a keypair was created, its path will be at:"
-  value = "${local.key_pair_path}"
+  value       = "${local.key_pair_path}"
 }
 
 output "security_group_ids" {
@@ -75,5 +75,3 @@ output "network_interface_id" {
   description = "ID of the network interface that was created with the instance"
   value       = "${join(",", aws_instance.default.*.network_interface_id)}"
 }
-
-
