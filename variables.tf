@@ -4,7 +4,7 @@ variable "ssh_key_pair" {
 }
 
 variable "generate_ssh_key_pair" {
-  description = "if true, create a new key pair and save the pem for it to the current working directory"
+  description = "If true, create a new key pair and save the pem for it to the current working directory"
   default     = "false"
 }
 

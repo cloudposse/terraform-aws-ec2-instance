@@ -13,32 +13,32 @@ output "private_dns" {
   value       = "${join(",", aws_instance.default.*.private_dns)}"
 }
 
-# locals {
-#   eips_exist = "${signum(length(null_resource.eip.triggers)) == 1}"
-#   local_dns_output = "${local.eips_exist ? coalesce(concat(null_resource.eip.*.triggers.public_dns, list()), aws_instance.default.*.public_dns) : list() }"
-# }
-# output "public_dns" {
-#   description = "Public DNS of instance (or DNS of EIP)"
-#   value       = "${local.local_dns_output}"
-# }
+locals {
+  local_dns_output = "${coalescelist(concat(null_resource.eip.*.triggers.public_dns, list()), aws_instance.default.*.public_dns)}"
+}
+
+output "public_dns" {
+  description = "Public DNS of instance (or DNS of EIP)"
+  value       = "${signum(local.additional_eips) == 1 &&  signum(var.instance_count) == 1 ? join(",",local.local_dns_output) : ""}"
+}
 
 output "id" {
   description = "Disambiguated ID"
   value       = "${join(",", aws_instance.default.*.id)}"
 }
 
-output "ssh_key_pair" {
-  description = "Name of used AWS SSH key"
-  value       = "${signum(length(var.ssh_key_pair)) == 1 ? var.ssh_key_pair : "${var.generate_ssh_key_pair == "true" ? element(aws_key_pair.ssh.*.key_name, 0) : ""}"}"
+output "aws_key_pair_name" {
+  description = "Name of AWS key pair"
+  value       = "${signum(length(var.ssh_key_pair)) == 1 ? var.ssh_key_pair : "${var.generate_ssh_key_pair == "true" ? module.ssh_key_pair.key_name : ""}"}"
 }
 
-output "New ssh keypair generated" {
+output "new_ssh_keypair_generated" {
   value = "${signum(length(var.ssh_key_pair)) == 1 ? "false" : "true" }"
 }
 
 output "ssh_key_pem_path" {
-  description = "If a keypair was created, its path will be at:"
-  value       = "${local.key_pair_path}"
+  description = "Path where SSH key pair was created (if applicable)"
+  value       = "${path.cwd}/${module.ssh_key_pair.key_name}.pem"
 }
 
 output "security_group_ids" {

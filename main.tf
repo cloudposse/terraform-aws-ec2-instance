@@ -103,7 +103,7 @@ resource "aws_instance" "default" {
   user_data                   = "${var.user_data}"
   iam_instance_profile        = "${element(aws_iam_instance_profile.default.*.name, 0)}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  key_name                    = "${signum(length(var.ssh_key_pair)) == 1 ? var.ssh_key_pair : element(aws_key_pair.ssh.*.key_name, 0)}"
+  key_name                    = "${signum(length(var.ssh_key_pair)) == 1 ? var.ssh_key_pair : module.ssh_key_pair.key_name}"
   subnet_id                   = "${local.subnet}"
   monitoring                  = "${var.monitoring}"
   private_ip                  = "${var.private_ip}"
@@ -125,28 +125,18 @@ resource "aws_instance" "default" {
   tags = "${module.label.tags}"
 }
 
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-}
-
 ##
 ## Create keypair if one isn't provided
 ##
 
-locals {
-  key_pair_path = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 0 && signum(var.instance_count) == 1 ? "${path.cwd}/${element(aws_key_pair.ssh.*.key_name, 0)}.pem" : "" }"
-}
-
-resource "aws_key_pair" "ssh" {
-  count           = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 1 && signum(var.instance_count) == 1 ? 0 : 1}"
-  key_name_prefix = "${module.label.id}"
-  public_key      = "${tls_private_key.ssh.public_key_openssh}"
-}
-
-resource "local_file" "keypair" {
-  count    = "${var.generate_ssh_key_pair == "true" && signum(length(var.ssh_key_pair)) == 0 && signum(var.instance_count) == 1 ? 1 : 0 }"
-  content  = "${tls_private_key.ssh.private_key_pem}"
-  filename = "${path.cwd}/${element(aws_key_pair.ssh.*.key_name, 0)}.pem"
+module "ssh_key_pair" {
+  source                = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=master"
+  namespace             = "${var.namespace}"
+  stage                 = "${var.stage}"
+  name                  = "${var.name}"
+  ssh_public_key_path   = "${path.cwd}"
+  private_key_extension = ".pem"
+  generate_ssh_key      = "${var.generate_ssh_key_pair}"
 }
 
 resource "aws_eip" "default" {
@@ -156,10 +146,11 @@ resource "aws_eip" "default" {
 }
 
 resource "null_resource" "eip" {
-  count = "${local.additional_eips * local.instance_count}"
+  # Have at least 1, so that resource exists for output without error, workaround for terraform 0.11.x
+  count = "${signum(local.instance_count) == 1 && signum(local.additional_eips) == 1 ? local.additional_eips * local.instance_count : 1}"
 
   triggers {
-    public_dns = "ec2-${replace(element(aws_eip.default.*.public_ip, count.index), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
+    public_dns = "ec2-${replace(element(coalescelist(aws_eip.default.*.public_ip, list("invalid")), count.index), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
   }
 }
 

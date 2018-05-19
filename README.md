@@ -19,14 +19,14 @@ Include this repository as a module in your existing terraform code.
 ```terraform
 module "instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   instance_type               = "${var.instance_type}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
-  name                        = "${var.name}"
-  namespace                   = "${var.namespace}"
-  stage                       = "${var.stage}"
 }
 ```
 
@@ -35,14 +35,14 @@ module "instance" {
 ```terraform
 module "kafka_instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
   associate_public_ip_address = "true"
-  name                        = "kafka"
-  namespace                   = "cp"
-  stage                       = "dev"
   additional_ips_count        = "1"
   ebs_volume_count            = "2"
   allowed_ports               = ["22", "80", "443"]
@@ -54,14 +54,14 @@ module "kafka_instance" {
 ```terraform
 module "kafka_instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
   associate_public_ip_address = "true"
-  name                        = "kafka"
-  namespace                   = "cp"
-  stage                       = "dev"
   additional_ips_count        = "1"
   ebs_volume_count            = "2"
   allowed_ports               = ["22", "80", "443"]
@@ -73,7 +73,7 @@ This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
 
-It is necessary to run `terraform get` to download those modules.
+It is necessary to run `terraform get` or `terraform init` to download this module.
 
 Now reference the label when creating an instance (for example):
 ```terraform
@@ -137,7 +137,8 @@ resource "aws_ami_from_instance" "example" {
 | `private_dns`                  | Private DNS of the instance                                        |
 | `private_ip`                   | Private IP of the instance                                         |
 | `public_ip`                    | Public IP of the instance (or EIP )                                |
-| `ssh_key_pair`                 | Name of used AWS SSH key                                           |
+| `aws_key_pair`                 | Name of AWS key                                                    |
+| `ssh_key_pem_path`             | Local path to SSH pem key                                          |
 | `security_group_id`            | ID of the AWS Security Group associated with the instance          |
 | `role`                         | Name of the AWS IAM Role associated with the instance              |
 | `alarm`                        | CloudWatch Alarm ID                                                |
@@ -145,9 +146,6 @@ resource "aws_ami_from_instance" "example" {
 | `ebs_ids`                      | IDs of EBSs                                                        |
 | `primary_network_interface_id` | ID of the instance's primary network interface                     |
 | `network_interface_id`         | ID of the network interface that was created with the instance     |
-
-## Removed output - as it causes a fault when instance size is 0 with terraform 0.11
-
 | `public_dns`                   | Public DNS of the instance (or DNS of EIP)                         |
 
 ## License

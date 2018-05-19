@@ -6,3 +6,4 @@
 **/terraform.tfstate.backup
 **/terraform.tfvars
 **/*.pem
+**/*.pub

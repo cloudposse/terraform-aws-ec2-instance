@@ -16,12 +16,12 @@ resource "aws_network_interface" "additional" {
 resource "aws_network_interface_attachment" "additional" {
   count                = "${local.additional_ips_count * var.instance_count}"
   instance_id          = "${aws_instance.default.id}"
-  network_interface_id = "${element(aws_network_interface.additional.*.id, count.index / var.instance_count)}"
+  network_interface_id = "${element(aws_network_interface.additional.*.id, floor(count.index / var.instance_count))}"
   device_index         = "${1 + count.index}"
 }
 
 resource "aws_eip" "additional" {
   count             = "${local.additional_ips_count * var.instance_count}"
   vpc               = "true"
-  network_interface = "${element(aws_network_interface.additional.*.id, count.index / var.instance_count)}"
+  network_interface = "${element(aws_network_interface.additional.*.id, floor(count.index / var.instance_count))}"
 }
