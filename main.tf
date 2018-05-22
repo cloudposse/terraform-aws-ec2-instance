@@ -115,8 +115,7 @@ resource "aws_instance" "default" {
 ##
 
 module "ssh_key_pair" {
-  #  source                = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=master"
-  source                = "../terraform-aws-key-pair"
+  source                = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.2.3" //upcoming release
   namespace             = "${var.namespace}"
   stage                 = "${var.stage}"
   name                  = "${var.name}"
