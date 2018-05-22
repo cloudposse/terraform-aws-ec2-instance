@@ -13,13 +13,17 @@ output "private_dns" {
   value       = "${join(",", aws_instance.default.*.private_dns)}"
 }
 
+# Workaround to handle null resource that can have variable values, from strings to empty lists.
 locals {
-  local_dns_output = "${coalescelist(concat(null_resource.eip.*.triggers.public_dns, list()), aws_instance.default.*.public_dns)}"
+  list_eip            = "${null_resource.eip.0.triggers.created == true ? join(",", null_resource.eip.*.triggers.public_dns) : ""}"
+  list_additional_eip = "${null_resource.additional_eip.0.triggers.created == true ? join(",", null_resource.additional_eip.*.triggers.public_dns) : ""}"
+  local_dns_output    = "${join(",", distinct(compact(concat(split(",", local.list_additional_eip), split(",", local.list_eip), aws_instance.default.*.public_dns))))}"
 }
 
 output "public_dns" {
   description = "Public DNS of instance (or DNS of EIP)"
-  value       = "${signum(local.additional_eips) == 1 &&  signum(var.instance_count) == 1 ? join(",",local.local_dns_output) : ""}"
+
+  value = "${local.local_dns_output}"
 }
 
 output "id" {
@@ -38,7 +42,7 @@ output "new_ssh_keypair_generated" {
 
 output "ssh_key_pem_path" {
   description = "Path where SSH key pair was created (if applicable)"
-  value       = "${path.cwd}/${module.ssh_key_pair.key_name}.pem"
+  value       = "${local.ssh_key_pair_path}/${module.ssh_key_pair.key_name}.pem"
 }
 
 output "security_group_ids" {
@@ -74,4 +78,14 @@ output "primary_network_interface_id" {
 output "network_interface_id" {
   description = "ID of the network interface that was created with the instance"
   value       = "${join(",", aws_instance.default.*.network_interface_id)}"
+}
+
+output "eips_per_instance" {
+  value       = "${local.count_default_ips + local.additional_ips_count}"
+  description = "Number of EIP's per instance."
+}
+
+output "instance_count" {
+  value       = "${local.instance_count}"
+  description = "Total number of instances created."
 }

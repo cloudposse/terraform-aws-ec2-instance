@@ -13,6 +13,11 @@ variable "associate_public_ip_address" {
   default     = "true"
 }
 
+variable "ssh_key_pair_path" {
+  description = "Path to where the generated key pairs will be created. Defaults to $${path.cwd}"
+  default     = ""
+}
+
 variable "assign_eip_address" {
   description = "Assign an Elastic IP address to the instance"
   default     = "true"
@@ -30,7 +35,6 @@ variable "instance_type" {
 
 variable "vpc_id" {
   description = "The ID of the VPC that the instance security group belongs to"
-  default     = ""
 }
 
 variable "security_groups" {
@@ -47,7 +51,6 @@ variable "allowed_ports" {
 
 variable "subnet" {
   description = "VPC Subnet ID the instance is launched in"
-  default     = ""
 }
 
 variable "namespace" {
@@ -80,7 +83,6 @@ variable "tags" {
 
 variable "region" {
   description = "AWS Region the instance is launched in"
-  default     = ""
 }
 
 variable "availability_zone" {
