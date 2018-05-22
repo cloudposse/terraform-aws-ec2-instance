@@ -1,10 +1,21 @@
 variable "ssh_key_pair" {
   description = "SSH key pair to be provisioned on the instance"
+  default     = ""
+}
+
+variable "generate_ssh_key_pair" {
+  description = "If true, create a new key pair and save the pem for it to the current working directory"
+  default     = "false"
 }
 
 variable "associate_public_ip_address" {
   description = "Associate a public IP address with the instance"
   default     = "true"
+}
+
+variable "ssh_key_pair_path" {
+  description = "Path to where the generated key pairs will be created. Defaults to $${path.cwd}"
+  default     = ""
 }
 
 variable "assign_eip_address" {
@@ -72,7 +83,6 @@ variable "tags" {
 
 variable "region" {
   description = "AWS Region the instance is launched in"
-  default     = ""
 }
 
 variable "availability_zone" {
@@ -223,4 +233,9 @@ variable "instance_enabled" {
 variable "additional_ips_count" {
   description = "Count of additional EIPs"
   default     = "0"
+}
+
+variable "instance_count" {
+  description = "Count of ec2 instances to create"
+  default     = "1"
 }

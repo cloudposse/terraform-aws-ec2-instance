@@ -1,4 +1,9 @@
 # Module directory
-.terraform/
+**/.terraform/
 .idea
 *.iml
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/terraform.tfvars
+**/*.pem
+**/*.pub

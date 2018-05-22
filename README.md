@@ -14,49 +14,73 @@ Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
 
 Include this repository as a module in your existing terraform code.
 
+
 ### Simple example:
 
-```terraform
+```hcl
 module "instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   instance_type               = "${var.instance_type}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
-  name                        = "${var.name}"
-  namespace                   = "${var.namespace}"
-  stage                       = "${var.stage}"
 }
 ```
 
 ### Example with additional volumes and EIP
 
-```terraform
+```hcl
 module "kafka_instance" {
   source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
   ssh_key_pair                = "${var.ssh_key_pair}"
   vpc_id                      = "${var.vpc_id}"
   security_groups             = ["${var.security_groups}"]
   subnet                      = "${var.subnet}"
   associate_public_ip_address = "true"
-  name                        = "kafka"
-  namespace                   = "cp"
-  stage                       = "dev"
   additional_ips_count        = "1"
   ebs_volume_count            = "2"
   allowed_ports               = ["22", "80", "443"]
 }
 ```
 
+### Example with additional EC2 servers and volumes and EIP
+
+```hcl
+module "kafka_instance" {
+  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  namespace                   = "${var.namespace}"
+  name                        = "${var.name}"
+  stage                       = "${var.stage}"
+  ssh_key_pair                = "${var.ssh_key_pair}"
+  vpc_id                      = "${var.vpc_id}"
+  security_groups             = ["${var.security_groups}"]
+  subnet                      = "${var.subnet}"
+  associate_public_ip_address = "true"
+  additional_ips_count        = "1"
+  ebs_volume_count            = "2"
+  allowed_ports               = ["22", "80", "443"]
+  instance_count              = "3"
+}
+```
+
+### Additional complete working example with variations of how to use the module
+In /examples directory
+
 This module depends on these modules:
 
 * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
 
-It is necessary to run `terraform get` to download those modules.
+It is necessary to run `terraform get` or `terraform init` to download this module.
 
 Now reference the label when creating an instance (for example):
-```terraform
+```hcl
 resource "aws_ami_from_instance" "example" {
   name               = "terraform-example"
   source_instance_id = "${module.admin_tier.id}"
@@ -76,7 +100,9 @@ resource "aws_ami_from_instance" "example" {
 | `ami`                           |                       ``                       | By default it is the AMI provided by Amazon with Ubuntu 16.04                                          |    No    |
 | `instance_enabled`              |                     `true`                     | Flag to control the instance creation. Set to false if it is necessary to skip instance creation       |    No    |
 | `create_default_security_group` |                     `true`                     | Create default Security Group with only Egress traffic allowed                                         |    No    |
-| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on the instance                                                         |   Yes    |
+| `ssh_key_pair`                  |                       ``                       | SSH key pair to be provisioned on the instance. If none provided, and `generate_ssh_key_pair` is true a new keypair is generated                                                         |   No    |
+| `generate_ssh_key_pair`         |                    `false`                     | Should a new SSH key pair be generated.                                                                |    No    |
+| `ssh_key_pair_path`             |                       ``                       | Path to where SSH key pair should be generated. Defaults to ${path.cwd}                                |    No    |
 | `instance_type`                 |                   `t2.micro`                   | The type of the instance (e.g. `t2.micro`)                                                             |    No    |
 | `vpc_id`                        |                       ``                       | The ID of the VPC that the instance security group belongs to                                          |   Yes    |
 | `security_groups`               |                      `[]`                      | List of Security Group IDs allowed to connect to the instance                                          |   Yes    |
@@ -106,6 +132,8 @@ resource "aws_ami_from_instance" "example" {
 | `statistic_level`               |                   `Maximum`                    | Statistic to apply to the alarm's associated metric                                                    |    No    |
 | `metric_threshold`              |                      `1`                       | Value against which the specified statistic is compared                                                |    No    |
 | `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                            |    No    |
+| `instance_count`                |                      `1`                       | Number of EC2 instances to create - each will have the same settings                                   |    No    |
+
 
 ## Outputs
 
@@ -115,8 +143,8 @@ resource "aws_ami_from_instance" "example" {
 | `private_dns`                  | Private DNS of the instance                                        |
 | `private_ip`                   | Private IP of the instance                                         |
 | `public_ip`                    | Public IP of the instance (or EIP )                                |
-| `public_dns`                   | Public DNS of the instance (or DNS of EIP)                         |
-| `ssh_key_pair`                 | Name of used AWS SSH key                                           |
+| `aws_key_pair`                 | Name of AWS key                                                    |
+| `ssh_key_pem_path`             | Local path to SSH pem key                                          |
 | `security_group_id`            | ID of the AWS Security Group associated with the instance          |
 | `role`                         | Name of the AWS IAM Role associated with the instance              |
 | `alarm`                        | CloudWatch Alarm ID                                                |
@@ -124,6 +152,7 @@ resource "aws_ami_from_instance" "example" {
 | `ebs_ids`                      | IDs of EBSs                                                        |
 | `primary_network_interface_id` | ID of the instance's primary network interface                     |
 | `network_interface_id`         | ID of the network interface that was created with the instance     |
+| `public_dns`                   | Public DNS of the instance (or DNS of EIP)                         |
 
 ## License
 
