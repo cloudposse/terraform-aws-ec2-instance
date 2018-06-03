@@ -12,9 +12,7 @@ locals {
 
 data "aws_caller_identity" "default" {}
 
-data "aws_region" "default" {
-  current = "true"
-}
+data "aws_region" "default" {}
 
 data "aws_subnet" "default" {
   id = "${var.subnet}"
@@ -60,9 +58,8 @@ data "aws_ami" "info" {
   }
 }
 
-# Apply the tf_label module for this resource
 module "label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.1"
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.5"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
