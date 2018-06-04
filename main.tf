@@ -7,13 +7,12 @@ locals {
   availability_zone    = "${var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone}"
   ami                  = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
   root_volume_type     = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
+  public_dns           = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ?  data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)}"
 }
 
 data "aws_caller_identity" "default" {}
 
-data "aws_region" "default" {
-  current = "true"
-}
+data "aws_region" "default" {}
 
 data "aws_subnet" "default" {
   id = "${var.subnet}"
@@ -59,9 +58,8 @@ data "aws_ami" "info" {
   }
 }
 
-# Apply the tf_label module for this resource
 module "label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.1"
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.5"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
@@ -122,11 +120,9 @@ resource "aws_eip" "default" {
   vpc               = "true"
 }
 
-resource "null_resource" "eip" {
-  count = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
-
-  triggers {
-    public_dns = "ec2-${replace(aws_eip.default.public_ip, ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
+data "null_data_source" "eip" {
+  inputs = {
+    public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
   }
 }
 
