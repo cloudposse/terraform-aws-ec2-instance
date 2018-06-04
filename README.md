@@ -56,8 +56,8 @@ This module depends on these modules:
 
 ## Variables
 
-| Name                            |         Default           | Description                                                                                                       | Required |
-|:--------------------------------|:--------------------------|:------------------------------------------------------------------------------------------------------------------|:--------:|
+| Name                            |         Default                      | Description                                                                                            | Required |
+|:--------------------------------|:-------------------------------------|:-------------------------------------------------------------------------------------------------------|:--------:|
 | `region`                        |                       ``             | AWS Region the instance is launched in. Optional. If not provided, the current region will be used     |   No     |
 | `namespace`                     |                       ``             | Namespace (e.g. `cp` or `cloudposse`)                                                                  |   Yes    |
 | `stage`                         |                       ``             | Stage (e.g. `prod`, `dev`, `staging`                                                                   |   Yes    |
@@ -89,14 +89,14 @@ This module depends on these modules:
 | `ebs_iops`                      |                      `0`             | Amount of provisioned IOPS. This must be set if `ebs_volume_type` is set to `io1`                      |    No    |
 | `ebs_volume_count`              |                      `0`             | Count of EBS volumes that will be attached to the instance                                             |    No    |
 | `delete_on_termination`         |                     `true`           | Whether the volume should be destroyed on instance termination                                         |    No    |
-| `comparison_operator`           |        `GreaterThanOrEqualToThreshold` | Arithmetic operation to use when comparing the specified Statistic and Threshold                       |    No    |
-| `metric_name`                   |          `StatusCheckFailed_Instance`  | Name for the alarm's associated metric                                                                 |    No    |
-| `evaluation_periods`            |                      `5`               | Number of periods over which data is compared to the specified threshold                               |    No    |
-| `metric_namespace`              |                   `AWS/EC2`            | Namespace for the alarm's associated metric                                                            |    No    |
-| `applying_period`               |                      `60`              | Period in seconds over which the specified statistic is applied                                        |    No    |
-| `statistic_level`               |                   `Maximum`            | Statistic to apply to the alarm's associated metric                                                    |    No    |
-| `metric_threshold`              |                      `1`               | Value against which the specified statistic is compared                                                |    No    |
-| `default_alarm_action`          | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                            |    No    |
+| `comparison_operator`           |      `GreaterThanOrEqualToThreshold` | Arithmetic operation to use when comparing the specified Statistic and Threshold                       |    No    |
+| `metric_name`                   |        `StatusCheckFailed_Instance`  | Name for the alarm's associated metric                                                                 |    No    |
+| `evaluation_periods`            |                    `5`               | Number of periods over which data is compared to the specified threshold                               |    No    |
+| `metric_namespace`              |                 `AWS/EC2`            | Namespace for the alarm's associated metric                                                            |    No    |
+| `applying_period`               |                    `60`              | Period in seconds over which the specified statistic is applied                                        |    No    |
+| `statistic_level`               |                 `Maximum`            | Statistic to apply to the alarm's associated metric                                                    |    No    |
+| `metric_threshold`              |                    `1`               | Value against which the specified statistic is compared                                                |    No    |
+| `default_alarm_action`          | `action/actions/ AWS_EC2.InstanceId.Reboot/1.0` | String of action to execute when this alarm transitions into an ALARM state                 |    No    |
 
 
 ## Outputs
