@@ -43,15 +43,15 @@ variable "subnet" {
 }
 
 variable "namespace" {
-  description = "Namespace (e.g. `cp` or `cloudposse`) - required for `tf_label` module"
+  description = "Namespace (e.g. `cp` or `cloudposse`)"
 }
 
 variable "stage" {
-  description = "Stage (e.g. `prod`, `dev`, `staging` - required for `tf_label` module"
+  description = "Stage (e.g. `prod`, `dev`, `staging`"
 }
 
 variable "name" {
-  description = "Name  (e.g. `bastion` or `db`) - required for `tf_label` module"
+  description = "Name  (e.g. `bastion` or `db`)"
 }
 
 variable "delimiter" {
@@ -59,7 +59,7 @@ variable "delimiter" {
 }
 
 variable "attributes" {
-  description = "Additional attributes (e.g. `policy` or `role`)"
+  description = "Additional attributes (e.g. `1`)"
   type        = "list"
   default     = []
 }

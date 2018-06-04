@@ -120,7 +120,6 @@ resource "aws_eip" "default" {
   vpc               = "true"
 }
 
-# dirty hack
 data "null_data_source" "eip" {
   inputs = {
     public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ? "compute-1" : "${local.region}.compute"}.amazonaws.com"
