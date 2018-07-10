@@ -55,7 +55,8 @@ variable "name" {
 }
 
 variable "delimiter" {
-  default = "-"
+  default     = "-"
+  description = "Delimiter to be used between `name`, `namespace`, `stage`, etc."
 }
 
 variable "attributes" {
