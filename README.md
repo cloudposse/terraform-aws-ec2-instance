@@ -66,10 +66,6 @@ module "kafka_instance" {
 }
 ```
 
-This module depends on these modules:
-
-* [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-
 
 
 
@@ -154,6 +150,17 @@ Available targets:
 | security_group_ids | IDs on the AWS Security Groups associated with the instance |
 | ssh_key_pair | Name of the SSH key pair provisioned on the instance |
 
+
+
+
+## Related Projects
+
+Check out these related projects.
+
+- [terraform-aws-ec2-ami-backup](https://github.com/cloudposse/terraform-aws-ec2-ami-backup) - Terraform module for automatic & scheduled AMI creation
+- [terraform-aws-ec2-ami-snapshot](https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot) - Terraform module to easily generate AMI snapshots to create replica instances
+- [terraform-aws-ec2-cloudwatch-sns-alarms](https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms) - Terraform module that configures CloudWatch SNS alerts for EC2 instances
+- [terraform-null-label](https://github.com/cloudposse/terraform-null-label) - Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])
 
 
 

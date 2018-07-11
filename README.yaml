@@ -28,6 +28,20 @@ badges:
     image: "https://slack.cloudposse.com/badge.svg"
     url: "https://slack.cloudposse.com"
 
+related:
+- name: "terraform-aws-ec2-ami-backup"
+  description: "Terraform module for automatic & scheduled AMI creation"
+  url: "https://github.com/cloudposse/terraform-aws-ec2-ami-backup"
+- name: "terraform-aws-ec2-ami-snapshot"
+  description: "Terraform module to easily generate AMI snapshots to create replica instances"
+  url: "https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot"
+- name: "terraform-aws-ec2-cloudwatch-sns-alarms"
+  description: "Terraform module that configures CloudWatch SNS alerts for EC2 instances"
+  url: "https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms"
+- name: "terraform-null-label"
+  description: "Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])"
+  url: "https://github.com/cloudposse/terraform-null-label"
+
 # Short description of this project
 description: |-
   Terraform Module for provisioning a general purpose EC2 host.
@@ -78,11 +92,7 @@ usage: |-
     allowed_ports               = ["22", "80", "443"]
   }
   ```
-
-  This module depends on these modules:
-
-  * [terraform-null-label](https://github.com/cloudposse/terraform-null-label)
-
+  
 # References
 references:
   - name: "terraform-aws-ec2-bastion-server"
