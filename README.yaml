@@ -7,6 +7,17 @@
 # Name of this project
 name: terraform-aws-ec2-instance
 
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - platform
+  - ec2
+
+# Categories of this project
+categories:
+  - terraform-platform
+
 # Logo for this project
 #logo: docs/logo.png
 
