@@ -58,7 +58,7 @@ data "aws_ami" "info" {
     values = ["${local.ami}"]
   }
 
-  owners = [ "${local.ami_owner}"]
+  owners = ["${local.ami_owner}"]
 }
 
 module "label" {
