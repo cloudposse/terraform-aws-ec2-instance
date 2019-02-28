@@ -6,6 +6,7 @@ locals {
   ebs_iops             = "${var.ebs_volume_type == "io1" ? var.ebs_iops : "0"}"
   availability_zone    = "${var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone}"
   ami                  = "${var.ami != "" ? var.ami : data.aws_ami.default.image_id}"
+  ami_owner            = "${var.ami != "" ? var.ami_owner : data.aws_ami.default.owner_id}"
   root_volume_type     = "${var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type}"
   public_dns           = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ?  data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)}"
 }
@@ -56,6 +57,8 @@ data "aws_ami" "info" {
     name   = "image-id"
     values = ["${local.ami}"]
   }
+
+  owners = ["${local.ami_owner}"]
 }
 
 module "label" {

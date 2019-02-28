@@ -1,4 +1,3 @@
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -6,6 +5,7 @@
 | additional_ips_count | Count of additional EIPs | string | `0` | no |
 | allowed_ports | List of allowed ingress ports | list | `<list>` | no |
 | ami | The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 16.04 | string | `` | no |
+| ami_owner | Owner of the given AMI (ignored if `ami` unset) | string | `` | no |
 | applying_period | The period in seconds over which the specified statistic is applied | string | `60` | no |
 | assign_eip_address | Assign an Elastic IP address to the instance | string | `true` | no |
 | associate_public_ip_address | Associate a public IP address with the instance | string | `true` | no |
@@ -13,7 +13,7 @@
 | availability_zone | Availability Zone the instance is launched in. If not set, will be launched in the first AZ of the region | string | `` | no |
 | comparison_operator | The arithmetic operation to use when comparing the specified Statistic and Threshold. Possible values are: GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold. | string | `GreaterThanOrEqualToThreshold` | no |
 | create_default_security_group | Create default Security Group with only Egress traffic allowed | string | `true` | no |
-| default_alarm_action |  | string | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | no |
+| default_alarm_action | - | string | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | no |
 | delete_on_termination | Whether the volume should be destroyed on instance termination | string | `true` | no |
 | delimiter | Delimiter to be used between `name`, `namespace`, `stage`, etc. | string | `-` | no |
 | disable_api_termination | Enable EC2 Instance Termination Protection | string | `false` | no |
@@ -48,7 +48,7 @@
 | tags | Additional tags | map | `<map>` | no |
 | user_data | Instance user data. Do not pass gzip-compressed data via this argument | string | `` | no |
 | vpc_id | The ID of the VPC that the instance security group belongs to | string | - | yes |
-| welcome_message |  | string | `` | no |
+| welcome_message | - | string | `` | no |
 
 ## Outputs
 
