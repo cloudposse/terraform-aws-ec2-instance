@@ -86,6 +86,11 @@ variable "ami" {
   default     = ""
 }
 
+variable "ami_owner" {
+  description = "Owner of the given AMI (ignored if `ami` unset)"
+  default     = ""
+}
+
 variable "ebs_optimized" {
   description = "Launched EC2 instance will be EBS-optimized"
   default     = "false"
