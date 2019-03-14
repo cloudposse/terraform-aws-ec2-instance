@@ -57,8 +57,3 @@ output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
   value       = "${join("", aws_instance.default.*.primary_network_interface_id)}"
 }
-
-output "network_interface_id" {
-  description = "ID of the network interface that was created with the instance"
-  value       = "${join("", aws_instance.default.*.network_interface_id)}"
-}
