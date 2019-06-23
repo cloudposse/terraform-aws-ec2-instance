@@ -15,7 +15,7 @@ resource "aws_network_interface" "additional" {
 
 resource "aws_network_interface_attachment" "additional" {
   count                = "${local.additional_ips_count}"
-  instance_id          = "${aws_instance.default.id}"
+  instance_id          = "${aws_instance.default[count.index].id}"
   network_interface_id = "${aws_network_interface.additional.*.id[count.index]}"
   device_index         = "${1 + count.index}"
 }
