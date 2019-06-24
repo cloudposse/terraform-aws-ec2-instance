@@ -1,6 +1,6 @@
 output "public_ip" {
   description = "Public IP of instance (or EIP)"
-  value       = "${coalesce(join("", aws_eip.default.*.public_ip), join("", aws_instance.default.*.public_ip))}"
+  value       = "${coalesce(["", aws_eip.default.*.public_ip], ["", aws_instance.default.*.public_ip])}"
 }
 
 output "private_ip" {
