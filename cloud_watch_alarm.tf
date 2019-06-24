@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
   depends_on          = ["null_resource.check_alarm_action"]
 
   dimensions = {
-    InstanceId = "${aws_instance.default.id}"
+    InstanceId = "${aws_instance.default[count.index].id}"
   }
 
   alarm_actions = [
