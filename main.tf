@@ -117,7 +117,7 @@ resource "aws_instance" "default" {
 
 resource "aws_eip" "default" {
   count             = "${var.associate_public_ip_address == "true" && var.assign_eip_address == "true" && var.instance_enabled == "true" ? 1 : 0}"
-  network_interface = "${aws_instance.default[count.index]primary_network_interface_id}"
+  network_interface = "${aws_instance.default[count.index].primary_network_interface_id}"
   vpc               = "true"
   tags              = "${module.label.tags}"
 }
