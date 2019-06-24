@@ -6,8 +6,9 @@ resource "aws_network_interface" "additional" {
   count     = "${local.additional_ips_count}"
   subnet_id = "${var.subnet}"
 
-  security_groups =
-    "${compact(concat([var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""], var.security_groups))}"
+  security_groups = [
+    "${compact(concat(list(var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
+  ]
 
   tags = "${module.label.tags}"
 }
