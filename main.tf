@@ -141,5 +141,5 @@ resource "aws_volume_attachment" "default" {
   count       = "${var.ebs_volume_count}"
   device_name = "${element(var.ebs_device_name, count.index)}"
   volume_id   = "${element(aws_ebs_volume.default.*.id, count.index)}"
-  instance_id = "${aws_instance.default.id}"
+  instance_id = "${aws_instance.default[count.index].id}"
 }
