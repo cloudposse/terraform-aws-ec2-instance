@@ -17,7 +17,7 @@ resource "aws_security_group_rule" "egress" {
   to_port           = 65535
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.default.id}"
+  security_group_id = "${aws_security_group.default[count.index].id}"
 }
 
 resource "aws_security_group_rule" "ingress" {
@@ -27,5 +27,5 @@ resource "aws_security_group_rule" "ingress" {
   to_port           = "${element(var.allowed_ports, count.index)}"
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.default.id}"
+  security_group_id = "${aws_security_group.default[count.index].id}"
 }

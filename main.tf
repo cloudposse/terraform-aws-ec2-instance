@@ -75,7 +75,7 @@ module "label" {
 resource "aws_iam_instance_profile" "default" {
   count = "${local.instance_count}"
   name  = "${module.label.id}"
-  role  = "${aws_iam_role.default.name}"
+  role  = "${aws_iam_role.default[count.index].name}"
 }
 
 resource "aws_iam_role" "default" {
