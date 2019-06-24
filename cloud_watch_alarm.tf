@@ -20,7 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
   threshold           = "${var.metric_threshold}"
   depends_on          = ["null_resource.check_alarm_action"]
 
-  dimensions {
+  dimensions = {
     InstanceId = "${aws_instance.default.id}"
   }
 
