@@ -103,9 +103,7 @@ resource "aws_instance" "default" {
   ipv6_address_count          = "${var.ipv6_address_count}"
   ipv6_addresses              = "${var.ipv6_addresses}"
 
-  vpc_security_group_ids = [
-    "${compact(concat(list(var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}",
-  ]
+  vpc_security_group_ids = "${compact(concat(list(var.create_default_security_group == "true" ? join("", aws_security_group.default.*.id) : ""), var.security_groups))}"
 
   root_block_device {
     volume_type           = "${local.root_volume_type}"
