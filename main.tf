@@ -93,7 +93,7 @@ resource "aws_instance" "default" {
   ebs_optimized               = "${var.ebs_optimized}"
   disable_api_termination     = "${var.disable_api_termination}"
   user_data                   = "${var.user_data}"
-  iam_instance_profile        = "${aws_iam_instance_profile.default.name}"
+  iam_instance_profile        = "${aws_iam_instance_profile.default[count.index].name}"
   associate_public_ip_address = "${var.associate_public_ip_address}"
   key_name                    = "${var.ssh_key_pair}"
   subnet_id                   = "${var.subnet}"
