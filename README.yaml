@@ -33,9 +33,9 @@ github_repo: cloudposse/terraform-aws-ec2-instance
 
 # Badges to display
 badges:
-  - name: "Build Status"
-    image: "https://travis-ci.org/cloudposse/terraform-aws-ec2-instance.svg?branch=master"
-    url: "https://travis-ci.org/cloudposse/terraform-aws-ec2-instance"
+  - name: "Codefresh Build Status"
+    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-ec2-instance?type=cf-1"
+    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d1a7dc1e38a04899f12f82b"
   - name: "Latest Release"
     image: "https://img.shields.io/github/release/cloudposse/terraform-aws-ec2-instance.svg"
     url: "https://github.com/cloudposse/terraform-aws-ec2-instance/releases/latest"
@@ -44,18 +44,18 @@ badges:
     url: "https://slack.cloudposse.com"
 
 related:
-- name: "terraform-aws-ec2-ami-backup"
-  description: "Terraform module for automatic & scheduled AMI creation"
-  url: "https://github.com/cloudposse/terraform-aws-ec2-ami-backup"
-- name: "terraform-aws-ec2-ami-snapshot"
-  description: "Terraform module to easily generate AMI snapshots to create replica instances"
-  url: "https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot"
-- name: "terraform-aws-ec2-cloudwatch-sns-alarms"
-  description: "Terraform module that configures CloudWatch SNS alerts for EC2 instances"
-  url: "https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms"
-- name: "terraform-null-label"
-  description: "Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])"
-  url: "https://github.com/cloudposse/terraform-null-label"
+  - name: "terraform-aws-ec2-ami-backup"
+    description: "Terraform module for automatic & scheduled AMI creation"
+    url: "https://github.com/cloudposse/terraform-aws-ec2-ami-backup"
+  - name: "terraform-aws-ec2-ami-snapshot"
+    description: "Terraform module to easily generate AMI snapshots to create replica instances"
+    url: "https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot"
+  - name: "terraform-aws-ec2-cloudwatch-sns-alarms"
+    description: "Terraform module that configures CloudWatch SNS alerts for EC2 instances"
+    url: "https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms"
+  - name: "terraform-null-label"
+    description: "Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])"
+    url: "https://github.com/cloudposse/terraform-null-label"
 
 # Short description of this project
 description: |-
@@ -78,14 +78,14 @@ usage: |-
   ```hcl
   module "instance" {
     source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
-    ssh_key_pair                = "${var.ssh_key_pair}"
-    instance_type               = "${var.instance_type}"
-    vpc_id                      = "${var.vpc_id}"
-    security_groups             = ["${var.security_groups}"]
-    subnet                      = "${var.subnet}"
-    name                        = "${var.name}"
-    namespace                   = "${var.namespace}"
-    stage                       = "${var.stage}"
+    ssh_key_pair                = var.ssh_key_pair
+    instance_type               = var.instance_type
+    vpc_id                      = var.vpc_id
+    security_groups             = var.security_groups
+    subnet                      = var.subnet
+    name                        = "ec2"
+    namespace                   = "eg"
+    stage                       = "dev"
   }
   ```
 
@@ -94,20 +94,20 @@ usage: |-
   ```hcl
   module "kafka_instance" {
     source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
-    ssh_key_pair                = "${var.ssh_key_pair}"
-    vpc_id                      = "${var.vpc_id}"
-    security_groups             = ["${var.security_groups}"]
-    subnet                      = "${var.subnet}"
-    associate_public_ip_address = "true"
+    ssh_key_pair                = var.ssh_key_pair
+    vpc_id                      = var.vpc_id
+    security_groups             = var.security_groups
+    subnet                      = var.subnet
+    associate_public_ip_address = true
     name                        = "kafka"
-    namespace                   = "cp"
+    namespace                   = "eg"
     stage                       = "dev"
-    additional_ips_count        = "1"
-    ebs_volume_count            = "2"
-    allowed_ports               = ["22", "80", "443"]
+    additional_ips_count        = 1
+    ebs_volume_count            = 2
+    allowed_ports               = [22, 80, 443]
   }
   ```
-  
+
 # References
 references:
   - name: "terraform-aws-ec2-bastion-server"
@@ -131,8 +131,8 @@ contributors:
   - name: "Valeriy"
     github: "drama17"
   - name: "Ivan Pinatti"
-    github: "ivan-pinatti"    
+    github: "ivan-pinatti"
   - name: "Vladimir"
-    github: "SweetOps"  
+    github: "SweetOps"
   - name: "Konstantin B"
-    github: "comeanother"  
+    github: "comeanother"
