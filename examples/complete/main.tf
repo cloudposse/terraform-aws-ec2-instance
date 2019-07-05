@@ -3,11 +3,12 @@ provider "aws" {
 }
 
 module "aws_key_pair" {
-  source           = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.4.0"
-  namespace        = var.namespace
-  stage            = var.stage
-  name             = var.name
-  generate_ssh_key = true
+  source              = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.4.0"
+  namespace           = var.namespace
+  stage               = var.stage
+  name                = var.name
+  ssh_public_key_path = var.ssh_public_key_path
+  generate_ssh_key    = true
 }
 
 module "vpc" {

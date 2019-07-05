@@ -15,3 +15,5 @@ associate_public_ip_address = true
 instance_type = "t2.micro"
 
 allowed_ports = [22, 80, 443]
+
+ssh_public_key_path = "/secrets"

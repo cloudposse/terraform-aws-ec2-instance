@@ -42,3 +42,8 @@ variable "allowed_ports" {
   type        = list(number)
   description = "List of allowed ingress ports"
 }
+
+variable "ssh_public_key_path" {
+  type        = string
+  description = "Path to SSH public key directory (e.g. `/secrets`)"
+}
