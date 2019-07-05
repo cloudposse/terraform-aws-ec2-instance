@@ -44,4 +44,14 @@ func TestExamplesComplete(t *testing.T) {
 	keyName := terraform.Output(t, terraformOptions, "key_name")
 	// Verify we're getting back the outputs we expect
 	assert.Equal(t, "eg-test-ec2-instance", keyName)
+
+	// Run `terraform output` to get the value of an output variable
+	publicDns := terraform.Output(t, terraformOptions, "public_dns")
+	// Verify we're getting back the outputs we expect
+	assert.Contains(t, publicDns, ".us-west-1.compute.amazonaws.com")
+
+	// Run `terraform output` to get the value of an output variable
+	role := terraform.Output(t, terraformOptions, "role")
+	// Verify we're getting back the outputs we expect
+	assert.Equal(t, "eg-test-ec2-instance", role)
 }
