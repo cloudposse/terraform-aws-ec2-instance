@@ -1,9 +1,9 @@
 output "public_ip" {
   description = "Public IP of instance (or EIP)"
-  value = coalesce(
+  value = var.instance_enabled ? coalesce(
     join("", aws_eip.default.*.public_ip),
     join("", aws_instance.default.*.public_ip)
-  )
+  ) : ""
 }
 
 output "private_ip" {
