@@ -1,9 +1,6 @@
 output "public_ip" {
   description = "Public IP of instance (or EIP)"
-  value = coalesce(
-    join("", aws_eip.default.*.public_ip),
-    join("", aws_instance.default.*.public_ip)
-  )
+  value       = concat(aws_eip.default.*.public_ip, aws_instance.default.*.public_ip, [""])[0]
 }
 
 output "private_ip" {
