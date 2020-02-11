@@ -23,6 +23,7 @@
 | ebs_volume_count | Count of EBS volumes that will be attached to the instance | number | `0` | no |
 | ebs_volume_size | Size of the EBS volume in gigabytes | number | `10` | no |
 | ebs_volume_type | The type of EBS volume. Can be standard, gp2 or io1 | string | `gp2` | no |
+| environment | Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT' | string | `` | no |
 | evaluation_periods | The number of periods over which data is compared to the specified threshold. | number | `5` | no |
 | instance_enabled | Flag to control the instance creation. Set to false if it is necessary to skip instance creation | bool | `true` | no |
 | instance_type | The type of the instance | string | `t2.micro` | no |
