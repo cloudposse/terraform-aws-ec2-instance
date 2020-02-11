@@ -61,6 +61,12 @@ variable "stage" {
   default     = ""
 }
 
+variable "environment" {
+  type        = string
+  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
+  default     = ""
+}
+
 variable "name" {
   type        = string
   description = "Name  (e.g. `bastion` or `db`)"
