@@ -60,6 +60,7 @@
 | alarm | CloudWatch Alarm ID |
 | ebs_ids | IDs of EBSs |
 | id | Disambiguated ID of the instance |
+| name | Instance name |
 | primary_network_interface_id | ID of the instance's primary network interface |
 | private_dns | Private DNS of instance |
 | private_ip | Private IP of instance |
