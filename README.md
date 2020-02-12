@@ -183,6 +183,7 @@ Available targets:
 | monitoring | Launched EC2 instance will have detailed monitoring enabled | bool | `true` | no |
 | name | Name  (e.g. `bastion` or `db`) | string | - | yes |
 | namespace | Namespace (e.g. `cp` or `cloudposse`) | string | `` | no |
+| permissions_boundary_arn | Policy ARN to attach to instance role as a permissions boundary | string | `` | no |
 | private_ip | Private IP address to associate with the instance in the VPC | string | `` | no |
 | region | AWS Region the instance is launched in | string | `` | no |
 | root_iops | Amount of provisioned IOPS. This must be set if root_volume_type is set to `io1` | number | `0` | no |

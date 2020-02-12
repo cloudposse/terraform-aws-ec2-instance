@@ -281,3 +281,9 @@ variable "additional_ips_count" {
   description = "Count of additional EIPs"
   default     = 0
 }
+
+variable "permissions_boundary_arn" {
+  type        = string
+  description = "Policy ARN to attach to instance role as a permissions boundary"
+  default     = ""
+}
