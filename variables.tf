@@ -146,7 +146,7 @@ variable "source_dest_check" {
 
 variable "ipv6_address_count" {
   type        = number
-  description = "Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet"
+  description = "Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet (-1 to use subnet default)"
   default     = 0
 }
 
