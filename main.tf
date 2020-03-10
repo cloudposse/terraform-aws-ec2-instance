@@ -104,8 +104,8 @@ resource "aws_instance" "default" {
   monitoring                  = var.monitoring
   private_ip                  = var.private_ip
   source_dest_check           = var.source_dest_check
-  ipv6_address_count          = var.ipv6_address_count
-  ipv6_addresses              = var.ipv6_addresses
+  ipv6_address_count          = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
+  ipv6_addresses              = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
 
   vpc_security_group_ids = compact(
     concat(
