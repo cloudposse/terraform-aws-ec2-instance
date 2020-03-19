@@ -5,8 +5,8 @@ locals {
   root_iops            = var.root_volume_type == "io1" ? var.root_iops : "0"
   ebs_iops             = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   availability_zone    = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  ami                  = var.ami != "" ? var.ami : data.aws_ami.default.image_id
-  ami_owner            = var.ami != "" ? var.ami_owner : data.aws_ami.default.owner_id
+  ami                  = var.ami != "" ? var.ami : data.aws_ami.default.0.image_id
+  ami_owner            = var.ami != "" ? var.ami_owner : data.aws_ami.default.0.owner_id
   root_volume_type     = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
   public_dns           = var.associate_public_ip_address && var.assign_eip_address && var.instance_enabled ? data.null_data_source.eip.outputs["public_dns"] : join("", aws_instance.default.*.public_dns)
 }
@@ -42,6 +42,7 @@ data "aws_iam_policy_document" "default" {
 }
 
 data "aws_ami" "default" {
+  count       = var.ami == "" ? 1 : 0
   most_recent = "true"
 
   filter {
