@@ -1,8 +1,8 @@
 locals {
-  instance_count         = var.instance_enabled ? 1 : 0
+  instance_count = var.instance_enabled ? 1 : 0
   # create an instance profile if the instance is enabled and we aren't given
   # one to use
-  instance_profile_count = !var.instance_enabled ? 0 : length(var.instance_profile) > 0 ? 0 : 1
+  instance_profile_count = ! var.instance_enabled ? 0 : length(var.instance_profile) > 0 ? 0 : 1
   instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
   security_group_count   = var.create_default_security_group ? 1 : 0
   region                 = var.region != "" ? var.region : data.aws_region.default.name

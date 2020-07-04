@@ -289,7 +289,7 @@ variable "permissions_boundary_arn" {
 }
 
 variable "instance_profile" {
-    type        = string
-    description = "A pre-defined profile to attach to the instance (default is to build our own)"
-    default     = ""
+  type        = string
+  description = "A pre-defined profile to attach to the instance (default is to build our own)"
+  default     = ""
 }
