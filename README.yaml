@@ -1,63 +1,39 @@
----
-#
-# This is the canonical configuration for the `README.md`
-# Run `make readme` to rebuild the `README.md`
-#
-
-# Name of this project
 name: terraform-aws-ec2-instance
-
-# Tags of this project
 tags:
-  - aws
-  - terraform
-  - terraform-modules
-  - platform
-  - ec2
-  - instance
-  - security
-  - ansible
-
-# Categories of this project
+- aws
+- terraform
+- terraform-modules
+- platform
+- ec2
+- instance
+- security
+- ansible
 categories:
-  - terraform-modules/platform
-
-# Logo for this project
-#logo: docs/logo.png
-
-# License of this project
-license: "APACHE2"
-
-# Canonical GitHub repo
+- terraform-modules/platform
+license: APACHE2
 github_repo: cloudposse/terraform-aws-ec2-instance
-
-# Badges to display
 badges:
-  - name: "Codefresh Build Status"
-    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-ec2-instance?type=cf-1"
-    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d1a7dc1e38a04899f12f82b"
-  - name: "Latest Release"
-    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-ec2-instance.svg"
-    url: "https://github.com/cloudposse/terraform-aws-ec2-instance/releases/latest"
-  - name: "Slack Community"
-    image: "https://slack.cloudposse.com/badge.svg"
-    url: "https://slack.cloudposse.com"
-
+- name: Latest Release
+  image: https://img.shields.io/github/release/cloudposse/terraform-aws-ec2-instance.svg
+  url: https://github.com/cloudposse/terraform-aws-ec2-instance/releases/latest
+- name: Slack Community
+  image: https://slack.cloudposse.com/badge.svg
+  url: https://slack.cloudposse.com
 related:
-  - name: "terraform-aws-ec2-ami-backup"
-    description: "Terraform module for automatic & scheduled AMI creation"
-    url: "https://github.com/cloudposse/terraform-aws-ec2-ami-backup"
-  - name: "terraform-aws-ec2-ami-snapshot"
-    description: "Terraform module to easily generate AMI snapshots to create replica instances"
-    url: "https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot"
-  - name: "terraform-aws-ec2-cloudwatch-sns-alarms"
-    description: "Terraform module that configures CloudWatch SNS alerts for EC2 instances"
-    url: "https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms"
-  - name: "terraform-null-label"
-    description: "Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])"
-    url: "https://github.com/cloudposse/terraform-null-label"
-
-# Short description of this project
+- name: terraform-aws-ec2-ami-backup
+  description: Terraform module for automatic & scheduled AMI creation
+  url: https://github.com/cloudposse/terraform-aws-ec2-ami-backup
+- name: terraform-aws-ec2-ami-snapshot
+  description: Terraform module to easily generate AMI snapshots to create replica
+    instances
+  url: https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot
+- name: terraform-aws-ec2-cloudwatch-sns-alarms
+  description: Terraform module that configures CloudWatch SNS alerts for EC2 instances
+  url: https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms
+- name: terraform-null-label
+  description: Terraform Module to define a consistent naming convention by (namespace,
+    stage, name, [attributes])
+  url: https://github.com/cloudposse/terraform-null-label
 description: |-
   Terraform Module for provisioning a general purpose EC2 host.
 
@@ -66,8 +42,6 @@ description: |-
   * Option to switch EIP attachment
   * CloudWatch monitoring and automatic reboot if instance hangs
   * Assume Role capability
-
-# How to use this project
 usage: |-
   Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
 
@@ -107,36 +81,32 @@ usage: |-
     allowed_ports               = [22, 80, 443]
   }
   ```
-
-# References
 references:
-  - name: "terraform-aws-ec2-bastion-server"
-    description: 'Terraform Module to define a generic Bastion host with parameterized user_data'
-    url: "https://github.com/cloudposse/terraform-aws-ec2-bastion-server"
-
+- name: terraform-aws-ec2-bastion-server
+  description: Terraform Module to define a generic Bastion host with parameterized
+    user_data
+  url: https://github.com/cloudposse/terraform-aws-ec2-bastion-server
 include:
-  - "docs/targets.md"
-  - "docs/terraform.md"
-
-# Contributors to this project
+- docs/targets.md
+- docs/terraform.md
 contributors:
-  - name: "Erik Osterman"
-    github: "osterman"
-  - name: "Igor Rodionov"
-    github: "goruha"
-  - name: "Andriy Knysh"
-    github: "aknysh"
-  - name: "Sergey Vasilyev"
-    github: "s2504s"
-  - name: "Valeriy"
-    github: "drama17"
-  - name: "Ivan Pinatti"
-    github: "ivan-pinatti"
-  - name: "Vladimir"
-    github: "SweetOps"
-  - name: "Konstantin B"
-    github: "comeanother"
-  - name: "Maarten van der Hoef"
-    github: "maartenvanderhoef"
-  - name: "Chris Weyl"
-    github: "rsrchboy"
+- name: Erik Osterman
+  github: osterman
+- name: Igor Rodionov
+  github: goruha
+- name: Andriy Knysh
+  github: aknysh
+- name: Sergey Vasilyev
+  github: s2504s
+- name: Valeriy
+  github: drama17
+- name: Ivan Pinatti
+  github: ivan-pinatti
+- name: Vladimir
+  github: SweetOps
+- name: Konstantin B
+  github: comeanother
+- name: Maarten van der Hoef
+  github: maartenvanderhoef
+- name: Chris Weyl
+  github: rsrchboy
