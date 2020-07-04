@@ -16,7 +16,7 @@ func TestExamplesComplete(t *testing.T) {
 		TerraformDir: "../../examples/complete",
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
-		VarFiles: []string{"fixtures.us-west-1.tfvars"},
+		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 	}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
@@ -48,7 +48,7 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	publicDns := terraform.Output(t, terraformOptions, "public_dns")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, publicDns, ".us-west-1.compute.amazonaws.com")
+	assert.Contains(t, publicDns, ".us-east-2.compute.amazonaws.com")
 
 	// Run `terraform output` to get the value of an output variable
 	role := terraform.Output(t, terraformOptions, "role")
