@@ -161,7 +161,7 @@ Available targets:
 | availability_zone | Availability Zone the instance is launched in. If not set, will be launched in the first AZ of the region | string | `` | no |
 | comparison_operator | The arithmetic operation to use when comparing the specified Statistic and Threshold. Possible values are: GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold. | string | `GreaterThanOrEqualToThreshold` | no |
 | create_default_security_group | Create default Security Group with only Egress traffic allowed | bool | `true` | no |
-| default_alarm_action | Default alerm action | string | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | no |
+| default_alarm_action | Default alarm action | string | `action/actions/AWS_EC2.InstanceId.Reboot/1.0` | no |
 | delete_on_termination | Whether the volume should be destroyed on instance termination | bool | `true` | no |
 | delimiter | Delimiter to be used between `name`, `namespace`, `stage`, etc. | string | `-` | no |
 | disable_api_termination | Enable EC2 Instance Termination Protection | bool | `false` | no |
