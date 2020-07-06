@@ -189,6 +189,7 @@ Available targets:
 | environment | Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT' | `string` | `""` | no |
 | evaluation\_periods | The number of periods over which data is compared to the specified threshold. | `number` | `5` | no |
 | instance\_enabled | Flag to control the instance creation. Set to false if it is necessary to skip instance creation | `bool` | `true` | no |
+| instance\_profile | A pre-defined profile to attach to the instance (default is to build our own) | `string` | `""` | no |
 | instance\_type | The type of the instance | `string` | `"t2.micro"` | no |
 | ipv6\_address\_count | Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet (-1 to use subnet default) | `number` | `0` | no |
 | ipv6\_addresses | List of IPv6 addresses from the range of the subnet to associate with the primary network interface | `list(string)` | `[]` | no |
@@ -223,6 +224,7 @@ Available targets:
 | alarm | CloudWatch Alarm ID |
 | ebs\_ids | IDs of EBSs |
 | id | Disambiguated ID of the instance |
+| instance\_profile | Name of the instance's profile (either built or supplied) |
 | name | Instance name |
 | primary\_network\_interface\_id | ID of the instance's primary network interface |
 | private\_dns | Private DNS of instance |
