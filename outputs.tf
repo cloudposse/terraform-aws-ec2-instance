@@ -45,7 +45,7 @@ output "security_group_ids" {
 
 output "role" {
   description = "Name of AWS IAM Role associated with the instance"
-  value       = join("", aws_iam_role.default.*.name)
+  value       = local.instance_profile_count > 0 ? join("", aws_iam_role.default.*.name) : join("", data.aws_iam_instance_profile.given.*.role_name)
 }
 
 output "alarm" {
@@ -69,4 +69,9 @@ output "ebs_ids" {
 output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
   value       = join("", aws_instance.default.*.primary_network_interface_id)
+}
+
+output "instance_profile" {
+  description = "Name of the instance's profile (either built or supplied)"
+  value       = local.instance_profile
 }
