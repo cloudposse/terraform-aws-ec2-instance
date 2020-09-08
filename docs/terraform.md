@@ -1,17 +1,18 @@
+<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.0, < 0.14.0 |
-| aws | ~> 2.0 |
-| null | ~> 2.0 |
+| terraform | >= 0.12.0 |
+| aws | >= 2.0 |
+| null | >= 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.0 |
-| null | ~> 2.0 |
+| aws | >= 2.0 |
+| null | >= 2.0 |
 
 ## Inputs
 
@@ -87,3 +88,4 @@
 | security\_group\_ids | IDs on the AWS Security Groups associated with the instance |
 | ssh\_key\_pair | Name of the SSH key pair provisioned on the instance |
 
+<!-- markdownlint-restore -->
