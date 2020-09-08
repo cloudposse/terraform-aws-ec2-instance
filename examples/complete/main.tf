@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "aws_key_pair" {
-  source              = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.4.0"
+  source              = "git::https://github.com/cloudposse/terraform-aws-key-pair.git?ref=tags/0.13.1"
   namespace           = var.namespace
   stage               = var.stage
   name                = var.name
@@ -12,7 +12,7 @@ module "aws_key_pair" {
 }
 
 module "vpc" {
-  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.7.0"
+  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.17.0"
   namespace  = var.namespace
   stage      = var.stage
   name       = var.name
@@ -20,7 +20,7 @@ module "vpc" {
 }
 
 module "subnets" {
-  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.0"
+  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.29.0"
   availability_zones   = var.availability_zones
   namespace            = var.namespace
   stage                = var.stage
