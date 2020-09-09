@@ -3,21 +3,6 @@ variable "region" {
   description = "AWS region"
 }
 
-variable "namespace" {
-  type        = string
-  description = "Namespace (e.g. `eg` or `cp`)"
-}
-
-variable "stage" {
-  type        = string
-  description = "Stage (e.g. `prod`, `dev`, `staging`, `infra`)"
-}
-
-variable "name" {
-  type        = string
-  description = "Name  (e.g. `app` or `cluster`)"
-}
-
 variable "availability_zones" {
   type        = list(string)
   description = "List of availability zones"
@@ -40,7 +25,14 @@ variable "instance_type" {
 
 variable "allowed_ports" {
   type        = list(number)
-  description = "List of allowed ingress ports"
+  description = "List of allowed ingress TCP ports"
+  default     = []
+}
+
+variable "allowed_ports_udp" {
+  type        = list(number)
+  description = "List of allowed ingress UDP ports"
+  default     = []
 }
 
 variable "ssh_public_key_path" {

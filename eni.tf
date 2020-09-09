@@ -1,5 +1,5 @@
 locals {
-  additional_ips_count = var.associate_public_ip_address && var.instance_enabled && var.additional_ips_count > 0 ? var.additional_ips_count : 0
+  additional_ips_count = module.this.enabled && var.associate_public_ip_address && var.additional_ips_count > 0 ? var.additional_ips_count : 0
 }
 
 resource "aws_network_interface" "additional" {
@@ -15,7 +15,7 @@ resource "aws_network_interface" "additional" {
     )
   )
 
-  tags = module.label.tags
+  tags = module.this.tags
 }
 
 resource "aws_network_interface_attachment" "additional" {
