@@ -64,5 +64,5 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	role := terraform.Output(t, terraformOptions, "role")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "eg-test-ec2-instance-"+randId, role)
+	assert.Equal(t, "eg-test-ec2-instance", role)
 }

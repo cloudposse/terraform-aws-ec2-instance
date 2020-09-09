@@ -7,6 +7,7 @@ module "aws_key_pair" {
   namespace           = module.this.namespace
   stage               = module.this.stage
   name                = module.this.name
+  attributes          = module.this.attributes
   ssh_public_key_path = var.ssh_public_key_path
   generate_ssh_key    = true
 }

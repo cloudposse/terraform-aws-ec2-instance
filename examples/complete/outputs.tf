@@ -58,6 +58,11 @@ output "id" {
   value       = module.ec2_instance.id
 }
 
+output "name" {
+  description = "Instance name"
+  value       = module.ec2_instance.name
+}
+
 output "ssh_key_pair" {
   description = "Name of the SSH key pair provisioned on the instance"
   value       = module.ec2_instance.ssh_key_pair
