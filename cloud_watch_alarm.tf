@@ -10,7 +10,7 @@ resource "null_resource" "check_alarm_action" {
 
 resource "aws_cloudwatch_metric_alarm" "default" {
   count               = local.instance_count
-  alarm_name          = module.label.id
+  alarm_name          = module.this.id
   comparison_operator = var.comparison_operator
   evaluation_periods  = var.evaluation_periods
   metric_name         = var.metric_name

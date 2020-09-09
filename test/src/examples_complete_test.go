@@ -1,7 +1,10 @@
 package test
 
 import (
+	"math/rand"
+	"strconv"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
@@ -11,12 +14,20 @@ import (
 func TestExamplesComplete(t *testing.T) {
 	t.Parallel()
 
+	rand.Seed(time.Now().UnixNano())
+
+	randId := strconv.Itoa(rand.Intn(100000))
+	attributes := []string{randId}
+
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located
 		TerraformDir: "../../examples/complete",
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
+		Vars: map[string]interface{}{
+			"attributes": attributes,
+		},
 	}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
@@ -43,7 +54,7 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	keyName := terraform.Output(t, terraformOptions, "key_name")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "eg-test-ec2-instance", keyName)
+	assert.Equal(t, "eg-test-ec2-instance-"+randId, keyName)
 
 	// Run `terraform output` to get the value of an output variable
 	publicDns := terraform.Output(t, terraformOptions, "public_dns")
@@ -53,5 +64,5 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	role := terraform.Output(t, terraformOptions, "role")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "eg-test-ec2-instance", role)
+	assert.Equal(t, "eg-test-ec2-instance-"+randId, role)
 }

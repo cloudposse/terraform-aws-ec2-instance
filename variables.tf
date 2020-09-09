@@ -40,54 +40,19 @@ variable "security_groups" {
 
 variable "allowed_ports" {
   type        = list(number)
-  description = "List of allowed ingress ports"
+  description = "List of allowed ingress TCP ports"
+  default     = []
+}
+
+variable "allowed_ports_udp" {
+  type        = list(number)
+  description = "List of allowed ingress UDP ports"
   default     = []
 }
 
 variable "subnet" {
   type        = string
   description = "VPC Subnet ID the instance is launched in"
-}
-
-variable "namespace" {
-  type        = string
-  description = "Namespace (e.g. `cp` or `cloudposse`)"
-  default     = ""
-}
-
-variable "stage" {
-  type        = string
-  description = "Stage (e.g. `prod`, `dev`, `staging`"
-  default     = ""
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
-  default     = ""
-}
-
-variable "name" {
-  type        = string
-  description = "Name  (e.g. `bastion` or `db`)"
-}
-
-variable "delimiter" {
-  type        = string
-  default     = "-"
-  description = "Delimiter to be used between `name`, `namespace`, `stage`, etc."
-}
-
-variable "attributes" {
-  description = "Additional attributes (e.g. `1`)"
-  type        = list(string)
-  default     = []
-}
-
-variable "tags" {
-  description = "Additional tags"
-  type        = map(string)
-  default     = {}
 }
 
 variable "region" {
@@ -261,18 +226,12 @@ variable "metric_threshold" {
 variable "default_alarm_action" {
   type        = string
   default     = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
-  description = "Default alerm action"
+  description = "Default alarm action"
 }
 
 variable "create_default_security_group" {
   type        = bool
   description = "Create default Security Group with only Egress traffic allowed"
-  default     = true
-}
-
-variable "instance_enabled" {
-  type        = bool
-  description = "Flag to control the instance creation. Set to false if it is necessary to skip instance creation"
   default     = true
 }
 
