@@ -201,7 +201,8 @@ Available targets:
 | statistic\_level | The statistic to apply to the alarm's associated metric. Allowed values are: SampleCount, Average, Sum, Minimum, Maximum | `string` | `"Maximum"` | no |
 | subnet | VPC Subnet ID the instance is launched in | `string` | n/a | yes |
 | tags | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
-| user\_data | Instance user data. Do not pass gzip-compressed data via this argument | `string` | `""` | no |
+| user\_data | The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument; use `user_data_base64` instead | `string` | `null` | no |
+| user\_data\_base64 | Can be used instead of `user_data` to pass base64-encoded binary data directly. Use this instead of `user_data` whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption | `string` | `null` | no |
 | vpc\_id | The ID of the VPC that the instance security group belongs to | `string` | n/a | yes |
 | welcome\_message | Welcome message | `string` | `""` | no |
 
@@ -211,6 +212,7 @@ Available targets:
 |------|-------------|
 | additional\_eni\_ids | Map of ENI to EIP |
 | alarm | CloudWatch Alarm ID |
+| arn | ARN of the instance |
 | ebs\_ids | IDs of EBSs |
 | id | Disambiguated ID of the instance |
 | instance\_profile | Name of the instance's profile (either built or supplied) |

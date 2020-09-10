@@ -58,6 +58,11 @@ output "id" {
   value       = module.ec2_instance.id
 }
 
+output "arn" {
+  description = "ARN of the instance"
+  value       = module.ec2_instance.arn
+}
+
 output "name" {
   description = "Instance name"
   value       = module.ec2_instance.name
