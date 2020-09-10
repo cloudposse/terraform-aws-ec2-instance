@@ -23,6 +23,11 @@ output "id" {
   value       = join("", aws_instance.default.*.id)
 }
 
+output "arn" {
+  description = "ARN of the instance"
+  value       = join("", aws_instance.default.*.arn)
+}
+
 output "name" {
   description = "Instance name"
   value       = module.this.id

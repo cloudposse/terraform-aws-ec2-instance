@@ -97,6 +97,7 @@ resource "aws_instance" "default" {
   ebs_optimized               = var.ebs_optimized
   disable_api_termination     = var.disable_api_termination
   user_data                   = var.user_data
+  user_data_base64            = var.user_data_base64
   iam_instance_profile        = local.instance_profile
   associate_public_ip_address = var.associate_public_ip_address
   key_name                    = var.ssh_key_pair
