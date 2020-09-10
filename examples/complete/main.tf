@@ -34,10 +34,8 @@ module "subnets" {
 }
 
 module "ec2_instance" {
-  source                      = "../../"
-  namespace                   = var.namespace
-  stage                       = var.stage
-  name                        = var.name
+  source = "../../"
+
   ssh_key_pair                = module.aws_key_pair.key_name
   vpc_id                      = module.vpc.vpc_id
   subnet                      = module.subnets.private_subnet_ids[0]
@@ -47,4 +45,6 @@ module "ec2_instance" {
   instance_type               = var.instance_type
   allowed_ports               = var.allowed_ports
   allowed_ports_udp           = var.allowed_ports_udp
+
+  context = module.this.context
 }
