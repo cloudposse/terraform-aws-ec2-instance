@@ -33,6 +33,41 @@ module "subnets" {
   context = module.this.context
 }
 
+module "instance_profile_label" {
+  source = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.19.2"
+
+  attributes = distinct(compact(concat(module.this.attributes, ["profile"])))
+
+  context = module.this.context
+}
+
+data "aws_iam_policy_document" "test" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sts:AssumeRole"
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "test" {
+  name               = module.instance_profile_label.id
+  assume_role_policy = data.aws_iam_policy_document.test.json
+  tags               = module.instance_profile_label.tags
+}
+
+# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
+resource "aws_iam_instance_profile" "test" {
+  name = module.instance_profile_label.id
+  role = aws_iam_role.test.name
+}
+
 module "ec2_instance" {
   source = "../../"
 
@@ -45,6 +80,7 @@ module "ec2_instance" {
   instance_type               = var.instance_type
   allowed_ports               = var.allowed_ports
   allowed_ports_udp           = var.allowed_ports_udp
+  instance_profile            = aws_iam_instance_profile.test.name
 
   context = module.this.context
 }
