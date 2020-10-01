@@ -70,9 +70,18 @@ data "aws_ami" "info" {
   owners = [local.ami_owner]
 }
 
-data "aws_iam_instance_profile" "given" {
+# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
+resource "null_resource" "instance_profile_dependency" {
   count = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
-  name  = var.instance_profile
+  triggers = {
+    dependency_id = var.instance_profile
+  }
+}
+
+data "aws_iam_instance_profile" "given" {
+  count      = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  name       = var.instance_profile
+  depends_on = [null_resource.instance_profile_dependency]
 }
 
 resource "aws_iam_instance_profile" "default" {

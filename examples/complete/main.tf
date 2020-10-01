@@ -33,6 +33,18 @@ module "subnets" {
   context = module.this.context
 }
 
+resource "aws_iam_role" "test" {
+  name               = module.this.id
+  assume_role_policy = ""
+  tags               = module.this.tags
+}
+
+# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
+resource "aws_iam_instance_profile" "test" {
+  name = module.this.id
+  role = aws_iam_role.test.name
+}
+
 module "ec2_instance" {
   source = "../../"
 
@@ -45,6 +57,7 @@ module "ec2_instance" {
   instance_type               = var.instance_type
   allowed_ports               = var.allowed_ports
   allowed_ports_udp           = var.allowed_ports_udp
+  instance_profile            = aws_iam_instance_profile.test.name
 
   context = module.this.context
 }
