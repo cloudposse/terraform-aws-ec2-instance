@@ -247,6 +247,18 @@ variable "additional_ips_count" {
   default     = 0
 }
 
+variable "additional_private_ips_count" {
+  type        = number
+  description = "Count of additional private IPs"
+  default     = 0
+}
+
+variable "additional_private_ips" {
+  description = "List of private IPs to attach to the private ENI"
+  type        = list(string)
+  default     = []
+}
+
 variable "permissions_boundary_arn" {
   type        = string
   description = "Policy ARN to attach to instance role as a permissions boundary"

@@ -30,3 +30,23 @@ resource "aws_eip" "additional" {
   vpc               = true
   network_interface = aws_network_interface.additional[count.index].id
 }
+
+
+resource "aws_network_interface" "additional_private" {
+  count     = var.additional_private_ips_count > 1 ? 1 : 0
+  subnet_id = var.subnet
+
+  private_ips_count = var.additional_private_ips_count
+  private_ips       = var.additional_private_ips
+
+  security_groups = compact(
+    concat(
+      [
+        var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""
+      ],
+      var.security_groups
+    )
+  )
+
+  tags = module.this.tags
+}

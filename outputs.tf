@@ -66,6 +66,11 @@ output "additional_eni_ids" {
   )
 }
 
+output "additional_private_eni_ids" {
+  description = "Map of ENI to EIP"
+  value = aws_network_interface.additional_private
+}
+
 output "ebs_ids" {
   description = "IDs of EBSs"
   value       = aws_ebs_volume.default.*.id
