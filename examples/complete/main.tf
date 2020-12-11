@@ -34,7 +34,7 @@ module "subnets" {
 }
 
 module "instance_profile_label" {
-  source = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.19.2"
+  source = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.22.0"
 
   attributes = distinct(compact(concat(module.this.attributes, ["profile"])))
 
