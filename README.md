@@ -89,7 +89,9 @@ Include this repository as a module in your existing terraform code.
 
 ```hcl
 module "instance" {
-  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  source = "cloudposse/ec2-instance/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version     = "x.x.x"
   ssh_key_pair                = var.ssh_key_pair
   instance_type               = var.instance_type
   vpc_id                      = var.vpc_id
@@ -105,7 +107,9 @@ module "instance" {
 
 ```hcl
 module "kafka_instance" {
-  source                      = "git::https://github.com/cloudposse/terraform-aws-ec2-instance.git?ref=master"
+  source = "cloudposse/ec2-instance/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version     = "x.x.x"
   ssh_key_pair                = var.ssh_key_pair
   vpc_id                      = var.vpc_id
   security_groups             = var.security_groups
