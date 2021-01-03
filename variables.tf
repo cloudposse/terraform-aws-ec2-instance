@@ -181,12 +181,6 @@ variable "delete_on_termination" {
   default     = true
 }
 
-variable "welcome_message" {
-  type        = string
-  default     = ""
-  description = "Welcome message"
-}
-
 variable "comparison_operator" {
   type        = string
   description = "The arithmetic operation to use when comparing the specified Statistic and Threshold. Possible values are: GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold."
