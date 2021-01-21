@@ -96,6 +96,7 @@ resource "aws_iam_role" "default" {
   path                 = "/"
   assume_role_policy   = data.aws_iam_policy_document.default.json
   permissions_boundary = var.permissions_boundary_arn
+  tags                 = module.this.tags
 }
 
 resource "aws_instance" "default" {
