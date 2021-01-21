@@ -6,7 +6,7 @@ variable "ssh_key_pair" {
 variable "associate_public_ip_address" {
   type        = bool
   description = "Associate a public IP address with the instance"
-  default     = true
+  default     = false
 }
 
 variable "assign_eip_address" {
@@ -163,6 +163,12 @@ variable "ebs_volume_size" {
   default     = 10
 }
 
+variable "ebs_volume_encrypted" {
+  type        = bool
+  description = "Size of the EBS volume in gigabytes"
+  default     = true
+}
+
 variable "ebs_iops" {
   type        = number
   description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
@@ -257,4 +263,28 @@ variable "instance_profile" {
   type        = string
   description = "A pre-defined profile to attach to the instance (default is to build our own)"
   default     = ""
+}
+
+variable "root_block_device_encrypted" {
+  type        = bool
+  default     = true
+  description = "Whether to encrypt the root block device"
+}
+
+variable "metadata_http_tokens_required" {
+  type        = bool
+  default     = true
+  description = "Whether or not the metadata service requires session tokens, also referred to as Instance Metadata Service Version 2."
+}
+
+variable "metadata_http_endpoint_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether the metadata service is available"
+}
+
+variable "kms_key_id" {
+  type        = string
+  default     = null
+  description = "KMS key ID used to encrypt EBS volume. When specifying kms_key_id, ebs_volume_encrypted needs to be set to true"
 }

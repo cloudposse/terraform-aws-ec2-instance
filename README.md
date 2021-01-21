@@ -169,7 +169,7 @@ Available targets:
 | ami\_owner | Owner of the given AMI (ignored if `ami` unset) | `string` | `""` | no |
 | applying\_period | The period in seconds over which the specified statistic is applied | `number` | `60` | no |
 | assign\_eip\_address | Assign an Elastic IP address to the instance | `bool` | `true` | no |
-| associate\_public\_ip\_address | Associate a public IP address with the instance | `bool` | `true` | no |
+| associate\_public\_ip\_address | Associate a public IP address with the instance | `bool` | `false` | no |
 | attributes | Additional attributes (e.g. `1`) | `list(string)` | `[]` | no |
 | availability\_zone | Availability Zone the instance is launched in. If not set, will be launched in the first AZ of the region | `string` | `""` | no |
 | comparison\_operator | The arithmetic operation to use when comparing the specified Statistic and Threshold. Possible values are: GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold. | `string` | `"GreaterThanOrEqualToThreshold"` | no |
@@ -183,6 +183,7 @@ Available targets:
 | ebs\_iops | Amount of provisioned IOPS. This must be set with a volume\_type of io1 | `number` | `0` | no |
 | ebs\_optimized | Launched EC2 instance will be EBS-optimized | `bool` | `false` | no |
 | ebs\_volume\_count | Count of EBS volumes that will be attached to the instance | `number` | `0` | no |
+| ebs\_volume\_encrypted | Size of the EBS volume in gigabytes | `bool` | `true` | no |
 | ebs\_volume\_size | Size of the EBS volume in gigabytes | `number` | `10` | no |
 | ebs\_volume\_type | The type of EBS volume. Can be standard, gp2 or io1 | `string` | `"gp2"` | no |
 | enabled | Set to false to prevent the module from creating any resources | `bool` | `null` | no |
@@ -193,7 +194,10 @@ Available targets:
 | instance\_type | The type of the instance | `string` | `"t2.micro"` | no |
 | ipv6\_address\_count | Number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet (-1 to use subnet default) | `number` | `0` | no |
 | ipv6\_addresses | List of IPv6 addresses from the range of the subnet to associate with the primary network interface | `list(string)` | `[]` | no |
+| kms\_key\_id | KMS key ID used to encrypt EBS volume. When specifying kms\_key\_id, ebs\_volume\_encrypted needs to be set to true | `string` | `null` | no |
 | label\_order | The naming order of the id output and Name tag.<br>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br>You can omit any of the 5 elements, but at least one must be present. | `list(string)` | `null` | no |
+| metadata\_http\_endpoint\_enabled | Whether the metadata service is available | `bool` | `true` | no |
+| metadata\_http\_tokens\_required | Whether or not the metadata service requires session tokens, also referred to as Instance Metadata Service Version 2. | `bool` | `true` | no |
 | metric\_name | The name for the alarm's associated metric. Allowed values can be found in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ec2-metricscollected.html | `string` | `"StatusCheckFailed_Instance"` | no |
 | metric\_namespace | The namespace for the alarm's associated metric. Allowed values can be found in https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-namespaces.html | `string` | `"AWS/EC2"` | no |
 | metric\_threshold | The value against which the specified statistic is compared | `number` | `1` | no |
@@ -204,6 +208,7 @@ Available targets:
 | private\_ip | Private IP address to associate with the instance in the VPC | `string` | `""` | no |
 | regex\_replace\_chars | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
 | region | AWS Region the instance is launched in | `string` | `""` | no |
+| root\_block\_device\_encrypted | Whether to encrypt the root block device | `bool` | `true` | no |
 | root\_iops | Amount of provisioned IOPS. This must be set if root\_volume\_type is set to `io1` | `number` | `0` | no |
 | root\_volume\_size | Size of the root volume in gigabytes | `number` | `10` | no |
 | root\_volume\_type | Type of root volume. Can be standard, gp2 or io1 | `string` | `"gp2"` | no |
