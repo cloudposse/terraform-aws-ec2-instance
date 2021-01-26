@@ -100,7 +100,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_instance" "default" {
-  #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew support condition evaluation. See https://github.com/bridgecrewio/checkov/issues/793
+  #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew supports conditional evaluation. See https://github.com/bridgecrewio/checkov/issues/793
   count                       = local.instance_count
   ami                         = local.ami
   availability_zone           = local.availability_zone
