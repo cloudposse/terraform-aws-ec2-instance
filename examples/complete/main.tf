@@ -4,7 +4,7 @@ provider "aws" {
 
 module "aws_key_pair" {
   source              = "cloudposse/key-pair/aws"
-  version             = "0.13.1"
+  version             = "0.16.1"
   namespace           = module.this.namespace
   stage               = module.this.stage
   name                = module.this.name
@@ -15,7 +15,7 @@ module "aws_key_pair" {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "0.17.0"
+  version = "0.18.2"
 
   cidr_block = "172.16.0.0/16"
 
@@ -24,7 +24,7 @@ module "vpc" {
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "0.28.0"
+  version = "0.34.0"
 
   availability_zones   = var.availability_zones
   vpc_id               = module.vpc.vpc_id
@@ -38,7 +38,7 @@ module "subnets" {
 
 module "instance_profile_label" {
   source  = "cloudposse/label/null"
-  version = "0.22.0"
+  version = "0.22.1"
 
   attributes = distinct(compact(concat(module.this.attributes, ["profile"])))
 
