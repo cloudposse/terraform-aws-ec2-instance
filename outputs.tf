@@ -42,7 +42,7 @@ output "security_group_ids" {
   description = "IDs on the AWS Security Groups associated with the instance"
   value = compact(
     concat(
-      tolist(module.default_sg.id),
+      formatlist("%s", module.default_sg.id),
       var.security_groups
     )
   )
