@@ -23,19 +23,16 @@ variable "instance_type" {
   description = "The type of the instance"
 }
 
-variable "allowed_ports" {
-  type        = list(number)
-  description = "List of allowed ingress TCP ports"
-  default     = []
-}
-
-variable "allowed_ports_udp" {
-  type        = list(number)
-  description = "List of allowed ingress UDP ports"
-  default     = []
-}
-
 variable "ssh_public_key_path" {
   type        = string
   description = "Path to SSH public key directory (e.g. `/secrets`)"
+}
+
+variable "security_group_rules" {
+  type        = list(any)
+  description = <<-EOT
+    A list of maps of Security Group rules. 
+    The values of map is fully complated with `aws_security_group_rule` resource. 
+    To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule .
+  EOT
 }

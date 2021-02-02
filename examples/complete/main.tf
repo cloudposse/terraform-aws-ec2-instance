@@ -82,8 +82,7 @@ module "ec2_instance" {
   assign_eip_address          = var.assign_eip_address
   associate_public_ip_address = var.associate_public_ip_address
   instance_type               = var.instance_type
-  allowed_ports               = var.allowed_ports
-  allowed_ports_udp           = var.allowed_ports_udp
+  security_group_rules        = var.security_group_rules
   instance_profile            = aws_iam_instance_profile.test.name
 
   context = module.this.context

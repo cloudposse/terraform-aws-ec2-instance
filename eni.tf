@@ -8,9 +8,7 @@ resource "aws_network_interface" "additional" {
 
   security_groups = compact(
     concat(
-      [
-        var.create_default_security_group ? join("", aws_security_group.default.*.id) : ""
-      ],
+      tolist(module.default_sg.id),
       var.security_groups
     )
   )
