@@ -20,8 +20,6 @@
 |------|-------------|------|---------|:--------:|
 | additional\_ips\_count | Count of additional EIPs | `number` | `0` | no |
 | additional\_tag\_map | Additional tags for appending to tags\_as\_list\_of\_maps. Not added to `tags`. | `map(string)` | `{}` | no |
-| allowed\_ports | List of allowed ingress TCP ports | `list(number)` | `[]` | no |
-| allowed\_ports\_udp | List of allowed ingress UDP ports | `list(number)` | `[]` | no |
 | ami | The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 16.04 | `string` | `""` | no |
 | ami\_owner | Owner of the given AMI (ignored if `ami` unset) | `string` | `""` | no |
 | applying\_period | The period in seconds over which the specified statistic is applied | `number` | `60` | no |
@@ -69,6 +67,7 @@
 | root\_iops | Amount of provisioned IOPS. This must be set if root\_volume\_type is set to `io1` | `number` | `0` | no |
 | root\_volume\_size | Size of the root volume in gigabytes | `number` | `10` | no |
 | root\_volume\_type | Type of root volume. Can be standard, gp2 or io1 | `string` | `"gp2"` | no |
+| security\_group\_rules | A list of maps of Security Group rules. <br>The values of map is fully complated with `aws_security_group_rule` resource. <br>To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule . | `list(any)` | <pre>[<br>  {<br>    "cidr_blocks": [<br>      "0.0.0.0/0"<br>    ],<br>    "from_port": 0,<br>    "protocol": "-1",<br>    "to_port": 65535,<br>    "type": "egress"<br>  }<br>]</pre> | no |
 | security\_groups | List of Security Group IDs allowed to connect to the instance | `list(string)` | `[]` | no |
 | source\_dest\_check | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs | `bool` | `true` | no |
 | ssh\_key\_pair | SSH key pair to be provisioned on the instance | `string` | n/a | yes |
