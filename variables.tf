@@ -285,7 +285,7 @@ variable "metadata_http_endpoint_enabled" {
 
 variable "metadata_http_put_response_hop_limit" {
   type        = number
-  default     = 1
+  default     = 2
   description = "The desired HTTP PUT response hop limit (between 1 and 64) for instance metadata requests."
 }
 
