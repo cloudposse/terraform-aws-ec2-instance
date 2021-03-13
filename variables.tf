@@ -283,6 +283,12 @@ variable "metadata_http_endpoint_enabled" {
   description = "Whether the metadata service is available"
 }
 
+variable "metadata_http_put_response_hop_limit" {
+  type        = number
+  default     = 2
+  description = "The desired HTTP PUT response hop limit (between 1 and 64) for instance metadata requests."
+}
+
 variable "kms_key_id" {
   type        = string
   default     = null

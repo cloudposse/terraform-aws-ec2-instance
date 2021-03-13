@@ -135,8 +135,9 @@ resource "aws_instance" "default" {
   }
 
   metadata_options {
-    http_endpoint = var.metadata_http_endpoint_enabled ? "enabled" : "disabled"
-    http_tokens   = var.metadata_http_tokens_required ? "required" : "optional"
+    http_endpoint               = var.metadata_http_endpoint_enabled ? "enabled" : "disabled"
+    http_put_response_hop_limit = var.metadata_http_put_response_hop_limit
+    http_tokens                 = var.metadata_http_tokens_required ? "required" : "optional"
   }
 
   tags = module.this.tags
