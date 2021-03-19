@@ -140,6 +140,10 @@ resource "aws_instance" "default" {
     http_tokens                 = var.metadata_http_tokens_required ? "required" : "optional"
   }
 
+  lifecycle {
+    ignore_changes = [user_data, user_data_base64]
+  }
+
   tags = module.this.tags
 }
 
