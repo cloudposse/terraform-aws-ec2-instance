@@ -296,7 +296,7 @@ variable "kms_key_id" {
 }
 
 variable "volume_tags_enabled" {
-  type = bool
-  default = false  # To preserve existing behaviour
+  type        = bool
+  default     = false # To preserve existing behaviour
   description = "Whether or not to copy instance tags to root and EBS volumes"
 }
