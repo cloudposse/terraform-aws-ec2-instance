@@ -11,10 +11,10 @@ locals {
   ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
-  public_dns             = (var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
-                             ("ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ?
-                               "compute-1" : "${local.region}.compute"}.amazonaws.com") :
-                             join("", aws_instance.default.*.public_dns))
+  public_dns = (var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
+    ("ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region == "us-east-1" ?
+    "compute-1" : "${local.region}.compute"}.amazonaws.com") :
+  join("", aws_instance.default.*.public_dns))
 }
 
 data "aws_caller_identity" "default" {
