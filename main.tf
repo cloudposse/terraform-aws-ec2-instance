@@ -14,7 +14,7 @@ locals {
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
   eip_public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region_domain}"
-  public_dns     = (
+  public_dns = (
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
     local.eip_public_dns : join("", aws_instance.default.*.public_dns)
   )
