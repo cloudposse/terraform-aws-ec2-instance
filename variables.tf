@@ -294,3 +294,9 @@ variable "kms_key_id" {
   default     = null
   description = "KMS key ID used to encrypt EBS volume. When specifying kms_key_id, ebs_volume_encrypted needs to be set to true"
 }
+
+variable "volume_tags_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether or not to copy instance tags to root and EBS volumes"
+}
