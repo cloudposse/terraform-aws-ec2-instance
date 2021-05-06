@@ -152,10 +152,10 @@ resource "aws_instance" "default" {
 }
 
 resource "aws_eip" "default" {
-  count             = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
-  instance          = join("", aws_instance.default.*.id)
-  vpc               = true
-  tags              = module.this.tags
+  count    = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
+  instance = join("", aws_instance.default.*.id)
+  vpc      = true
+  tags     = module.this.tags
 }
 
 resource "aws_ebs_volume" "default" {
