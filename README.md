@@ -215,7 +215,7 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_default_sg"></a> [default\_sg](#module\_default\_sg) | cloudposse/security-group/aws | 0.1.4 |
+| <a name="module_default_sg"></a> [default\_sg](#module\_default\_sg) | cloudposse/security-group/aws | 0.2.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.24.1 |
 
 ## Resources
