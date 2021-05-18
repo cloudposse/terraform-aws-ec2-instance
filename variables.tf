@@ -38,10 +38,28 @@ variable "vpc_id" {
   description = "The ID of the VPC that the instance security group belongs to"
 }
 
+variable "security_group_enabled" {
+  type        = bool
+  description = "Whether to create default Security Group for EC2."
+  default     = true
+}
+
 variable "security_groups" {
   description = "List of Security Group IDs allowed to connect to the instance"
   type        = list(string)
   default     = []
+}
+
+variable "security_group_description" {
+  type        = string
+  default     = "EC2 Security Group"
+  description = "The Security Group description."
+}
+
+variable "security_group_use_name_prefix" {
+  type        = bool
+  default     = false
+  description = "Whether to create a default Security Group with unique name beginning with the normalized prefix."
 }
 
 variable "security_group_rules" {
@@ -53,6 +71,7 @@ variable "security_group_rules" {
       to_port     = 65535
       protocol    = "-1"
       cidr_blocks = ["0.0.0.0/0"]
+      description = "Allow ALL egress traffic"
     }
   ]
   description = <<-EOT
@@ -239,12 +258,6 @@ variable "default_alarm_action" {
   type        = string
   default     = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
   description = "Default alarm action"
-}
-
-variable "create_default_security_group" {
-  type        = bool
-  description = "Create default Security Group with only Egress traffic allowed"
-  default     = true
 }
 
 variable "additional_ips_count" {
