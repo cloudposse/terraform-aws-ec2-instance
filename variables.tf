@@ -71,7 +71,7 @@ variable "security_group_rules" {
       to_port     = 65535
       protocol    = "-1"
       cidr_blocks = ["0.0.0.0/0"]
-      description = "Allow ALL egress traffic"
+      description = "Allow all outbound traffic"
     }
   ]
   description = <<-EOT
