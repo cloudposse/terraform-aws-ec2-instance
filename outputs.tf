@@ -80,3 +80,18 @@ output "instance_profile" {
   description = "Name of the instance's profile (either built or supplied)"
   value       = local.instance_profile
 }
+
+output "security_group_id" {
+  value       = module.default_sg.id
+  description = "EC2 instance Security Group ID"
+}
+
+output "security_group_arn" {
+  value       = module.default_sg.arn
+  description = "EC2 instance Security Group ARN"
+}
+
+output "security_group_name" {
+  value       = module.default_sg.name
+  description = "EC2 instance Security Group name"
+}

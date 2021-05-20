@@ -97,3 +97,18 @@ output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
   value       = module.ec2_instance.primary_network_interface_id
 }
+
+output "security_group_id" {
+  value       = module.ec2_instance.security_group_id
+  description = "EC2 instance Security Group ID"
+}
+
+output "security_group_arn" {
+  value       = module.ec2_instance.security_group_arn
+  description = "EC2 instance Security Group ARN"
+}
+
+output "security_group_name" {
+  value       = module.ec2_instance.security_group_name
+  description = "EC2 instance Security Group name"
+}
