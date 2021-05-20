@@ -1,4 +1,4 @@
-module "default_sg" {
+module "security_group" {
   source  = "cloudposse/security-group/aws"
   version = "0.3.1"
 

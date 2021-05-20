@@ -127,7 +127,7 @@ resource "aws_instance" "default" {
 
   vpc_security_group_ids = compact(
     concat(
-      formatlist("%s", module.default_sg.id),
+      formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )

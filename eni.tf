@@ -8,7 +8,7 @@ resource "aws_network_interface" "additional" {
 
   security_groups = compact(
     concat(
-      formatlist("%s", module.default_sg.id),
+      formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )

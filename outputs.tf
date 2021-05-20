@@ -42,7 +42,7 @@ output "security_group_ids" {
   description = "IDs on the AWS Security Groups associated with the instance"
   value = compact(
     concat(
-      formatlist("%s", module.default_sg.id),
+      formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )
@@ -82,16 +82,16 @@ output "instance_profile" {
 }
 
 output "security_group_id" {
-  value       = module.default_sg.id
+  value       = module.security_group.id
   description = "EC2 instance Security Group ID"
 }
 
 output "security_group_arn" {
-  value       = module.default_sg.arn
+  value       = module.security_group.arn
   description = "EC2 instance Security Group ARN"
 }
 
 output "security_group_name" {
-  value       = module.default_sg.name
+  value       = module.security_group.name
   description = "EC2 instance Security Group name"
 }
