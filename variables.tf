@@ -45,7 +45,7 @@ variable "security_group_enabled" {
 }
 
 variable "security_groups" {
-  description = "List of Security Group IDs allowed to connect to the instance"
+  description = "A list of Security Group IDs to associate with EC2 instance"
   type        = list(string)
   default     = []
 }
