@@ -107,23 +107,24 @@ resource "aws_iam_role" "default" {
 
 resource "aws_instance" "default" {
   #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew supports conditional evaluation. See https://github.com/bridgecrewio/checkov/issues/793
-  count                       = local.instance_count
-  ami                         = local.ami
-  availability_zone           = local.availability_zone
-  instance_type               = var.instance_type
-  ebs_optimized               = var.ebs_optimized
-  disable_api_termination     = var.disable_api_termination
-  user_data                   = var.user_data
-  user_data_base64            = var.user_data_base64
-  iam_instance_profile        = local.instance_profile
-  associate_public_ip_address = var.associate_public_ip_address
-  key_name                    = var.ssh_key_pair
-  subnet_id                   = var.subnet
-  monitoring                  = var.monitoring
-  private_ip                  = var.private_ip
-  source_dest_check           = var.source_dest_check
-  ipv6_address_count          = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
-  ipv6_addresses              = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
+  count                                = local.instance_count
+  ami                                  = local.ami
+  availability_zone                    = local.availability_zone
+  instance_type                        = var.instance_type
+  ebs_optimized                        = var.ebs_optimized
+  disable_api_termination              = var.disable_api_termination
+  user_data                            = var.user_data
+  user_data_base64                     = var.user_data_base64
+  iam_instance_profile                 = local.instance_profile
+  instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
+  associate_public_ip_address          = var.associate_public_ip_address
+  key_name                             = var.ssh_key_pair
+  subnet_id                            = var.subnet
+  monitoring                           = var.monitoring
+  private_ip                           = var.private_ip
+  source_dest_check                    = var.source_dest_check
+  ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
+  ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
 
   vpc_security_group_ids = compact(
     concat(
