@@ -278,6 +278,12 @@ variable "instance_profile" {
   default     = ""
 }
 
+variable "instance_initiated_shutdown_behavior" {
+  type        = string
+  description = "Specifies whether an instance stops or terminates when you initiate shutdown from the instance. Can be one of 'stop' or 'terminate'."
+  default     = null
+}
+
 variable "root_block_device_encrypted" {
   type        = bool
   default     = true
