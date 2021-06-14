@@ -173,7 +173,7 @@ resource "aws_ebs_volume" "default" {
 }
 
 resource "aws_volume_attachment" "default" {
-  count       = local.volumes_count
+  count       = local.volume_count
   device_name = var.ebs_device_name[count.index]
   volume_id   = aws_ebs_volume.default.*.id[count.index]
   instance_id = join("", aws_instance.default.*.id)
