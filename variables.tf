@@ -87,7 +87,7 @@ variable "ami" {
 
 variable "ami_owner" {
   type        = string
-  description = "Owner of the given AMI (ignored if `ami` unset)"
+  description = "Owner of the given AMI (ignored if `ami` unset, required if set)"
   default     = ""
 }
 
@@ -159,19 +159,19 @@ variable "ebs_device_name" {
 
 variable "ebs_volume_type" {
   type        = string
-  description = "The type of EBS volume. Can be standard, gp2 or io1"
+  description = "The type of the additional EBS volumes. Can be standard, gp2 or io1"
   default     = "gp2"
 }
 
 variable "ebs_volume_size" {
   type        = number
-  description = "Size of the EBS volume in gigabytes"
+  description = "Size of the additional EBS volumes in gigabytes"
   default     = 10
 }
 
 variable "ebs_volume_encrypted" {
   type        = bool
-  description = "Size of the EBS volume in gigabytes"
+  description = "Whether to encrypt the additional EBS volumes"
   default     = true
 }
 

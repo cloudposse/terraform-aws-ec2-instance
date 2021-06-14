@@ -1,5 +1,6 @@
 locals {
   instance_count = module.this.enabled ? 1 : 0
+  volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
   instance_profile_count = module.this.enabled ? (length(var.instance_profile) > 0 ? 0 : 1) : 0
   instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
@@ -161,7 +162,7 @@ resource "aws_eip" "default" {
 }
 
 resource "aws_ebs_volume" "default" {
-  count             = var.ebs_volume_count
+  count             = local.volume_count
   availability_zone = local.availability_zone
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
@@ -172,7 +173,7 @@ resource "aws_ebs_volume" "default" {
 }
 
 resource "aws_volume_attachment" "default" {
-  count       = var.ebs_volume_count
+  count       = local.volume_count
   device_name = var.ebs_device_name[count.index]
   volume_id   = aws_ebs_volume.default.*.id[count.index]
   instance_id = join("", aws_instance.default.*.id)
