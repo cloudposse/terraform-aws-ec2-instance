@@ -162,7 +162,7 @@ resource "aws_eip" "default" {
 }
 
 resource "aws_ebs_volume" "default" {
-  count             = local.volumes_count
+  count             = local.volume_count
   availability_zone = local.availability_zone
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
