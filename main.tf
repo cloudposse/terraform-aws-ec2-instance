@@ -4,7 +4,7 @@ locals {
   # create an instance profile if the instance is enabled and we aren't given one to use
   instance_profile_count = module.this.enabled ? (length(var.instance_profile) > 0 ? 0 : 1) : 0
   instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
-  security_group_enabled = module.this.enabled && var.create_default_security_group ? true : false
+  security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
   root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
   ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
@@ -130,7 +130,7 @@ resource "aws_instance" "default" {
 
   vpc_security_group_ids = compact(
     concat(
-      formatlist("%s", module.default_sg.id),
+      formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )
