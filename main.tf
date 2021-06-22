@@ -74,7 +74,7 @@ resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
   count       = local.ssm_path_log_bucket_enabled ? 1 : 0
   name        = "ssm_patch_manager_log_bucket_policy"
   path        = "/"
-  description = "Policy to allow the local ssm agent on the instance to write the log output to the defined bucket"
+  description = "Policy to allow the local SSM agent on the instance to write the log output to the defined bucket"
   policy      = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
 }
 
