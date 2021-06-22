@@ -134,7 +134,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_core" {
-  count      = local.enabled ? local.instance_profile_count : 0
+  count      = module.this.enabled ? local.instance_profile_count : 0
   role       = aws_iam_role.default[count.index]
   policy_arn = local.ssm_policy
 }
