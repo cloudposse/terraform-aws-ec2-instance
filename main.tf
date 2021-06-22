@@ -19,6 +19,8 @@ locals {
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
     local.eip_public_dns : join("", aws_instance.default.*.public_dns)
   )
+  ssm_path_log_bucket_enabled = module.this.enabled && var.ssm_patch_manager_enabled && var.ssm_patch_manager_s3_log_bucket != ""
+  ssm_policy = var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
 }
 
 data "aws_caller_identity" "default" {
@@ -49,6 +51,31 @@ data "aws_iam_policy_document" "default" {
 
     effect = "Allow"
   }
+}
+
+data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
+  count = local.ssm_path_log_bucket_enabled ? 1 : 0
+  statement {
+    sid = ""
+    actions = [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:PutObjectAcl", 
+            "s3:GetEncryptionConfiguration",
+    ]
+    resources = [
+            "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
+            "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
+  count = local.ssm_path_log_bucket_enabled ? 1 : 0
+  name        = "ssm_patch_manager_log_bucket_policy"
+  path        = "/"
+  description = "Policy to allow the local ssm agent on the instance to write the log output to the defined bucket"
+  policy = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
 }
 
 data "aws_ami" "default" {
@@ -105,6 +132,19 @@ resource "aws_iam_role" "default" {
   permissions_boundary = var.permissions_boundary_arn
   tags                 = module.this.tags
 }
+
+resource "aws_iam_role_policy_attachment" "ssm_core" {
+  count      = module.this.enabled ? local.instance_profile_count : 0
+  role       = aws_iam_role.default[count.index]
+  policy_arn = local.ssm_policy
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_s3_policy" {
+  count      = module.this.enabled && local.ssm_path_log_bucket_enabled ? local.instance_profile_count : 0
+  role       = aws_iam_role.default[count.index]
+  policy_arn = aws_iam_policy.ssm_patch_s3_log_policy[0].arn
+}
+
 
 resource "aws_instance" "default" {
   #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew supports conditional evaluation. See https://github.com/bridgecrewio/checkov/issues/793
