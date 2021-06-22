@@ -20,7 +20,7 @@ locals {
     local.eip_public_dns : join("", aws_instance.default.*.public_dns)
   )
   ssm_path_log_bucket_enabled = module.this.enabled && var.ssm_patch_manager_enabled && var.ssm_patch_manager_s3_log_bucket != ""
-  ssm_policy                  = var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
+  ssm_policy                  = var.ssm_patch_manager_iam_policy == null || var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
 }
 
 data "aws_caller_identity" "default" {
