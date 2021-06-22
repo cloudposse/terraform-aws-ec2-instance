@@ -321,31 +321,31 @@ variable "volume_tags_enabled" {
 }
 
 variable "ssm_patch_manager_enabled" {
- type = bool
- default = false
- description = "Weather to enable SSM Patch manager" 
+  type        = bool
+  default     = false
+  description = "Weather to enable SSM Patch manager"
 }
 
 variable "ssm_patch_manager_patch_tag" {
-  type = string
-  default = "TOPATCH"
+  type        = string
+  default     = "TOPATCH"
   description = "The tag name for the instances to patch"
 }
 
 variable "ssm_patch_manager_scan_tag" {
-  type = string
-  default = "TOPATCH"
+  type        = string
+  default     = "TOPATCH"
   description = "The tag name for the instances to scan"
 }
 
 variable "ssm_patch_manager_iam_policy" {
-  type = string
-  default = null
+  type        = string
+  default     = null
   description = "IAM policy to allow Patch manager to manage the instance"
 }
 
 variable "ssm_patch_manager_s3_log_bucket" {
-  type = string
-  default = null
+  type        = string
+  default     = null
   description = "The name of the s3 bucket to export the patch log to"
 }

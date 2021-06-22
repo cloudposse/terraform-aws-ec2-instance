@@ -20,7 +20,7 @@ locals {
     local.eip_public_dns : join("", aws_instance.default.*.public_dns)
   )
   ssm_path_log_bucket_enabled = module.this.enabled && var.ssm_patch_manager_enabled && var.ssm_patch_manager_s3_log_bucket != ""
-  ssm_policy = var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
+  ssm_policy                  = var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
 }
 
 data "aws_caller_identity" "default" {
@@ -58,24 +58,24 @@ data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
   statement {
     sid = ""
     actions = [
-            "s3:GetObject",
-            "s3:PutObject",
-            "s3:PutObjectAcl", 
-            "s3:GetEncryptionConfiguration",
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:GetEncryptionConfiguration",
     ]
     resources = [
-            "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
-            "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}",
+      "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
+      "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}",
     ]
   }
 }
 
 resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
-  count = local.ssm_path_log_bucket_enabled ? 1 : 0
+  count       = local.ssm_path_log_bucket_enabled ? 1 : 0
   name        = "ssm_patch_manager_log_bucket_policy"
   path        = "/"
   description = "Policy to allow the local ssm agent on the instance to write the log output to the defined bucket"
-  policy = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
+  policy      = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
 }
 
 data "aws_ami" "default" {
