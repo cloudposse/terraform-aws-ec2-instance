@@ -326,18 +326,6 @@ variable "ssm_patch_manager_enabled" {
   description = "Whether to enable SSM Patch manager"
 }
 
-variable "ssm_patch_manager_patch_tag" {
-  type        = string
-  default     = "TOPATCH"
-  description = "The tag name for the instances to patch"
-}
-
-variable "ssm_patch_manager_scan_tag" {
-  type        = string
-  default     = "TOSCAN"
-  description = "The tag name for the instances to scan"
-}
-
 variable "ssm_patch_manager_iam_policy" {
   type        = string
   default     = null
