@@ -54,4 +54,4 @@ security_group_rules = [
   },
 ]
 
-ssh_public_key_path = "./secrets"
+ssh_public_key_path = "/secrets"
