@@ -312,9 +312,7 @@ Available targets:
 | <a name="input_ssh_key_pair"></a> [ssh\_key\_pair](#input\_ssh\_key\_pair) | SSH key pair to be provisioned on the instance | `string` | n/a | yes |
 | <a name="input_ssm_patch_manager_enabled"></a> [ssm\_patch\_manager\_enabled](#input\_ssm\_patch\_manager\_enabled) | Whether to enable SSM Patch manager | `bool` | `false` | no |
 | <a name="input_ssm_patch_manager_iam_policy"></a> [ssm\_patch\_manager\_iam\_policy](#input\_ssm\_patch\_manager\_iam\_policy) | IAM policy to allow Patch manager to manage the instance | `string` | `null` | no |
-| <a name="input_ssm_patch_manager_patch_tag"></a> [ssm\_patch\_manager\_patch\_tag](#input\_ssm\_patch\_manager\_patch\_tag) | The tag name for the instances to patch | `string` | `"TOPATCH"` | no |
 | <a name="input_ssm_patch_manager_s3_log_bucket"></a> [ssm\_patch\_manager\_s3\_log\_bucket](#input\_ssm\_patch\_manager\_s3\_log\_bucket) | The name of the s3 bucket to export the patch log to | `string` | `null` | no |
-| <a name="input_ssm_patch_manager_scan_tag"></a> [ssm\_patch\_manager\_scan\_tag](#input\_ssm\_patch\_manager\_scan\_tag) | The tag name for the instances to scan | `string` | `"TOSCAN"` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
 | <a name="input_statistic_level"></a> [statistic\_level](#input\_statistic\_level) | The statistic to apply to the alarm's associated metric. Allowed values are: SampleCount, Average, Sum, Minimum, Maximum | `string` | `"Maximum"` | no |
 | <a name="input_subnet"></a> [subnet](#input\_subnet) | VPC Subnet ID the instance is launched in | `string` | n/a | yes |
