@@ -1,5 +1,5 @@
 locals {
-  enabled = module.this.enabled
+  enabled        = module.this.enabled
   instance_count = module.this.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
@@ -55,9 +55,9 @@ data "aws_iam_policy_document" "default" {
 }
 
 module "label_ssm_patch_s3_log_policy" {
-  source     = "cloudposse/label/null"
-  version    = "0.24.1"
-  
+  source  = "cloudposse/label/null"
+  version = "0.24.1"
+
   attributes = ["ssm-patch-s3-logs"]
   context    = module.this.context
 }
