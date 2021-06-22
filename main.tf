@@ -1,4 +1,5 @@
 locals {
+  enabled = module.this.enabled
   instance_count = module.this.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
@@ -53,6 +54,13 @@ data "aws_iam_policy_document" "default" {
   }
 }
 
+module "label_ssm_patch_s3_log_policy" {
+  source     = "cloudposse/label/null"
+  version    = "0.24.1"
+  
+  attributes = ["ssm-patch-s3-logs"]
+  context    = module.this.context
+}
 data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
   count = local.ssm_path_log_bucket_enabled ? 1 : 0
   statement {
@@ -72,7 +80,7 @@ data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
 
 resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
   count       = local.ssm_path_log_bucket_enabled ? 1 : 0
-  name        = "${module.this.enabled}-ssm-patch-s3-logs"
+  name        = module.label_ssm_patch_s3_log_policy.id
   path        = "/"
   description = "Policy to allow the local SSM agent on the instance to write the log output to the defined bucket"
   policy      = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
@@ -134,13 +142,13 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_core" {
-  count      = module.this.enabled ? local.instance_profile_count : 0
+  count      = local.enabled ? local.instance_profile_count : 0
   role       = aws_iam_role.default[count.index]
   policy_arn = local.ssm_policy
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_s3_policy" {
-  count      = module.this.enabled && local.ssm_path_log_bucket_enabled ? local.instance_profile_count : 0
+  count      = local.enabled && local.ssm_path_log_bucket_enabled ? local.instance_profile_count : 0
   role       = aws_iam_role.default[count.index]
   policy_arn = aws_iam_policy.ssm_patch_s3_log_policy[0].arn
 }
