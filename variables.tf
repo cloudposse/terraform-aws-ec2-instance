@@ -334,7 +334,7 @@ variable "ssm_patch_manager_patch_tag" {
 
 variable "ssm_patch_manager_scan_tag" {
   type        = string
-  default     = "TOPATCH"
+  default     = "TOSCAN"
   description = "The tag name for the instances to scan"
 }
 
