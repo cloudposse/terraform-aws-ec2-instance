@@ -323,7 +323,7 @@ variable "volume_tags_enabled" {
 variable "ssm_patch_manager_enabled" {
   type        = bool
   default     = false
-  description = "Weather to enable SSM Patch manager"
+  description = "Whether to enable SSM Patch manager"
 }
 
 variable "ssm_patch_manager_patch_tag" {
