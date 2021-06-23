@@ -61,6 +61,7 @@ module "label_ssm_patch_s3_log_policy" {
   attributes = ["ssm-patch-s3-logs"]
   context    = module.this.context
 }
+
 data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
   count = local.ssm_path_log_bucket_enabled ? 1 : 0
   statement {
@@ -114,14 +115,14 @@ data "aws_ami" "info" {
 
 # https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
 resource "null_resource" "instance_profile_dependency" {
-  count = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  count = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
   triggers = {
     dependency_id = var.instance_profile
   }
 }
 
 data "aws_iam_instance_profile" "given" {
-  count      = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  count      = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
   name       = var.instance_profile
   depends_on = [null_resource.instance_profile_dependency]
 }
