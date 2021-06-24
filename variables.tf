@@ -319,3 +319,21 @@ variable "volume_tags_enabled" {
   default     = true
   description = "Whether or not to copy instance tags to root and EBS volumes"
 }
+
+variable "ssm_patch_manager_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to enable SSM Patch manager"
+}
+
+variable "ssm_patch_manager_iam_policy" {
+  type        = string
+  default     = null
+  description = "IAM policy to allow Patch manager to manage the instance"
+}
+
+variable "ssm_patch_manager_s3_log_bucket" {
+  type        = string
+  default     = null
+  description = "The name of the s3 bucket to export the patch log to"
+}

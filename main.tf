@@ -1,5 +1,6 @@
 locals {
-  instance_count = module.this.enabled ? 1 : 0
+  enabled        = module.this.enabled
+  instance_count = local.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
   instance_profile_count = module.this.enabled ? (length(var.instance_profile) > 0 ? 0 : 1) : 0
@@ -19,6 +20,8 @@ locals {
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
     local.eip_public_dns : join("", aws_instance.default.*.public_dns)
   )
+  ssm_path_log_bucket_enabled = local.enabled && var.ssm_patch_manager_enabled && var.ssm_patch_manager_s3_log_bucket != "" && var.ssm_patch_manager_s3_log_bucket != null
+  ssm_policy                  = var.ssm_patch_manager_iam_policy == null || var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
 }
 
 data "aws_caller_identity" "default" {
@@ -51,6 +54,39 @@ data "aws_iam_policy_document" "default" {
   }
 }
 
+module "label_ssm_patch_s3_log_policy" {
+  source  = "cloudposse/label/null"
+  version = "0.24.1"
+
+  attributes = ["ssm-patch-s3-logs"]
+  context    = module.this.context
+}
+
+data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
+  count = local.ssm_path_log_bucket_enabled ? 1 : 0
+  statement {
+    sid = "AllowAccessToPathLogBucket"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:GetEncryptionConfiguration",
+    ]
+    resources = [
+      "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
+      "arn:aws:s3:::${var.ssm_patch_manager_s3_log_bucket}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
+  count       = local.ssm_path_log_bucket_enabled ? 1 : 0
+  name        = module.label_ssm_patch_s3_log_policy.id
+  path        = "/"
+  description = "Policy to allow the local SSM agent on the instance to write the log output to the defined bucket"
+  policy      = data.aws_iam_policy_document.ssm_patch_s3_log_policy[0].json
+}
+
 data "aws_ami" "default" {
   count       = var.ami == "" ? 1 : 0
   most_recent = "true"
@@ -79,14 +115,14 @@ data "aws_ami" "info" {
 
 # https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
 resource "null_resource" "instance_profile_dependency" {
-  count = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  count = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
   triggers = {
     dependency_id = var.instance_profile
   }
 }
 
 data "aws_iam_instance_profile" "given" {
-  count      = module.this.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  count      = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
   name       = var.instance_profile
   depends_on = [null_resource.instance_profile_dependency]
 }
@@ -105,6 +141,19 @@ resource "aws_iam_role" "default" {
   permissions_boundary = var.permissions_boundary_arn
   tags                 = module.this.tags
 }
+
+resource "aws_iam_role_policy_attachment" "ssm_core" {
+  count      = local.enabled ? local.instance_profile_count : 0
+  role       = aws_iam_role.default[count.index]
+  policy_arn = local.ssm_policy
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_s3_policy" {
+  count      = local.enabled && local.ssm_path_log_bucket_enabled ? local.instance_profile_count : 0
+  role       = aws_iam_role.default[count.index]
+  policy_arn = aws_iam_policy.ssm_patch_s3_log_policy[0].arn
+}
+
 
 resource "aws_instance" "default" {
   #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew supports conditional evaluation. See https://github.com/bridgecrewio/checkov/issues/793
