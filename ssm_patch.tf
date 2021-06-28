@@ -1,12 +1,12 @@
 
 locals {
   ssm_patch_log_bucket_enabled = local.enabled && var.ssm_patch_manager_enabled && var.ssm_patch_manager_s3_log_bucket != "" && var.ssm_patch_manager_s3_log_bucket != null
-  ssm_policy                  = var.ssm_patch_manager_iam_policy == null || var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
-  ssm_enabled = local.enabled && var.ssm_patch_manager_enabled ? 1 : 0
+  ssm_policy                   = var.ssm_patch_manager_iam_policy == null || var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
+  ssm_enabled                  = local.enabled && var.ssm_patch_manager_enabled ? 1 : 0
 }
 
 module "label_ssm_patch_s3_log_policy" {
-  count = local.ssm_enabled ? 1 : 0 
+  count   = local.ssm_enabled ? 1 : 0
   source  = "cloudposse/label/null"
   version = "0.24.1"
 
