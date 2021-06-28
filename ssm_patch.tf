@@ -6,7 +6,6 @@ locals {
 }
 
 module "label_ssm_patch_s3_log_policy" {
-  count   = local.ssm_enabled ? 1 : 0
   source  = "cloudposse/label/null"
   version = "0.24.1"
 
