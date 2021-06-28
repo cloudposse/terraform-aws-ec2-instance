@@ -15,7 +15,7 @@ module "label_ssm_patch_s3_log_policy" {
 }
 
 data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
-  count = local.ssm_enabled && local.ssm_patch_log_bucket_enabled ? 1 : 0
+  count = local.ssm_patch_log_bucket_enabled
   statement {
     sid = "AllowAccessToPathLogBucket"
     actions = [
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
 }
 
 resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
-  count       = local.ssm_enabled && local.ssm_patch_log_bucket_enabled ? 1 : 0
+  count       = local.ssm_patch_log_bucket_enabled
   name        = module.label_ssm_patch_s3_log_policy.id
   path        = "/"
   description = "Policy to allow the local SSM agent on the instance to write the log output to the defined bucket"
@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "ssm_core" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_s3_policy" {
-  count      = local.ssm_enabled && local.ssm_patch_log_bucket_enabled ? local.instance_profile_count : 0
+  count      = local.ssm_patch_log_bucket_enabled ? local.instance_profile_count : 0
   role       = aws_iam_role.default[count.index].name
   policy_arn = aws_iam_policy.ssm_patch_s3_log_policy[0].arn
 }
