@@ -323,7 +323,7 @@ variable "volume_tags_enabled" {
 variable "ssm_patch_manager_enabled" {
   type        = bool
   default     = false
-  description = "Whether to enable SSM Patch manager"
+  description = "Whether to enable SSM Patch Manager"
 }
 
 variable "ssm_patch_manager_iam_policy" {
