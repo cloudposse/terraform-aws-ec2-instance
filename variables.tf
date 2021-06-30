@@ -323,13 +323,13 @@ variable "volume_tags_enabled" {
 variable "ssm_patch_manager_enabled" {
   type        = bool
   default     = false
-  description = "Whether to enable SSM Patch Manager"
+  description = "Whether to enable SSM Patch manager"
 }
 
 variable "ssm_patch_manager_iam_policy" {
   type        = string
   default     = null
-  description = "IAM policy to allow SSM Patch Manager to manage the instance"
+  description = "IAM policy to allow Patch manager to manage the instance"
 }
 
 variable "ssm_patch_manager_s3_log_bucket" {
