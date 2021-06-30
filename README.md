@@ -311,8 +311,8 @@ Available targets:
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | A list of Security Group IDs to associate with EC2 instance. | `list(string)` | `[]` | no |
 | <a name="input_source_dest_check"></a> [source\_dest\_check](#input\_source\_dest\_check) | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs | `bool` | `true` | no |
 | <a name="input_ssh_key_pair"></a> [ssh\_key\_pair](#input\_ssh\_key\_pair) | SSH key pair to be provisioned on the instance | `string` | n/a | yes |
-| <a name="input_ssm_patch_manager_enabled"></a> [ssm\_patch\_manager\_enabled](#input\_ssm\_patch\_manager\_enabled) | Whether to enable SSM Patch manager | `bool` | `false` | no |
-| <a name="input_ssm_patch_manager_iam_policy"></a> [ssm\_patch\_manager\_iam\_policy](#input\_ssm\_patch\_manager\_iam\_policy) | IAM policy to allow Patch manager to manage the instance | `string` | `null` | no |
+| <a name="input_ssm_patch_manager_enabled"></a> [ssm\_patch\_manager\_enabled](#input\_ssm\_patch\_manager\_enabled) | Whether to enable SSM Patch Manager | `bool` | `false` | no |
+| <a name="input_ssm_patch_manager_iam_policy"></a> [ssm\_patch\_manager\_iam\_policy](#input\_ssm\_patch\_manager\_iam\_policy) | IAM policy to allow SSM Patch Manager to manage the instance | `string` | `null` | no |
 | <a name="input_ssm_patch_manager_s3_log_bucket"></a> [ssm\_patch\_manager\_s3\_log\_bucket](#input\_ssm\_patch\_manager\_s3\_log\_bucket) | The name of the s3 bucket to export the patch log to | `string` | `null` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
 | <a name="input_statistic_level"></a> [statistic\_level](#input\_statistic\_level) | The statistic to apply to the alarm's associated metric. Allowed values are: SampleCount, Average, Sum, Minimum, Maximum | `string` | `"Maximum"` | no |
