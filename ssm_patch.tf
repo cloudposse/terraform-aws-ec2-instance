@@ -1,7 +1,7 @@
 
 locals {
   ssm_patch_log_bucket_enabled = local.ssm_enabled && var.ssm_patch_manager_s3_log_bucket != "" && var.ssm_patch_manager_s3_log_bucket != null
-  ssm_policy                   = var.ssm_patch_manager_iam_policy == null || var.ssm_patch_manager_iam_policy == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy
+  ssm_policy_arn               = var.ssm_patch_manager_iam_policy_arn == null || var.ssm_patch_manager_iam_policy_arn == "" ? "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy_arn
   ssm_enabled                  = local.enabled && var.ssm_patch_manager_enabled
 }
 
