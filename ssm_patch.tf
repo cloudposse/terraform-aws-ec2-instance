@@ -43,7 +43,7 @@ resource "aws_iam_policy" "ssm_patch_s3_log_policy" {
 resource "aws_iam_role_policy_attachment" "ssm_core" {
   count      = local.ssm_enabled ? local.instance_profile_count : 0
   role       = aws_iam_role.default[count.index].name
-  policy_arn = local.ssm_policy
+  policy_arn = local.ssm_policy_arn
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_s3_policy" {
