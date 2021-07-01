@@ -6,10 +6,10 @@ locals {
 }
 
 module "label_ssm_patch_s3_log_policy" {
-  enabled = local.ssm_patch_log_bucket_enabled
   source  = "cloudposse/label/null"
   version = "0.24.1"
 
+  enabled    = local.ssm_patch_log_bucket_enabled
   attributes = ["ssm-patch-s3-logs"]
   context    = module.this.context
 }
