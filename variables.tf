@@ -326,10 +326,10 @@ variable "ssm_patch_manager_enabled" {
   description = "Whether to enable SSM Patch manager"
 }
 
-variable "ssm_patch_manager_iam_policy" {
+variable "ssm_patch_manager_iam_policy_arn" {
   type        = string
   default     = null
-  description = "IAM policy to allow Patch manager to manage the instance"
+  description = "IAM policy ARN to allow Patch Manager to manage the instance. If not provided, `arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore` will be used"
 }
 
 variable "ssm_patch_manager_s3_log_bucket" {
@@ -337,3 +337,4 @@ variable "ssm_patch_manager_s3_log_bucket" {
   default     = null
   description = "The name of the s3 bucket to export the patch log to"
 }
+
