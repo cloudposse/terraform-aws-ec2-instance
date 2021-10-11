@@ -1,6 +1,7 @@
 variable "ssh_key_pair" {
   type        = string
   description = "SSH key pair to be provisioned on the instance"
+  default     = null
 }
 
 variable "associate_public_ip_address" {
