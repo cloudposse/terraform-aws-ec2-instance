@@ -106,6 +106,12 @@ resource "aws_iam_role" "default" {
   tags                 = module.this.tags
 }
 
+resource "aws_iam_role_policy_attachment" "default" {
+  count      = local.instance_profile_count > 0 ? lenght(var.permissions_policies_arns) : 0
+  role       = join("", aws_iam_role.default.*.name)
+  policy_arn = var.permissions_policies_arns[count.index]
+}
+
 resource "aws_instance" "default" {
   #bridgecrew:skip=BC_AWS_GENERAL_31: Skipping `Ensure Instance Metadata Service Version 1 is not enabled` check until BridgeCrew supports conditional evaluation. See https://github.com/bridgecrewio/checkov/issues/793
   #bridgecrew:skip=BC_AWS_NETWORKING_47: Skiping `Ensure AWS EC2 instance is configured with VPC` because it is incorrectly flagging that this instance does not belong to a VPC even though subnet_id is configured.
