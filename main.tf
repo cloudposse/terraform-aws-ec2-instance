@@ -107,7 +107,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_iam_role_policy_attachment" "default" {
-  count      = local.instance_profile_count > 0 ? lenght(var.permissions_policies_arns) : 0
+  count      = local.instance_profile_count > 0 ? length(var.permissions_policies_arns) : 0
   role       = join("", aws_iam_role.default.*.name)
   policy_arn = var.permissions_policies_arns[count.index]
 }
