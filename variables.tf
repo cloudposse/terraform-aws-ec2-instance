@@ -34,6 +34,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "burstable_mode" {
+  type        = string
+  description = "Enable burstable mode for the instance. Can be standard or unlimited. Applicable only for T2/T3/T4g instance types."
+  default     = null
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC that the instance security group belongs to"
