@@ -149,6 +149,10 @@ resource "aws_instance" "default" {
     http_tokens                 = var.metadata_http_tokens_required ? "required" : "optional"
   }
 
+  credit_specification {
+    cpu_credits = var.burstable_mode
+  }
+
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
