@@ -82,8 +82,8 @@ variable "security_group_rules" {
     }
   ]
   description = <<-EOT
-    A list of maps of Security Group rules. 
-    The values of map is fully complated with `aws_security_group_rule` resource. 
+    A list of maps of Security Group rules.
+    The values of map is fully complated with `aws_security_group_rule` resource.
     To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule .
   EOT
 }
@@ -161,7 +161,7 @@ variable "ipv6_addresses" {
 
 variable "root_volume_type" {
   type        = string
-  description = "Type of root volume. Can be standard, gp2 or io1"
+  description = "Type of root volume. Can be standard, gp2, gp3, io1 or io2"
   default     = "gp2"
 }
 
@@ -173,7 +173,13 @@ variable "root_volume_size" {
 
 variable "root_iops" {
   type        = number
-  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set to `io1`"
+  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set of `io1`, `io2` or `gp3`"
+  default     = 0
+}
+
+variable "root_throughput" {
+  type        = number
+  description = "Amount of throughput. This must be set if root_volume_type is set to `gp3`"
   default     = 0
 }
 
@@ -185,7 +191,7 @@ variable "ebs_device_name" {
 
 variable "ebs_volume_type" {
   type        = string
-  description = "The type of the additional EBS volumes. Can be standard, gp2 or io1"
+  description = "The type of the additional EBS volumes. Can be standard, gp2, gp3, io1 or io2"
   default     = "gp2"
 }
 
@@ -203,9 +209,16 @@ variable "ebs_volume_encrypted" {
 
 variable "ebs_iops" {
   type        = number
-  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  description = "Amount of provisioned IOPS. This must be set with a volume_type of `io1`, `io2` or `gp3`"
   default     = 0
 }
+
+variable "ebs_throughput" {
+  type        = number
+  description = "Amount of throughput. This must be set if volume_type is set to `gp3`"
+  default     = 0
+}
+
 
 variable "ebs_volume_count" {
   type        = number
