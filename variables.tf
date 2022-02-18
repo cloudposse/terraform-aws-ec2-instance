@@ -138,7 +138,7 @@ variable "monitoring" {
 variable "private_ip" {
   type        = string
   description = "Private IP address to associate with the instance in the VPC"
-  default     = ""
+  default     = null
 }
 
 variable "source_dest_check" {
