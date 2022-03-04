@@ -345,3 +345,8 @@ variable "ssm_patch_manager_s3_log_bucket" {
   description = "The name of the s3 bucket to export the patch log to"
 }
 
+variable "capacity_reservation_id" {
+  type        = string
+  default     = null
+  description = "The ID of the Capacity Reservation in which to run the instance"
+}

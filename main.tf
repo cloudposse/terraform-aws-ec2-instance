@@ -156,6 +156,12 @@ resource "aws_instance" "default" {
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
+
+  capacity_reservation_specification {
+    capacity_reservation_target {
+      capacity_reservation_id = var.capacity_reservation_id != null ? var.capacity_reservation_id : null
+    }
+  }
 }
 
 resource "aws_eip" "default" {
