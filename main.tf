@@ -145,6 +145,7 @@ resource "aws_instance" "default" {
 
   metadata_options {
     http_endpoint               = var.metadata_http_endpoint_enabled ? "enabled" : "disabled"
+    instance_metadata_tags      = var.metadata_tags_enabled ? "enabled" : "disabled"
     http_put_response_hop_limit = var.metadata_http_put_response_hop_limit
     http_tokens                 = var.metadata_http_tokens_required ? "required" : "optional"
   }
