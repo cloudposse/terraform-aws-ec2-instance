@@ -309,6 +309,12 @@ variable "metadata_http_endpoint_enabled" {
   description = "Whether the metadata service is available"
 }
 
+variable "metadata_tags_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether the tags are enabled in the metadata service."
+}
+
 variable "metadata_http_put_response_hop_limit" {
   type        = number
   default     = 2
