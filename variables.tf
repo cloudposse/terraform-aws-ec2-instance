@@ -311,7 +311,7 @@ variable "metadata_http_endpoint_enabled" {
 
 variable "metadata_tags_enabled" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether the tags are enabled in the metadata service."
 }
 
