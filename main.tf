@@ -9,10 +9,11 @@ locals {
   region                 = var.region != "" ? var.region : data.aws_region.default.name
   root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
   ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
-  availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
+  availability_zone      = var.availability_zone != "" ? var.availability_zone : join("", data.aws_subnet.default.*.availability_zone)
   ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
+  subnet_id              = var.subnet != null ? var.subnet : join("", data.aws_network_interface.existing.*.subnet_id)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
   eip_public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region_domain}"
@@ -32,7 +33,13 @@ data "aws_partition" "default" {
 }
 
 data "aws_subnet" "default" {
-  id = var.subnet
+  count = var.subnet != null ? 1 : 0
+  id    = var.subnet
+}
+
+data "aws_network_interface" "existing" {
+  count = var.existing_network_interface_id != null ? 1 : 0
+  id    = var.existing_network_interface_id
 }
 
 data "aws_iam_policy_document" "default" {
@@ -119,16 +126,16 @@ resource "aws_instance" "default" {
   user_data_base64                     = var.user_data_base64
   iam_instance_profile                 = local.instance_profile
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
-  associate_public_ip_address          = var.associate_public_ip_address
+  associate_public_ip_address          = var.existing_network_interface_id != null ? null : var.associate_public_ip_address
   key_name                             = var.ssh_key_pair
-  subnet_id                            = var.subnet
+  subnet_id                            = var.subnet #set to null by default now
   monitoring                           = var.monitoring
-  private_ip                           = var.private_ip
-  source_dest_check                    = var.source_dest_check
-  ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
-  ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
+  private_ip                           = var.existing_network_interface_id != null ? null : var.private_ip
+  source_dest_check                    = var.existing_network_interface_id != null ? null : var.source_dest_check
+  ipv6_address_count                   = var.existing_network_interface_id != null ? null : (var.ipv6_address_count < 0 ? null : var.ipv6_address_count)
+  ipv6_addresses                       = var.existing_network_interface_id != null ? null : (length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses)
 
-  vpc_security_group_ids = compact(
+  vpc_security_group_ids = var.existing_network_interface_id != null ? null : compact(
     concat(
       formatlist("%s", module.security_group.id),
       var.security_groups
@@ -152,6 +159,15 @@ resource "aws_instance" "default" {
 
   credit_specification {
     cpu_credits = var.burstable_mode
+  }
+
+  dynamic "network_interface" {
+    for_each = toset(compact([var.existing_network_interface_id]))
+
+    content {
+      network_interface_id = network_interface.value != null ? network_interface.value : null
+      device_index         = network_interface.value != null ? 0 : null
+    }
   }
 
   tags = module.this.tags

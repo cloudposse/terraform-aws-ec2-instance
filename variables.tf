@@ -91,6 +91,7 @@ variable "security_group_rules" {
 variable "subnet" {
   type        = string
   description = "VPC Subnet ID the instance is launched in"
+  default     = null
 }
 
 variable "region" {
@@ -349,5 +350,11 @@ variable "ssm_patch_manager_s3_log_bucket" {
   type        = string
   default     = null
   description = "The name of the s3 bucket to export the patch log to"
+}
+
+variable "existing_network_interface_id" {
+  type        = string
+  default     = null
+  description = "The ID of an existing network interface (ENI) to attach to this instance as the primary ENI"
 }
 
