@@ -303,6 +303,13 @@ variable "root_block_device_kms_key_id" {
   description = "KMS key ID used to encrypt EBS volume. When specifying root_block_device_kms_key_id, root_block_device_encrypted needs to be set to true"
 }
 
+variable "ebs_optimized" {
+  type        = bool
+  default     = true
+  description = <<-EOT
+    If true, the launched EC2 instance will be EBS-optimized. Note that if this is not set on an instance type that is optimized by default then this will show as disabled but if the instance type is optimized by default then there is no need to set this and there is no effect to disabling it. See the [EBS Optimized section](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html) of the AWS User Guide for more information.
+  EOT
+}
 variable "metadata_http_tokens_required" {
   type        = bool
   default     = true
