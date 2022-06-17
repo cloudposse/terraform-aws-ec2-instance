@@ -82,8 +82,8 @@ variable "security_group_rules" {
     }
   ]
   description = <<-EOT
-    A list of maps of Security Group rules. 
-    The values of map is fully complated with `aws_security_group_rule` resource. 
+    A list of maps of Security Group rules.
+    The values of map is fully complated with `aws_security_group_rule` resource.
     To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule .
   EOT
 }
@@ -297,6 +297,12 @@ variable "root_block_device_encrypted" {
   description = "Whether to encrypt the root block device"
 }
 
+variable "root_block_device_kms_key_id" {
+  type        = string
+  default     = null
+  description = "KMS key ID used to encrypt EBS volume. When specifying root_block_device_kms_key_id, root_block_device_encrypted needs to be set to true"
+}
+
 variable "metadata_http_tokens_required" {
   type        = bool
   default     = true
@@ -350,7 +356,6 @@ variable "ssm_patch_manager_s3_log_bucket" {
   default     = null
   description = "The name of the s3 bucket to export the patch log to"
 }
-
 variable "capacity_reservation_id" {
   type        = string
   default     = null
