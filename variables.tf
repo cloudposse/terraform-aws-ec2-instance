@@ -162,8 +162,8 @@ variable "ipv6_addresses" {
 variable "root_volume_type" {
   type        = string
   description = "Type of root volume. Can be standard, gp2, gp3, io1 or io2"
-  root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
-  ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
+  root_iops   = var.root_volume_type == "io1" ? var.root_iops : "0"
+  ebs_iops    = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   default     = "gp2"
 }
 
@@ -175,7 +175,7 @@ variable "root_volume_size" {
 
 variable "root_iops" {
   type        = number
-    description = "Amount of provisioned IOPS. This must be set if root_volume_type is set of `io1`, `io2` or `gp3`"
+  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set of `io1`, `io2` or `gp3`"
   default     = 0
 }
 
