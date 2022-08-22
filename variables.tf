@@ -162,8 +162,6 @@ variable "ipv6_addresses" {
 variable "root_volume_type" {
   type        = string
   description = "Type of root volume. Can be standard, gp2, gp3, io1 or io2"
-  root_iops   = var.root_volume_type == "io1" ? var.root_iops : "0"
-  ebs_iops    = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
   default     = "gp2"
 }
 
