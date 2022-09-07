@@ -7,8 +7,10 @@ locals {
   instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
-  root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
-  ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
+  root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : "0"
+  ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : "0"
+  root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : "0"
+  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : "0"
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
@@ -145,8 +147,10 @@ resource "aws_instance" "default" {
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = local.root_iops
+    throughput            = local.root_throughput
     delete_on_termination = var.delete_on_termination
     encrypted             = var.root_block_device_encrypted
+    kms_key_id            = var.root_block_device_kms_key_id
   }
 
   metadata_options {
@@ -177,6 +181,7 @@ resource "aws_ebs_volume" "default" {
   availability_zone = local.availability_zone
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
+  throughput        = local.ebs_throughput
   type              = var.ebs_volume_type
   tags              = module.this.tags
   encrypted         = var.ebs_volume_encrypted
