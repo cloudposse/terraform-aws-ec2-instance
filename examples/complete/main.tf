@@ -1,3 +1,6 @@
+provider "aws" {
+  region = var.region
+}
 
 module "aws_key_pair" {
   source              = "cloudposse/key-pair/aws"
