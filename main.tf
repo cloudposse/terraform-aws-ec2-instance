@@ -10,7 +10,7 @@ locals {
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : "0"
   ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : "0"
   root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : "0"
-  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : "0"
+  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : "125"
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
