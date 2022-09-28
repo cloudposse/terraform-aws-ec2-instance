@@ -129,6 +129,7 @@ resource "aws_instance" "default" {
   source_dest_check                    = var.source_dest_check
   ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
+  tenancy                              = var.tenancy
 
   vpc_security_group_ids = compact(
     concat(
