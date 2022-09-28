@@ -370,7 +370,7 @@ variable "ssm_patch_manager_s3_log_bucket" {
 }
 
 variable "tenancy" {
-  type = string
-  default = "default"
+  type        = string
+  default     = "default"
   description = "Tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of 'dedicated' runs on single-tenant hardware. The 'host' tenancy is not supported for the import-instance command. Valid values are 'default', 'dedicated', and 'host'."
 }
