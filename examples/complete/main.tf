@@ -84,6 +84,7 @@ module "ec2_instance" {
   instance_type               = var.instance_type
   security_group_rules        = var.security_group_rules
   instance_profile            = aws_iam_instance_profile.test.name
+  tenancy                     = var.tenancy
 
   context = module.this.context
 }

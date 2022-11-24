@@ -368,3 +368,13 @@ variable "ssm_patch_manager_s3_log_bucket" {
   default     = null
   description = "The name of the s3 bucket to export the patch log to"
 }
+
+variable "tenancy" {
+  type        = string
+  default     = "default"
+  description = "Tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of 'dedicated' runs on single-tenant hardware. The 'host' tenancy is not supported for the import-instance command. Valid values are 'default', 'dedicated', and 'host'."
+  validation {
+    condition     = contains(["default", "dedicated", "host"], lower(var.tenancy))
+    error_message = "Tenancy field can only be one of default, dedicated, host"
+  }
+}
