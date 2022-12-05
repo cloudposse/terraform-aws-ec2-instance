@@ -9,8 +9,8 @@ resource "null_resource" "check_alarm_action" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "default" {
-  count               = var.disable_alarm_action ? 0 : local.instance_count
-  
+  count = var.disable_alarm_action ? 0 : local.instance_count
+
   alarm_name          = module.this.id
   comparison_operator = var.comparison_operator
   evaluation_periods  = var.evaluation_periods
