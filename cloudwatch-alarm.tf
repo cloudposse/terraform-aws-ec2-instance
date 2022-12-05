@@ -1,7 +1,7 @@
 # Restart dead or hung instance
 
 resource "null_resource" "check_alarm_action" {
-  count = local.instance_count
+  count = var.disable_alarm_action ? 0 : local.instance_count
 
   triggers = {
     action = "arn:${data.aws_partition.default.partition}:swf:${local.region}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
@@ -9,7 +9,8 @@ resource "null_resource" "check_alarm_action" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "default" {
-  count               = local.instance_count
+  count               = var.disable_alarm_action ? 0 : local.instance_count
+  
   alarm_name          = module.this.id
   comparison_operator = var.comparison_operator
   evaluation_periods  = var.evaluation_periods
