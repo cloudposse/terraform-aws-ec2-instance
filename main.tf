@@ -126,6 +126,7 @@ resource "aws_instance" "default" {
   subnet_id                            = var.subnet
   monitoring                           = var.monitoring
   private_ip                           = var.private_ip
+  secondary_private_ips                = var.secondary_private_ips
   source_dest_check                    = var.source_dest_check
   ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
