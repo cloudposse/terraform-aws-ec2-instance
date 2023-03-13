@@ -7,14 +7,14 @@ locals {
   instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
-  root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : "0"
-  ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : "0"
-  root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : "0"
-  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : "0"
+  root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
+  ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : null
+  root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : null
+  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : null
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
   ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
-  root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
+  root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : one(data.aws_ami.info[*].root_device_type)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
   eip_public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region_domain}"
@@ -71,6 +71,8 @@ data "aws_ami" "default" {
 }
 
 data "aws_ami" "info" {
+  count = var.root_volume_type != "" ? 0 : 1
+
   filter {
     name   = "image-id"
     values = [local.ami]
@@ -126,6 +128,7 @@ resource "aws_instance" "default" {
   subnet_id                            = var.subnet
   monitoring                           = var.monitoring
   private_ip                           = var.private_ip
+  secondary_private_ips                = var.secondary_private_ips
   source_dest_check                    = var.source_dest_check
   ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses

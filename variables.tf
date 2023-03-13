@@ -141,6 +141,12 @@ variable "private_ip" {
   default     = null
 }
 
+variable "secondary_private_ips" {
+  type        = list(string)
+  description = "List of secondary private IP addresses to associate with the instance in the VPC"
+  default     = []
+}
+
 variable "source_dest_check" {
   type        = bool
   description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs"
