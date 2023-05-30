@@ -123,9 +123,9 @@ resource "aws_instance" "default" {
   user_data_base64                     = var.user_data_base64
   iam_instance_profile                 = local.instance_profile
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
-  associate_public_ip_address          = var.associate_public_ip_address
+  associate_public_ip_address          = var.external_network_interface_enabled ? null : var.associate_public_ip_address
   key_name                             = var.ssh_key_pair
-  subnet_id                            = var.subnet
+  subnet_id                            = var.external_network_interface_enabled ? null : var.subnet
   monitoring                           = var.monitoring
   private_ip                           = var.private_ip
   secondary_private_ips                = var.secondary_private_ips
@@ -134,13 +134,23 @@ resource "aws_instance" "default" {
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
   tenancy                              = var.tenancy
 
-  vpc_security_group_ids = compact(
+  vpc_security_group_ids = var.external_network_interface_enabled ? null : compact(
     concat(
       formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )
 
+  dynamic "network_interface" {
+    for_each = var.external_network_interface_enabled ? var.external_network_interfaces : []
+    content {
+      delete_on_termination = each.key.delete_on_termination ? each.key.delete_on_termination : false
+      device_index          = each.key.device_index != 0 ? each.key.device_index : 0
+      network_card_index    = each.key.network_card_index != 0 ? each.key.network_card_index : 0
+      network_interface_id  = each.key.network_interface_id
+    }
+
+  }
   root_block_device {
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size

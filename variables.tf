@@ -384,3 +384,20 @@ variable "tenancy" {
     error_message = "Tenancy field can only be one of default, dedicated, host."
   }
 }
+
+variable "external_network_interface_enabled" {
+  type        = bool
+  default     = false
+  description = "Wheter to attach an external ENI as the eth0 interface for the instance. Any change to the interface will force instance recreation."
+}
+
+variable "external_network_interfaces" {
+  type = object({
+    delete_on_termination = bool
+    device_index          = number
+    network_card_index    = number
+    network_interface_id  = string
+  })
+  description = "The external interface definitions to attach to the instances. This depends on the instance type"
+  default     = null
+}
