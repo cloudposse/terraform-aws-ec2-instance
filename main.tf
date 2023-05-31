@@ -3,8 +3,8 @@ locals {
   instance_count = local.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
-  instance_profile_count = module.this.enabled ? (length(var.instance_profile) > 0 ? 0 : 1) : 0
-  instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
+  instance_profile_count = module.this.enabled && var.instance_profile == "" ? 1 : 0
+  instance_profile       = var.instance_profile != "" ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
@@ -81,18 +81,9 @@ data "aws_ami" "info" {
   owners = [local.ami_owner]
 }
 
-# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
-resource "null_resource" "instance_profile_dependency" {
-  count = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
-  triggers = {
-    dependency_id = var.instance_profile
-  }
-}
-
 data "aws_iam_instance_profile" "given" {
-  count      = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
+  count      = local.enabled && var.instance_profile != "" ? 1 : 0
   name       = var.instance_profile
-  depends_on = [null_resource.instance_profile_dependency]
 }
 
 resource "aws_iam_instance_profile" "default" {
@@ -128,9 +119,9 @@ resource "aws_instance" "default" {
   subnet_id                            = var.external_network_interface_enabled ? null : var.subnet
   monitoring                           = var.monitoring
   private_ip                           = var.private_ip
-  secondary_private_ips                = var.secondary_private_ips
-  source_dest_check                    = var.source_dest_check
-  ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
+  secondary_private_ips                = var.external_network_interface_enabled ? null : var.secondary_private_ips
+  source_dest_check                    = var.external_network_interface_enabled ? null : var.source_dest_check
+  ipv6_address_count                   = var.external_network_interface_enabled && var.ipv6_address_count == 0 ? null : var.ipv6_address_count
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
   tenancy                              = var.tenancy
 
@@ -144,10 +135,10 @@ resource "aws_instance" "default" {
   dynamic "network_interface" {
     for_each = var.external_network_interface_enabled ? var.external_network_interfaces : []
     content {
-      delete_on_termination = each.key.delete_on_termination ? each.key.delete_on_termination : false
-      device_index          = each.key.device_index != 0 ? each.key.device_index : 0
-      network_card_index    = each.key.network_card_index != 0 ? each.key.network_card_index : 0
-      network_interface_id  = each.key.network_interface_id
+      delete_on_termination = network_interface.value.delete_on_termination ? network_interface.value.delete_on_termination : false
+      device_index          = network_interface.value.device_index != 0 ? network_interface.value.device_index : 0
+      network_card_index    = network_interface.value.network_card_index != 0 ? network_interface.value.network_card_index : 0
+      network_interface_id  = network_interface.value.network_interface_id
     }
 
   }

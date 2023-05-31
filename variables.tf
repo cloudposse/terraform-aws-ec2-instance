@@ -392,12 +392,12 @@ variable "external_network_interface_enabled" {
 }
 
 variable "external_network_interfaces" {
-  type = object({
+  type = list(object({
     delete_on_termination = bool
     device_index          = number
     network_card_index    = number
     network_interface_id  = string
-  })
+  }))
   description = "The external interface definitions to attach to the instances. This depends on the instance type"
   default     = null
 }
