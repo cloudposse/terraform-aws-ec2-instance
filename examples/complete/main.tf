@@ -86,7 +86,7 @@ module "ec2_instance" {
   instance_profile            = aws_iam_instance_profile.test.name
   tenancy                     = var.tenancy
 
-  depends_on = [ aws_iam_instance_profile.test ]
+  depends_on = [aws_iam_instance_profile.test]
 
   context = module.this.context
 }
