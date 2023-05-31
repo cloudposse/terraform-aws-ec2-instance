@@ -78,7 +78,7 @@ resource "aws_network_interface" "one" {
 }
 
 resource "aws_network_interface" "two" {
-  subnet_id = module.subnets.private_subnet_ids[0]
+  subnet_id       = module.subnets.private_subnet_ids[0]
   security_groups = [module.vpc.vpc_default_security_group_id]
   tags = module.this.tags
 }
