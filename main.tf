@@ -4,7 +4,7 @@ locals {
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
   instance_profile_count = module.this.enabled && var.instance_profile == "" ? 1 : 0
-  instance_profile       = var.instance_profile != "" ? var.instance_profile : join("", aws_iam_instance_profile.default[*].name)
+  instance_profile       = var.instance_profile != "" ? var.instance_profile : one(aws_iam_instance_profile.default[*].name)
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
@@ -12,15 +12,15 @@ locals {
   root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : null
   ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : null
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default[*].image_id)
-  ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default[*].owner_id)
+  ami                    = var.ami != "" ? var.ami : one(data.aws_ami.default[*].image_id)
+  ami_owner              = var.ami != "" ? var.ami_owner : one(data.aws_ami.default[*].owner_id)
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : one(data.aws_ami.info[*].root_device_type)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
-  eip_public_dns = "ec2-${replace(join("", aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}"
+  eip_public_dns = "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}"
   public_dns = (
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
-    local.eip_public_dns : join("", aws_instance.default[*].public_dns)
+    local.eip_public_dns : one(aws_instance.default[*].public_dns)
   )
 }
 
@@ -89,7 +89,7 @@ data "aws_iam_instance_profile" "given" {
 resource "aws_iam_instance_profile" "default" {
   count = local.instance_profile_count
   name  = module.this.id
-  role  = join("", aws_iam_role.default[*].name)
+  role  = one(aws_iam_role.default[*].name)
 }
 
 resource "aws_iam_role" "default" {
@@ -170,7 +170,7 @@ resource "aws_instance" "default" {
 
 resource "aws_eip" "default" {
   count    = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
-  instance = join("", aws_instance.default[*].id)
+  instance = one(aws_instance.default[*].id)
   vpc      = true
   tags     = module.this.tags
 }
@@ -191,5 +191,5 @@ resource "aws_volume_attachment" "default" {
   count       = local.volume_count
   device_name = var.ebs_device_name[count.index]
   volume_id   = aws_ebs_volume.default[*].id[count.index]
-  instance_id = join("", aws_instance.default[*].id)
+  instance_id = one(aws_instance.default[*].id)
 }

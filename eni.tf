@@ -18,7 +18,7 @@ resource "aws_network_interface" "additional" {
 
 resource "aws_network_interface_attachment" "additional" {
   count                = local.additional_ips_count
-  instance_id          = join("", aws_instance.default[*].id)
+  instance_id          = one(aws_instance.default[*].id)
   network_interface_id = aws_network_interface.additional[count.index].id
   device_index         = 1 + count.index
 }
