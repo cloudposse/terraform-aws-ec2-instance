@@ -115,5 +115,5 @@ module "ec2_instance" {
 
   context = module.this.context
 
-  depends_on = [ aws_iam_instance_profile.test ]
+  depends_on = [aws_iam_instance_profile.test]
 }
