@@ -98,19 +98,19 @@ module "ec2_instance" {
   tenancy                            = var.tenancy
   external_network_interface_enabled = true
 
-  external_network_interfaces =  [
-  {
-    delete_on_termination = false
-    device_index          = 0
-    network_card_index    = 0
-    network_interface_id  = aws_network_interface.one.id
-  },
- {
-    delete_on_termination = false
-    device_index          = 1
-    network_card_index    = 0
-    network_interface_id  = aws_network_interface.two.id
-  }
+  external_network_interfaces = [
+    {
+      delete_on_termination = false
+      device_index          = 0
+      network_card_index    = 0
+      network_interface_id  = aws_network_interface.one.id
+    },
+    {
+      delete_on_termination = false
+      device_index          = 1
+      network_card_index    = 0
+      network_interface_id  = aws_network_interface.two.id
+    }
   ]
 
   context = module.this.context
