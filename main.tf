@@ -82,8 +82,8 @@ data "aws_ami" "info" {
 }
 
 data "aws_iam_instance_profile" "given" {
-  count      = local.enabled && var.instance_profile != "" ? 1 : 0
-  name       = var.instance_profile
+  count = local.enabled && var.instance_profile != "" ? 1 : 0
+  name  = var.instance_profile
 }
 
 resource "aws_iam_instance_profile" "default" {
