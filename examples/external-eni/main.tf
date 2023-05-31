@@ -72,7 +72,7 @@ resource "aws_iam_instance_profile" "test" {
 }
 
 resource "aws_network_interface" "one" {
-  subnet_id = module.subnets.private_subnet_ids[0]
+  subnet_id       = module.subnets.private_subnet_ids[0]
   security_groups = [module.vpc.vpc_default_security_group_id]
   tags = module.this.tags
 }
