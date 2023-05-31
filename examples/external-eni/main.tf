@@ -86,16 +86,16 @@ resource "aws_network_interface" "two" {
 module "ec2_instance" {
   source = "../../"
 
-  ssh_key_pair                = module.aws_key_pair.key_name
-  vpc_id                      = module.vpc.vpc_id
-  subnet                      = module.subnets.private_subnet_ids[0]
-  security_groups             = [module.vpc.vpc_default_security_group_id]
-  assign_eip_address          = var.assign_eip_address
-  associate_public_ip_address = var.associate_public_ip_address
-  instance_type               = var.instance_type
-  security_group_rules        = var.security_group_rules
-  instance_profile            = aws_iam_instance_profile.test.name
-  tenancy                     = var.tenancy
+  ssh_key_pair                       = module.aws_key_pair.key_name
+  vpc_id                             = module.vpc.vpc_id
+  subnet                             = module.subnets.private_subnet_ids[0]
+  security_groups                    = [module.vpc.vpc_default_security_group_id]
+  assign_eip_address                 = var.assign_eip_address
+  associate_public_ip_address        = var.associate_public_ip_address
+  instance_type                      = var.instance_type
+  security_group_rules               = var.security_group_rules
+  instance_profile                   = aws_iam_instance_profile.test.name
+  tenancy                            = var.tenancy
   external_network_interface_enabled = true
 
   external_network_interfaces =  [
