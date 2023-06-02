@@ -120,7 +120,7 @@ variable "ami_owner" {
 variable "ebs_optimized" {
   type        = bool
   description = "Launched EC2 instance will be EBS-optimized"
-  default     = false
+  default     = true
 }
 
 variable "disable_api_termination" {
