@@ -87,7 +87,7 @@ output "instance_profile" {
 }
 
 output "security_group_id" {
-  value       = module.security_group.id 
+  value       = module.security_group.id
   description = "EC2 instance Security Group ID"
 }
 
