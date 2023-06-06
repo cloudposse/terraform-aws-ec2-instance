@@ -17,7 +17,7 @@ locals {
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : one(data.aws_ami.info[*].root_device_type)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
-  eip_public_dns = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}" : ""
+  eip_public_dns = module.this.enabled ? "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}" : ""
   public_dns = (
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
     local.eip_public_dns : one(aws_instance.default[*].public_dns)
