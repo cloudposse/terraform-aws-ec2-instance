@@ -73,7 +73,7 @@ output "additional_eni_ids" {
 
 output "ebs_ids" {
   description = "IDs of EBSs"
-  value       = one(aws_ebs_volume.default[*].id)
+  value       = aws_ebs_volume.default[*].id
 }
 
 output "primary_network_interface_id" {
@@ -87,7 +87,7 @@ output "instance_profile" {
 }
 
 output "security_group_id" {
-  value       = module.security_group.id
+  value       = module.security_group.id 
   description = "EC2 instance Security Group ID"
 }
 
