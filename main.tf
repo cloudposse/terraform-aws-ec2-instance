@@ -135,9 +135,9 @@ resource "aws_instance" "default" {
   dynamic "network_interface" {
     for_each = var.external_network_interface_enabled ? var.external_network_interfaces : []
     content {
-      delete_on_termination = network_interface.value.delete_on_termination ? network_interface.value.delete_on_termination : false
-      device_index          = network_interface.value.device_index != 0 ? network_interface.value.device_index : 0
-      network_card_index    = network_interface.value.network_card_index != 0 ? network_interface.value.network_card_index : 0
+      delete_on_termination = network_interface.value.delete_on_termination
+      device_index          = network_interface.value.device_index
+      network_card_index    = network_interface.value.network_card_index
       network_interface_id  = network_interface.value.network_interface_id
     }
 
@@ -190,6 +190,6 @@ resource "aws_ebs_volume" "default" {
 resource "aws_volume_attachment" "default" {
   count       = local.volume_count
   device_name = var.ebs_device_name[count.index]
-  volume_id   = aws_ebs_volume.default[*].id[count.index]
+  volume_id   = one(aws_ebs_volume.default[*].id[count.index])
   instance_id = one(aws_instance.default[*].id)
 }
