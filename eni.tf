@@ -18,13 +18,14 @@ resource "aws_network_interface" "additional" {
 
 resource "aws_network_interface_attachment" "additional" {
   count                = local.additional_ips_count
-  instance_id          = join("", aws_instance.default.*.id)
+  instance_id          = one(aws_instance.default[*].id)
   network_interface_id = aws_network_interface.additional[count.index].id
   device_index         = 1 + count.index
 }
 
 resource "aws_eip" "additional" {
+  #bridgecrew:skip=BC_AWS_NETWORKING_48: Skiping `Ensure all EIP addresses allocated to a VPC are attached to EC2 instances` because it is incorrectly flagging that this instance does not belong to a VPC even though subnet_id is configured.
   count             = local.additional_ips_count
-  vpc               = true
+  domain            = "vpc"
   network_interface = aws_network_interface.additional[count.index].id
 }
