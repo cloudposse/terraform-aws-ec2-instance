@@ -94,10 +94,6 @@ We highly recommend that in your code you pin the version to the exact version y
 using so that your infrastructure remains stable, and update versions in a
 systematic way so that they do not catch you by surprise.
 
-Also, because of a bug in the Terraform registry ([hashicorp/terraform#21417](https://github.com/hashicorp/terraform/issues/21417)),
-the registry shows many of our inputs as required when in fact they are optional.
-The table below correctly indicates which inputs are required.
-
 
 Note: add `${var.ssh_key_pair}` private key to the `ssh agent`.
 
@@ -216,7 +212,7 @@ Available targets:
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_label_ssm_patch_s3_log_policy"></a> [label\_ssm\_patch\_s3\_log\_policy](#module\_label\_ssm\_patch\_s3\_log\_policy) | cloudposse/label/null | 0.25.0 |
-| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | cloudposse/security-group/aws | 0.3.3 |
+| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | cloudposse/security-group/aws | 2.2.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Resources
