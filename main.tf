@@ -172,7 +172,6 @@ resource "aws_eip" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_48: Skiping `Ensure all EIP addresses allocated to a VPC are attached to EC2 instances` because it is incorrectly flagging that this instance does not belong to a VPC even though subnet_id is configured.
   count    = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
   instance = one(aws_instance.default[*].id)
-  domain   = "vpc"
   tags     = module.this.tags
 }
 
