@@ -279,6 +279,12 @@ variable "metric_threshold" {
   default     = 1
 }
 
+variable "disable_alarm_action" {
+  type        = bool
+  default     = false
+  description = "Disable the creation of Alarm Action"
+}
+
 variable "default_alarm_action" {
   type        = string
   default     = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
