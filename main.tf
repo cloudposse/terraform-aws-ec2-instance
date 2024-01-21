@@ -3,8 +3,8 @@ locals {
   instance_count = local.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
-  instance_profile_count = module.this.enabled && var.instance_profile == "" ? 1 : 0
-  instance_profile       = var.instance_profile != "" ? var.instance_profile : one(aws_iam_instance_profile.default[*].name)
+  instance_profile_count = module.this.enabled && var.instance_profile_enabled && var.instance_profile == "" ? 1 : 0
+  instance_profile       = var.instance_profile_enabled && var.instance_profile != "" ? var.instance_profile : (var.instance_profile_enabled ? one(aws_iam_instance_profile.default[*].name) : "")
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
@@ -82,18 +82,18 @@ data "aws_ami" "info" {
 }
 
 data "aws_iam_instance_profile" "given" {
-  count = local.enabled && var.instance_profile != "" ? 1 : 0
+  count = local.enabled && var.instance_profile_enabled && var.instance_profile != "" ? 1 : 0
   name  = var.instance_profile
 }
 
 resource "aws_iam_instance_profile" "default" {
-  count = local.instance_profile_count
+  count = var.instance_profile_enabled ? local.instance_profile_count : 0
   name  = module.this.id
   role  = one(aws_iam_role.default[*].name)
 }
 
 resource "aws_iam_role" "default" {
-  count                = local.instance_profile_count
+  count                = var.instance_profile_enabled ? local.instance_profile_count : 0
   name                 = module.this.id
   path                 = "/"
   assume_role_policy   = data.aws_iam_policy_document.default.json
@@ -112,7 +112,7 @@ resource "aws_instance" "default" {
   disable_api_termination              = var.disable_api_termination
   user_data                            = var.user_data
   user_data_base64                     = var.user_data_base64
-  iam_instance_profile                 = local.instance_profile
+  iam_instance_profile                 = var.instance_profile_enabled ? local.instance_profile : ""
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
   associate_public_ip_address          = var.external_network_interface_enabled ? null : var.associate_public_ip_address
   key_name                             = var.ssh_key_pair

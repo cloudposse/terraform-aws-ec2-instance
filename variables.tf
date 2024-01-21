@@ -309,6 +309,12 @@ variable "instance_profile" {
   default     = ""
 }
 
+variable "instance_profile_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts"
+}
+
 variable "instance_initiated_shutdown_behavior" {
   type        = string
   description = "Specifies whether an instance stops or terminates when you initiate shutdown from the instance. Can be one of 'stop' or 'terminate'."
