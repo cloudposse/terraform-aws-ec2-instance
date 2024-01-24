@@ -279,6 +279,12 @@ variable "metric_threshold" {
   default     = 1
 }
 
+variable "disable_alarm_action" {
+  type        = bool
+  default     = false
+  description = "Disable the creation of Alarm Action"
+}
+
 variable "default_alarm_action" {
   type        = string
   default     = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
@@ -301,6 +307,12 @@ variable "instance_profile" {
   type        = string
   description = "A pre-defined profile to attach to the instance (default is to build our own)"
   default     = ""
+}
+
+variable "instance_profile_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts"
 }
 
 variable "instance_initiated_shutdown_behavior" {
