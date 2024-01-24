@@ -50,12 +50,12 @@ output "security_group_ids" {
 
 output "role" {
   description = "Name of AWS IAM Role associated with the instance"
-  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].name) : one(data.aws_iam_instance_profile.given[*].role_name)
+  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].name) : (var.instance_profile_enabled ? one(data.aws_iam_instance_profile.given[*].role_name) : one([""]))
 }
 
 output "role_arn" {
   description = "ARN of AWS IAM Role associated with the instance"
-  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].arn) : one(data.aws_iam_instance_profile.given[*].role_arn)
+  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].arn) : (var.instance_profile_enabled ? one(data.aws_iam_instance_profile.given[*].role_arn) : one([""]))
 }
 
 output "alarm" {
