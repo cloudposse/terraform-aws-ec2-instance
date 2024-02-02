@@ -20,6 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "default" {
   statistic           = var.statistic_level
   threshold           = var.metric_threshold
   depends_on          = [null_resource.check_alarm_action]
+  treat_missing_data  = var.metric_treat_missing_data
 
   dimensions = {
     InstanceId = one(aws_instance.default[*].id)
