@@ -55,3 +55,5 @@ security_group_rules = [
 ]
 
 ssh_public_key_path = "/secrets"
+
+metric_treat_missing_data = "notBreaching"

@@ -85,6 +85,7 @@ module "ec2_instance" {
   security_group_rules        = var.security_group_rules
   instance_profile            = aws_iam_instance_profile.test.name
   tenancy                     = var.tenancy
+  metric_treat_missing_data   = var.metric_treat_missing_data
 
   depends_on = [aws_iam_instance_profile.test]
 
