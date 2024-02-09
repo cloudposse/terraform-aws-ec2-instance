@@ -284,8 +284,8 @@ variable "metric_treat_missing_data" {
   description = "Sets how this alarm is to handle missing data points. The following values are supported: `missing`, `ignore`, `breaching` and `notBreaching`. Defaults to `missing`."
   default     = "missing"
   validation {
-    condition     = contains(["missing", "ignore", "breaching", "notBreaching"])
-    error_message = "Only following values are supported: `missing`, `ignore`, `breaching`, and `notBreaching`. By default, it is set to `missing`."
+    condition     = contains(["missing", "ignore", "breaching", "notBreaching"], var.metric_treat_missing_data)
+    error_message = "The value of metric_treat_missing_data must be one of the following: \"missing\", \"ignore\", \"breaching\", and \"notBreaching\"."
   }
 }
 
