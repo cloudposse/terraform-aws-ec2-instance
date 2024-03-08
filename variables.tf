@@ -279,6 +279,16 @@ variable "metric_threshold" {
   default     = 1
 }
 
+variable "metric_treat_missing_data" {
+  type        = string
+  description = "Sets how this alarm is to handle missing data points. The following values are supported: `missing`, `ignore`, `breaching` and `notBreaching`. Defaults to `missing`."
+  default     = "missing"
+  validation {
+    condition     = contains(["missing", "ignore", "breaching", "notBreaching"], var.metric_treat_missing_data)
+    error_message = "The value of metric_treat_missing_data must be one of the following: \"missing\", \"ignore\", \"breaching\", and \"notBreaching\"."
+  }
+}
+
 variable "disable_alarm_action" {
   type        = bool
   default     = false
