@@ -66,28 +66,54 @@ resource "aws_iam_role" "test" {
   tags               = module.instance_profile_label.tags
 }
 
-# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
 resource "aws_iam_instance_profile" "test" {
   name = module.instance_profile_label.id
   role = aws_iam_role.test.name
 }
 
+resource "aws_network_interface" "one" {
+  subnet_id       = module.subnets.private_subnet_ids[0]
+  security_groups = [module.vpc.vpc_default_security_group_id]
+  tags            = module.this.tags
+}
+
+resource "aws_network_interface" "two" {
+  subnet_id       = module.subnets.private_subnet_ids[0]
+  security_groups = [module.vpc.vpc_default_security_group_id]
+  tags            = module.this.tags
+}
+
 module "ec2_instance" {
   source = "../../"
 
-  ssh_key_pair                = module.aws_key_pair.key_name
-  vpc_id                      = module.vpc.vpc_id
-  subnet                      = module.subnets.private_subnet_ids[0]
-  security_groups             = [module.vpc.vpc_default_security_group_id]
-  assign_eip_address          = var.assign_eip_address
-  associate_public_ip_address = var.associate_public_ip_address
-  instance_type               = var.instance_type
-  security_group_rules        = var.security_group_rules
-  instance_profile            = aws_iam_instance_profile.test.name
-  tenancy                     = var.tenancy
-  metric_treat_missing_data   = var.metric_treat_missing_data
+  ssh_key_pair                       = module.aws_key_pair.key_name
+  vpc_id                             = module.vpc.vpc_id
+  subnet                             = module.subnets.private_subnet_ids[0]
+  security_groups                    = [module.vpc.vpc_default_security_group_id]
+  assign_eip_address                 = var.assign_eip_address
+  associate_public_ip_address        = var.associate_public_ip_address
+  instance_type                      = var.instance_type
+  security_group_rules               = var.security_group_rules
+  instance_profile                   = aws_iam_instance_profile.test.name
+  tenancy                            = var.tenancy
+  external_network_interface_enabled = true
 
-  depends_on = [aws_iam_instance_profile.test]
+  external_network_interfaces = [
+    {
+      delete_on_termination = false
+      device_index          = 0
+      network_card_index    = 0
+      network_interface_id  = aws_network_interface.one.id
+    },
+    {
+      delete_on_termination = false
+      device_index          = 1
+      network_card_index    = 0
+      network_interface_id  = aws_network_interface.two.id
+    }
+  ]
 
   context = module.this.context
+
+  depends_on = [aws_iam_instance_profile.test]
 }

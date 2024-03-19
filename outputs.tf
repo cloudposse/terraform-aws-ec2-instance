@@ -1,16 +1,16 @@
 output "public_ip" {
   description = "Public IP of instance (or EIP)"
-  value       = concat(aws_eip.default.*.public_ip, aws_instance.default.*.public_ip, [""])[0]
+  value       = concat(aws_eip.default[*].public_ip, aws_instance.default[*].public_ip, [""])[0]
 }
 
 output "private_ip" {
   description = "Private IP of instance"
-  value       = join("", aws_instance.default.*.private_ip)
+  value       = one(aws_instance.default[*].private_ip)
 }
 
 output "private_dns" {
   description = "Private DNS of instance"
-  value       = join("", aws_instance.default.*.private_dns)
+  value       = one(aws_instance.default[*].private_dns)
 }
 
 output "public_dns" {
@@ -20,12 +20,12 @@ output "public_dns" {
 
 output "id" {
   description = "Disambiguated ID of the instance"
-  value       = join("", aws_instance.default.*.id)
+  value       = one(aws_instance.default[*].id)
 }
 
 output "arn" {
   description = "ARN of the instance"
-  value       = join("", aws_instance.default.*.arn)
+  value       = one(aws_instance.default[*].arn)
 }
 
 output "name" {
@@ -50,35 +50,35 @@ output "security_group_ids" {
 
 output "role" {
   description = "Name of AWS IAM Role associated with the instance"
-  value       = local.instance_profile_count > 0 ? join("", aws_iam_role.default.*.name) : join("", data.aws_iam_instance_profile.given.*.role_name)
+  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].name) : (var.instance_profile_enabled ? one(data.aws_iam_instance_profile.given[*].role_name) : one([""]))
 }
 
 output "role_arn" {
   description = "ARN of AWS IAM Role associated with the instance"
-  value       = local.instance_profile_count > 0 ? join("", aws_iam_role.default.*.arn) : join("", data.aws_iam_instance_profile.given.*.role_arn)
+  value       = local.instance_profile_count > 0 ? one(aws_iam_role.default[*].arn) : (var.instance_profile_enabled ? one(data.aws_iam_instance_profile.given[*].role_arn) : one([""]))
 }
 
 output "alarm" {
   description = "CloudWatch Alarm ID"
-  value       = join("", aws_cloudwatch_metric_alarm.default.*.id)
+  value       = one(aws_cloudwatch_metric_alarm.default[*].id)
 }
 
 output "additional_eni_ids" {
   description = "Map of ENI to EIP"
   value = zipmap(
-    aws_network_interface.additional.*.id,
-    aws_eip.additional.*.public_ip
+    aws_network_interface.additional[*].id,
+    aws_eip.additional[*].public_ip
   )
 }
 
 output "ebs_ids" {
   description = "IDs of EBSs"
-  value       = aws_ebs_volume.default.*.id
+  value       = aws_ebs_volume.default[*].id
 }
 
 output "primary_network_interface_id" {
   description = "ID of the instance's primary network interface"
-  value       = join("", aws_instance.default.*.primary_network_interface_id)
+  value       = one(aws_instance.default[*].primary_network_interface_id)
 }
 
 output "instance_profile" {

@@ -3,22 +3,24 @@ locals {
   instance_count = local.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
-  instance_profile_count = module.this.enabled ? (length(var.instance_profile) > 0 ? 0 : 1) : 0
-  instance_profile       = local.instance_profile_count == 0 ? var.instance_profile : join("", aws_iam_instance_profile.default.*.name)
+  instance_profile_count = module.this.enabled && var.instance_profile_enabled && var.instance_profile == "" ? 1 : 0
+  instance_profile       = var.instance_profile_enabled && var.instance_profile != "" ? var.instance_profile : (var.instance_profile_enabled ? one(aws_iam_instance_profile.default[*].name) : "")
   security_group_enabled = module.this.enabled && var.security_group_enabled
   region                 = var.region != "" ? var.region : data.aws_region.default.name
-  root_iops              = var.root_volume_type == "io1" ? var.root_iops : "0"
-  ebs_iops               = var.ebs_volume_type == "io1" ? var.ebs_iops : "0"
+  root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
+  ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : null
+  root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : null
+  ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : null
   availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
-  ami                    = var.ami != "" ? var.ami : join("", data.aws_ami.default.*.image_id)
-  ami_owner              = var.ami != "" ? var.ami_owner : join("", data.aws_ami.default.*.owner_id)
-  root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : data.aws_ami.info.root_device_type
+  ami                    = var.ami != "" ? var.ami : one(data.aws_ami.default[*].image_id)
+  ami_owner              = var.ami != "" ? var.ami_owner : one(data.aws_ami.default[*].owner_id)
+  root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : one(data.aws_ami.info[*].root_device_type)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
-  eip_public_dns = "ec2-${replace(join("", aws_eip.default.*.public_ip), ".", "-")}.${local.region_domain}"
+  eip_public_dns = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}" : ""
   public_dns = (
     var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
-    local.eip_public_dns : join("", aws_instance.default.*.public_dns)
+    local.eip_public_dns : one(aws_instance.default[*].public_dns)
   )
 }
 
@@ -69,6 +71,8 @@ data "aws_ami" "default" {
 }
 
 data "aws_ami" "info" {
+  count = var.root_volume_type != "" ? 0 : 1
+
   filter {
     name   = "image-id"
     values = [local.ami]
@@ -77,28 +81,19 @@ data "aws_ami" "info" {
   owners = [local.ami_owner]
 }
 
-# https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
-resource "null_resource" "instance_profile_dependency" {
-  count = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
-  triggers = {
-    dependency_id = var.instance_profile
-  }
-}
-
 data "aws_iam_instance_profile" "given" {
-  count      = local.enabled && length(var.instance_profile) > 0 ? 1 : 0
-  name       = var.instance_profile
-  depends_on = [null_resource.instance_profile_dependency]
+  count = local.enabled && var.instance_profile_enabled && var.instance_profile != "" ? 1 : 0
+  name  = var.instance_profile
 }
 
 resource "aws_iam_instance_profile" "default" {
-  count = local.instance_profile_count
+  count = var.instance_profile_enabled ? local.instance_profile_count : 0
   name  = module.this.id
-  role  = join("", aws_iam_role.default.*.name)
+  role  = one(aws_iam_role.default[*].name)
 }
 
 resource "aws_iam_role" "default" {
-  count                = local.instance_profile_count
+  count                = var.instance_profile_enabled ? local.instance_profile_count : 0
   name                 = module.this.id
   path                 = "/"
   assume_role_policy   = data.aws_iam_policy_document.default.json
@@ -121,26 +116,39 @@ resource "aws_instance" "default" {
   user_data_replace_on_change          = var.user_data_replace_on_change
   iam_instance_profile                 = local.instance_profile
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
-  associate_public_ip_address          = var.associate_public_ip_address
+  associate_public_ip_address          = var.external_network_interface_enabled ? null : var.associate_public_ip_address
   key_name                             = var.ssh_key_pair
-  subnet_id                            = var.subnet
+  subnet_id                            = var.external_network_interface_enabled ? null : var.subnet
   monitoring                           = var.monitoring
   private_ip                           = var.private_ip
-  source_dest_check                    = var.source_dest_check
-  ipv6_address_count                   = var.ipv6_address_count < 0 ? null : var.ipv6_address_count
+  secondary_private_ips                = var.external_network_interface_enabled ? null : var.secondary_private_ips
+  source_dest_check                    = var.external_network_interface_enabled ? null : var.source_dest_check
+  ipv6_address_count                   = var.external_network_interface_enabled && var.ipv6_address_count == 0 ? null : var.ipv6_address_count
   ipv6_addresses                       = length(var.ipv6_addresses) == 0 ? null : var.ipv6_addresses
+  tenancy                              = var.tenancy
 
-  vpc_security_group_ids = compact(
+  vpc_security_group_ids = var.external_network_interface_enabled ? null : compact(
     concat(
       formatlist("%s", module.security_group.id),
       var.security_groups
     )
   )
 
+  dynamic "network_interface" {
+    for_each = var.external_network_interface_enabled ? var.external_network_interfaces : []
+    content {
+      delete_on_termination = network_interface.value.delete_on_termination
+      device_index          = network_interface.value.device_index
+      network_card_index    = network_interface.value.network_card_index
+      network_interface_id  = network_interface.value.network_interface_id
+    }
+
+  }
   root_block_device {
     volume_type           = local.root_volume_type
     volume_size           = var.root_volume_size
     iops                  = local.root_iops
+    throughput            = local.root_throughput
     delete_on_termination = var.delete_on_termination
     encrypted             = var.root_block_device_encrypted
     kms_key_id            = var.root_block_device_kms_key_id
@@ -157,15 +165,22 @@ resource "aws_instance" "default" {
     cpu_credits = var.burstable_mode
   }
 
+  lifecycle {
+    ignore_changes = [
+      ami
+    ]
+  }
+
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
 }
 
 resource "aws_eip" "default" {
+  #bridgecrew:skip=BC_AWS_NETWORKING_48: Skiping `Ensure all EIP addresses allocated to a VPC are attached to EC2 instances` because it is incorrectly flagging that this instance does not belong to a VPC even though subnet_id is configured.
   count    = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
-  instance = join("", aws_instance.default.*.id)
-  vpc      = true
+  instance = one(aws_instance.default[*].id)
+  domain   = "vpc"
   tags     = module.this.tags
 }
 
@@ -174,6 +189,7 @@ resource "aws_ebs_volume" "default" {
   availability_zone = local.availability_zone
   size              = var.ebs_volume_size
   iops              = local.ebs_iops
+  throughput        = local.ebs_throughput
   type              = var.ebs_volume_type
   tags              = module.this.tags
   encrypted         = var.ebs_volume_encrypted
@@ -183,6 +199,6 @@ resource "aws_ebs_volume" "default" {
 resource "aws_volume_attachment" "default" {
   count       = local.volume_count
   device_name = var.ebs_device_name[count.index]
-  volume_id   = aws_ebs_volume.default.*.id[count.index]
-  instance_id = join("", aws_instance.default.*.id)
+  volume_id   = aws_ebs_volume.default[count.index].id
+  instance_id = one(aws_instance.default[*].id)
 }

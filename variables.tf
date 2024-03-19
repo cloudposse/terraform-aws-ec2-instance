@@ -126,7 +126,7 @@ variable "ami_owner" {
 variable "ebs_optimized" {
   type        = bool
   description = "Launched EC2 instance will be EBS-optimized"
-  default     = false
+  default     = true
 }
 
 variable "disable_api_termination" {
@@ -145,6 +145,12 @@ variable "private_ip" {
   type        = string
   description = "Private IP address to associate with the instance in the VPC"
   default     = null
+}
+
+variable "secondary_private_ips" {
+  type        = list(string)
+  description = "List of secondary private IP addresses to associate with the instance in the VPC"
+  default     = []
 }
 
 variable "source_dest_check" {
@@ -167,7 +173,7 @@ variable "ipv6_addresses" {
 
 variable "root_volume_type" {
   type        = string
-  description = "Type of root volume. Can be standard, gp2 or io1"
+  description = "Type of root volume. Can be standard, gp2, gp3, io1 or io2"
   default     = "gp2"
 }
 
@@ -179,7 +185,13 @@ variable "root_volume_size" {
 
 variable "root_iops" {
   type        = number
-  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set to `io1`"
+  description = "Amount of provisioned IOPS. This must be set if root_volume_type is set of `io1`, `io2` or `gp3`"
+  default     = 0
+}
+
+variable "root_throughput" {
+  type        = number
+  description = "Amount of throughput. This must be set if root_volume_type is set to `gp3`"
   default     = 0
 }
 
@@ -191,7 +203,7 @@ variable "ebs_device_name" {
 
 variable "ebs_volume_type" {
   type        = string
-  description = "The type of the additional EBS volumes. Can be standard, gp2 or io1"
+  description = "The type of the additional EBS volumes. Can be standard, gp2, gp3, io1 or io2"
   default     = "gp2"
 }
 
@@ -209,7 +221,13 @@ variable "ebs_volume_encrypted" {
 
 variable "ebs_iops" {
   type        = number
-  description = "Amount of provisioned IOPS. This must be set with a volume_type of io1"
+  description = "Amount of provisioned IOPS. This must be set with a volume_type of `io1`, `io2` or `gp3`"
+  default     = 0
+}
+
+variable "ebs_throughput" {
+  type        = number
+  description = "Amount of throughput. This must be set if volume_type is set to `gp3`"
   default     = 0
 }
 
@@ -267,6 +285,22 @@ variable "metric_threshold" {
   default     = 1
 }
 
+variable "metric_treat_missing_data" {
+  type        = string
+  description = "Sets how this alarm is to handle missing data points. The following values are supported: `missing`, `ignore`, `breaching` and `notBreaching`. Defaults to `missing`."
+  default     = "missing"
+  validation {
+    condition     = contains(["missing", "ignore", "breaching", "notBreaching"], var.metric_treat_missing_data)
+    error_message = "The value of metric_treat_missing_data must be one of the following: \"missing\", \"ignore\", \"breaching\", and \"notBreaching\"."
+  }
+}
+
+variable "disable_alarm_action" {
+  type        = bool
+  default     = false
+  description = "Disable the creation of Alarm Action"
+}
+
 variable "default_alarm_action" {
   type        = string
   default     = "action/actions/AWS_EC2.InstanceId.Reboot/1.0"
@@ -289,6 +323,12 @@ variable "instance_profile" {
   type        = string
   description = "A pre-defined profile to attach to the instance (default is to build our own)"
   default     = ""
+}
+
+variable "instance_profile_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts"
 }
 
 variable "instance_initiated_shutdown_behavior" {
@@ -361,4 +401,31 @@ variable "ssm_patch_manager_s3_log_bucket" {
   type        = string
   default     = null
   description = "The name of the s3 bucket to export the patch log to"
+}
+
+variable "tenancy" {
+  type        = string
+  default     = "default"
+  description = "Tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of 'dedicated' runs on single-tenant hardware. The 'host' tenancy is not supported for the import-instance command. Valid values are 'default', 'dedicated', and 'host'."
+  validation {
+    condition     = contains(["default", "dedicated", "host"], lower(var.tenancy))
+    error_message = "Tenancy field can only be one of default, dedicated, host."
+  }
+}
+
+variable "external_network_interface_enabled" {
+  type        = bool
+  default     = false
+  description = "Wheter to attach an external ENI as the eth0 interface for the instance. Any change to the interface will force instance recreation."
+}
+
+variable "external_network_interfaces" {
+  type = list(object({
+    delete_on_termination = bool
+    device_index          = number
+    network_card_index    = number
+    network_interface_id  = string
+  }))
+  description = "The external interface definitions to attach to the instances. This depends on the instance type"
+  default     = null
 }
