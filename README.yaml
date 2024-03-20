@@ -1,39 +1,42 @@
 name: terraform-aws-ec2-instance
 tags:
-- aws
-- terraform
-- terraform-modules
-- platform
-- ec2
-- instance
-- security
-- ansible
+  - aws
+  - terraform
+  - terraform-modules
+  - platform
+  - ec2
+  - instance
+  - security
+  - ansible
 categories:
-- terraform-modules/platform
+  - terraform-modules/platform
 license: APACHE2
 github_repo: cloudposse/terraform-aws-ec2-instance
 badges:
-- name: Latest Release
-  image: https://img.shields.io/github/release/cloudposse/terraform-aws-ec2-instance.svg
-  url: https://github.com/cloudposse/terraform-aws-ec2-instance/releases/latest
-- name: Slack Community
-  image: https://slack.cloudposse.com/badge.svg
-  url: https://slack.cloudposse.com
+  - name: Latest Release
+    image: https://img.shields.io/github/release/cloudposse/terraform-aws-ec2-instance.svg?style=for-the-badge
+    url: https://github.com/cloudposse/terraform-aws-ec2-instance/releases/latest
+  - name: Last Updated
+    image: https://img.shields.io/github/last-commit/cloudposse/terraform-aws-ec2-instance.svg?style=for-the-badge
+    url: https://github.com/cloudposse/terraform-aws-ec2-instance/commits
+  - name: Slack Community
+    image: https://slack.cloudposse.com/for-the-badge.svg
+    url: https://slack.cloudposse.com
+
+# List any related terraform modules that this module may be used with or that this module depends on.
 related:
-- name: terraform-aws-ec2-ami-backup
-  description: Terraform module for automatic & scheduled AMI creation
-  url: https://github.com/cloudposse/terraform-aws-ec2-ami-backup
-- name: terraform-aws-ec2-ami-snapshot
-  description: Terraform module to easily generate AMI snapshots to create replica
-    instances
-  url: https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot
-- name: terraform-aws-ec2-cloudwatch-sns-alarms
-  description: Terraform module that configures CloudWatch SNS alerts for EC2 instances
-  url: https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms
-- name: terraform-null-label
-  description: Terraform Module to define a consistent naming convention by (namespace,
-    stage, name, [attributes])
-  url: https://github.com/cloudposse/terraform-null-label
+  - name: terraform-aws-ec2-ami-backup
+    description: Terraform module for automatic & scheduled AMI creation
+    url: https://github.com/cloudposse/terraform-aws-ec2-ami-backup
+  - name: terraform-aws-ec2-ami-snapshot
+    description: Terraform module to easily generate AMI snapshots to create replica instances
+    url: https://github.com/cloudposse/terraform-aws-ec2-ami-snapshot
+  - name: terraform-aws-ec2-cloudwatch-sns-alarms
+    description: Terraform module that configures CloudWatch SNS alerts for EC2 instances
+    url: https://github.com/cloudposse/terraform-aws-ec2-cloudwatch-sns-alarms
+  - name: terraform-null-label
+    description: Terraform Module to define a consistent naming convention by (namespace, stage, name, [attributes])
+    url: https://github.com/cloudposse/terraform-null-label
 description: |-
   Terraform Module for provisioning a general purpose EC2 host.
 
@@ -122,33 +125,10 @@ usage: |-
   }
   ```
 references:
-- name: terraform-aws-ec2-bastion-server
-  description: Terraform Module to define a generic Bastion host with parameterized
-    user_data
-  url: https://github.com/cloudposse/terraform-aws-ec2-bastion-server
+  - name: terraform-aws-ec2-bastion-server
+    description: Terraform Module to define a generic Bastion host with parameterized user_data
+    url: https://github.com/cloudposse/terraform-aws-ec2-bastion-server
 include:
-- docs/targets.md
-- docs/terraform.md
-contributors:
-- name: Erik Osterman
-  github: osterman
-- name: Igor Rodionov
-  github: goruha
-- name: Andriy Knysh
-  github: aknysh
-- name: Sergey Vasilyev
-  github: s2504s
-- name: Valeriy
-  github: drama17
-- name: Ivan Pinatti
-  github: ivan-pinatti
-- name: Vladimir Syromyatnikov
-  github: SweetOps
-- name: Konstantin B
-  github: comeanother
-- name: Maarten van der Hoef
-  github: maartenvanderhoef
-- name: Chris Weyl
-  github: rsrchboy
-- name: Yonatan Koren
-  github: korenyoni
+  - docs/targets.md
+  - docs/terraform.md
+contributors: []
