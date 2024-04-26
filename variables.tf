@@ -331,6 +331,13 @@ variable "instance_profile_enabled" {
   description = "Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts"
 }
 
+
+variable "instance_profile_created_at_the_same_run" {
+  type = bool
+  default = false
+  description = "Whether the instance profile is created at the same terraform apply"
+}
+
 variable "instance_initiated_shutdown_behavior" {
   type        = string
   description = "Specifies whether an instance stops or terminates when you initiate shutdown from the instance. Can be one of 'stop' or 'terminate'."

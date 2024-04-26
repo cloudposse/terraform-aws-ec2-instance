@@ -82,7 +82,7 @@ data "aws_ami" "info" {
 }
 
 data "aws_iam_instance_profile" "given" {
-  count = local.enabled && var.instance_profile_enabled && var.instance_profile != "" ? 1 : 0
+  count = local.enabled && var.instance_profile_enabled && var.instance_profile != "" && !var.instance_profile_created_at_the_same_run ? 1 : 0
   name  = var.instance_profile
 }
 
