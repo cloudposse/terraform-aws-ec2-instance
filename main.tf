@@ -110,6 +110,7 @@ resource "aws_instance" "default" {
   availability_zone                    = local.availability_zone
   instance_type                        = var.instance_type
   ebs_optimized                        = var.ebs_optimized
+  disable_api_stop                     = var.disable_api_stop
   disable_api_termination              = var.disable_api_termination
   user_data                            = var.user_data
   user_data_base64                     = var.user_data_base64
