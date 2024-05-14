@@ -129,6 +129,12 @@ variable "ebs_optimized" {
   default     = true
 }
 
+variable "disable_api_stop" {
+  type        = bool
+  description = "Enable EC2 Instance Stop Protection"
+  default     = false
+}
+
 variable "disable_api_termination" {
   type        = bool
   description = "Enable EC2 Instance Termination Protection"
