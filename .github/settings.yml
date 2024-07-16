@@ -5,3 +5,4 @@ repository:
   description: Terraform module for provisioning a general purpose EC2 host
   homepage: https://cloudposse.com/accelerate
   topics: aws, ec2, security, instance, ansible, terraform, terraform-modules, hcl2
+
