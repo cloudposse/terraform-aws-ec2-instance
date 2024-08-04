@@ -248,6 +248,7 @@ Available targets:
 | <a name="input_force_detach_ebs"></a> [force\_detach\_ebs](#input\_force\_detach\_ebs) | force the volume/s to detach from the instance. | `bool` | `false` | no |
 | <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br/>Set to `0` for unlimited length.<br/>Set to `null` for keep the existing setting, which defaults to `0`.<br/>Does not affect `id_full`. | `number` | `null` | no |
 | <a name="input_instance_initiated_shutdown_behavior"></a> [instance\_initiated\_shutdown\_behavior](#input\_instance\_initiated\_shutdown\_behavior) | Specifies whether an instance stops or terminates when you initiate shutdown from the instance. Can be one of 'stop' or 'terminate'. | `string` | `null` | no |
+| <a name="input_instance_market_options_enabled"></a> [instance\_market\_options\_enabled](#input\_instance\_market\_options\_enabled) | Wheter to enable the purchasing option for the instances | `bool` | `false` | no |
 | <a name="input_instance_profile"></a> [instance\_profile](#input\_instance\_profile) | A pre-defined profile to attach to the instance (default is to build our own) | `string` | `""` | no |
 | <a name="input_instance_profile_enabled"></a> [instance\_profile\_enabled](#input\_instance\_profile\_enabled) | Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts | `bool` | `true` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The type of the instance | `string` | `"t2.micro"` | no |
@@ -286,6 +287,7 @@ Available targets:
 | <a name="input_security_group_use_name_prefix"></a> [security\_group\_use\_name\_prefix](#input\_security\_group\_use\_name\_prefix) | Whether to create a default Security Group with unique name beginning with the normalized prefix. | `bool` | `false` | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | A list of Security Group IDs to associate with EC2 instance. | `list(string)` | `[]` | no |
 | <a name="input_source_dest_check"></a> [source\_dest\_check](#input\_source\_dest\_check) | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs | `bool` | `true` | no |
+| <a name="input_spot_options_attributes"></a> [spot\_options\_attributes](#input\_spot\_options\_attributes) | Describes the market (purchasing) option for the instances.<br>To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options . | <pre>list(object({<br>    instance_interruption_behavior = string    <br>    max_price                      = number<br>    spot_instance_type             = string<br>    valid_until                    = string<br>  }))</pre> | `null` | no |
 | <a name="input_ssh_key_pair"></a> [ssh\_key\_pair](#input\_ssh\_key\_pair) | SSH key pair to be provisioned on the instance | `string` | `null` | no |
 | <a name="input_ssm_patch_manager_enabled"></a> [ssm\_patch\_manager\_enabled](#input\_ssm\_patch\_manager\_enabled) | Whether to enable SSM Patch manager | `bool` | `false` | no |
 | <a name="input_ssm_patch_manager_iam_policy_arn"></a> [ssm\_patch\_manager\_iam\_policy\_arn](#input\_ssm\_patch\_manager\_iam\_policy\_arn) | IAM policy ARN to allow Patch Manager to manage the instance. If not provided, `arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore` will be used | `string` | `null` | no |
@@ -312,6 +314,7 @@ Available targets:
 | <a name="output_arn"></a> [arn](#output\_arn) | ARN of the instance |
 | <a name="output_ebs_ids"></a> [ebs\_ids](#output\_ebs\_ids) | IDs of EBSs |
 | <a name="output_id"></a> [id](#output\_id) | Disambiguated ID of the instance |
+| <a name="output_instance_lifecycle"></a> [instance\_lifecycle](#output\_instance\_lifecycle) | Indicates whether this is a Spot Instance or a Scheduled Instance |
 | <a name="output_instance_profile"></a> [instance\_profile](#output\_instance\_profile) | Name of the instance's profile (either built or supplied) |
 | <a name="output_name"></a> [name](#output\_name) | Instance name |
 | <a name="output_primary_network_interface_id"></a> [primary\_network\_interface\_id](#output\_primary\_network\_interface\_id) | ID of the instance's primary network interface |
@@ -325,6 +328,7 @@ Available targets:
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | EC2 instance Security Group ID |
 | <a name="output_security_group_ids"></a> [security\_group\_ids](#output\_security\_group\_ids) | IDs on the AWS Security Groups associated with the instance |
 | <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | EC2 instance Security Group name |
+| <a name="output_spot_instance_request_id"></a> [spot\_instance\_request\_id](#output\_spot\_instance\_request\_id) | the ID of the Spot Instance request |
 | <a name="output_ssh_key_pair"></a> [ssh\_key\_pair](#output\_ssh\_key\_pair) | Name of the SSH key pair provisioned on the instance |
 <!-- markdownlint-restore -->
 
