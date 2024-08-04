@@ -46,6 +46,32 @@ variable "burstable_mode" {
   default     = null
 }
 
+variable "instance_market_options_enabled" {
+  type        = bool
+  description = "Wheter to enable the purchasing option for the instances"
+  default     = false
+}
+
+variable "market_type" {
+  type        = string
+  description = "Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if `spot_options` is specified."
+  default     = "spot"
+}
+
+variable "spot_options_attributes" {
+  type = list(object({
+    instance_interruption_behavior = string    
+    max_price                      = number
+    spot_instance_type             = string
+    valid_until                    = string
+  }))
+  description = <<-EOT
+    Describes the market (purchasing) option for the instances.
+    To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options .
+  EOT
+  default     = null
+}
+
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC that the instance security group belongs to"
