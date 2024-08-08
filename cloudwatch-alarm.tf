@@ -29,4 +29,6 @@ resource "aws_cloudwatch_metric_alarm" "default" {
   alarm_actions = [
     null_resource.check_alarm_action[count.index].triggers.action
   ]
+
+  tags = module.this.tags
 }
