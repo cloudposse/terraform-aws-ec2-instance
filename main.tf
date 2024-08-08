@@ -90,6 +90,8 @@ resource "aws_iam_instance_profile" "default" {
   count = var.instance_profile_enabled ? local.instance_profile_count : 0
   name  = module.this.id
   role  = one(aws_iam_role.default[*].name)
+
+  tags = module.this.tags
 }
 
 resource "aws_iam_role" "default" {
