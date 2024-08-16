@@ -69,7 +69,7 @@ variable "spot_options_attributes" {
     Describes the market (purchasing) option for the instances.
     To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options .
   EOT
-  default     = null
+  default     = []
 }
 
 variable "vpc_id" {
