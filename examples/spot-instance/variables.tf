@@ -65,7 +65,7 @@ variable "instance_market_options_enabled" {
 
 variable "market_type" {
   type        = string
-  description = "(Optional) Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if `spot_options` is specified."
+  description = "(Optional) Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if a non-empty value is provided for `spot_options_attributes`."
   default     = "spot"
 }
 
@@ -80,5 +80,5 @@ variable "spot_options_attributes" {
     Describes the market (purchasing) option for the instances.
     To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options .
   EOT
-  default     = null
+  default     = []
 }
