@@ -192,22 +192,6 @@ resource "aws_instance" "default" {
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
 
-  dynamic "instance_market_options" {
-    for_each = var.instance_market_options_enabled ? [var.spot_options_attributes] : []
-    content {
-      market_type = var.market_type
-      
-      dynamic "spot_options" {
-        for_each = var.market_type == "spot" ? var.spot_options_attributes : []
-        content {
-          instance_interruption_behavior = spot_options.value.instance_interruption_behavior
-          max_price                      = spot_options.value.max_price
-          spot_instance_type             = spot_options.value.spot_instance_type
-          valid_until                    = spot_options.value.valid_until
-        }
-      }
-    }
-  }
 }
 
 resource "aws_eip" "default" {
