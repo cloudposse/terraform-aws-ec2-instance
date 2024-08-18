@@ -71,7 +71,7 @@ variable "market_type" {
 
 variable "spot_options_attributes" {
   type = list(object({
-    instance_interruption_behavior = string    
+    instance_interruption_behavior = string
     max_price                      = number
     spot_instance_type             = string
     valid_until                    = string

@@ -191,7 +191,6 @@ resource "aws_instance" "default" {
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
-
 }
 
 resource "aws_eip" "default" {
