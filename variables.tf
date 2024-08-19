@@ -48,7 +48,7 @@ variable "burstable_mode" {
 
 variable "instance_market_options_enabled" {
   type        = bool
-  description = "Wheter to enable the purchasing option for the instances"
+  description = "Whether to enable the purchasing option for the instances"
   default     = false
 }
 
