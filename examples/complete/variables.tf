@@ -57,12 +57,6 @@ variable "metric_treat_missing_data" {
   }
 }
 
-variable "instance_market_options_enabled" {
-  type        = bool
-  description = "Wheter to enable the purchasing option for the instances"
-  default     = false
-}
-
 variable "market_type" {
   type        = string
   description = "(Optional) Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if a non-empty value is provided for `spot_options_attributes`."

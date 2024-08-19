@@ -114,11 +114,11 @@ output "security_group_name" {
 }
 
 output "instance_lifecycle" {
-  value       = var.instance_market_options_enabled ? module.ec2_instance.instance_lifecycle : null
+  value       = var.spot_options_attributes != [] ? module.ec2_instance.instance_lifecycle : null
   description = "Indicates whether this is a Spot Instance or a Scheduled Instance"
 }
 
 output "spot_instance_request_id" {
-  value       = var.instance_market_options_enabled && var.market_type == "spot" ? module.ec2_instance.spot_instance_request_id : null
+  value       = var.spot_options_attributes != [] && var.market_type == "spot" ? module.ec2_instance.spot_instance_request_id : null
   description = "the ID of the Spot Instance request"
 }

@@ -88,7 +88,6 @@
 | <a name="input_external_network_interfaces"></a> [external\_network\_interfaces](#input\_external\_network\_interfaces) | The external interface definitions to attach to the instances. This depends on the instance type | <pre>list(object({<br>    delete_on_termination = bool<br>    device_index          = number<br>    network_card_index    = number<br>    network_interface_id  = string<br>  }))</pre> | `null` | no |
 | <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br>Set to `0` for unlimited length.<br>Set to `null` for keep the existing setting, which defaults to `0`.<br>Does not affect `id_full`. | `number` | `null` | no |
 | <a name="input_instance_initiated_shutdown_behavior"></a> [instance\_initiated\_shutdown\_behavior](#input\_instance\_initiated\_shutdown\_behavior) | Specifies whether an instance stops or terminates when you initiate shutdown from the instance. Can be one of 'stop' or 'terminate'. | `string` | `null` | no |
-| <a name="input_instance_market_options_enabled"></a> [instance\_market\_options\_enabled](#input\_instance\_market\_options\_enabled) | Wheter to enable the purchasing option for the instances | `bool` | `false` | no |
 | <a name="input_instance_profile"></a> [instance\_profile](#input\_instance\_profile) | A pre-defined profile to attach to the instance (default is to build our own) | `string` | `""` | no |
 | <a name="input_instance_profile_enabled"></a> [instance\_profile\_enabled](#input\_instance\_profile\_enabled) | Whether an IAM instance profile is created to pass a role to an Amazon EC2 instance when the instance starts | `bool` | `true` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The type of the instance | `string` | `"t2.micro"` | no |
@@ -168,6 +167,6 @@
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | EC2 instance Security Group ID |
 | <a name="output_security_group_ids"></a> [security\_group\_ids](#output\_security\_group\_ids) | IDs on the AWS Security Groups associated with the instance |
 | <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | EC2 instance Security Group name |
-| <a name="output_spot_instance_request_id"></a> [spot\_instance\_request\_id](#output\_spot\_instance\_request\_id) | the ID of the Spot Instance request |
+| <a name="output_spot_instance_request_id"></a> [spot\_instance\_request\_id](#output\_spot\_instance\_request\_id) | ID of the Spot Instance request |
 | <a name="output_ssh_key_pair"></a> [ssh\_key\_pair](#output\_ssh\_key\_pair) | Name of the SSH key pair provisioned on the instance |
 <!-- markdownlint-restore -->

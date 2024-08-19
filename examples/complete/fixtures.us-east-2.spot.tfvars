@@ -58,8 +58,6 @@ ssh_public_key_path = "/secrets"
 
 metric_treat_missing_data = "notBreaching"
 
-instance_market_options_enabled = true
-
 market_type = "spot"
 
 spot_options_attributes = [{
