@@ -182,12 +182,6 @@ resource "aws_instance" "default" {
       }
   }
 
-  lifecycle {
-    ignore_changes = [
-      ami
-    ]
-  }
-
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
