@@ -168,16 +168,16 @@ resource "aws_instance" "default" {
     cpu_credits = var.burstable_mode
   }
 
+  tags = module.this.tags
+
+  volume_tags = var.volume_tags_enabled ? module.this.tags : {}
+
   lifecycle {
     ignore_changes = [
       ami,
       associate_public_ip_address,
     ]
   }
-
-  tags = module.this.tags
-
-  volume_tags = var.volume_tags_enabled ? module.this.tags : {}
 }
 
 resource "aws_eip" "default" {
