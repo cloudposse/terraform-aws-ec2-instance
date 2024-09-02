@@ -174,7 +174,6 @@ resource "aws_instance" "default" {
 
   lifecycle {
     ignore_changes = [
-      ami,
       associate_public_ip_address,
     ]
   }
