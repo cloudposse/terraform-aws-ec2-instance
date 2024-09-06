@@ -37,7 +37,7 @@ variable "user_data_replace_on_change" {
 variable "instance_type" {
   type        = string
   description = "The type of the instance"
-  default     = "t2.micro"
+  default     = "t2.small"
 }
 
 variable "burstable_mode" {
