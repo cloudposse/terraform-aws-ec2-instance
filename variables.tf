@@ -123,6 +123,12 @@ variable "ami_owner" {
   default     = ""
 }
 
+variable "ignore_ami_changes" {
+  type        = bool
+  description = "Do not recreate the EC2 instance if proivided AMI image ID changes"
+  default     = false
+}
+
 variable "ebs_optimized" {
   type        = bool
   description = "Launched EC2 instance will be EBS-optimized"

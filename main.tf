@@ -171,6 +171,10 @@ resource "aws_instance" "default" {
   tags = module.this.tags
 
   volume_tags = var.volume_tags_enabled ? module.this.tags : {}
+
+  lifecycle {
+    ignore_changes = var.ignore_ami_changes ? [ami] : []
+  }
 }
 
 resource "aws_eip" "default" {
