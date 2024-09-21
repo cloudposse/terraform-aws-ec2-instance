@@ -62,7 +62,7 @@ market_type = "spot"
 
 spot_options_attributes = [{
   instance_interruption_behavior = "terminate"
-  max_price                      = 0.004700
+  max_price                      = null
   spot_instance_type             = "one-time"
   valid_until                    = null
 }]
