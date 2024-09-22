@@ -61,7 +61,7 @@ variable "spot_options_attributes" {
   }))
   description = <<-EOT
     Describes the market (purchasing) option for the instances.
-    To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options .
+    See [docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options) for more information.
   EOT
   default     = []
 }
