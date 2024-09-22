@@ -48,8 +48,8 @@ variable "burstable_mode" {
 
 variable "market_type" {
   type        = string
-  description = "Type of market for the instance. Valid values are `spot` and `capacity-block`. Defaults to `spot`. Required if a non-empty value is provided for `spot_options_attributes`."
-  default     = "spot"
+  description = "(Optional) Type of market for the instance. Valid values are `spot` and `capacity-block`. If the value set is `spot`, the `spot_options_attributes` variable becomes adjustable."
+  default     = null
 }
 
 variable "spot_options_attributes" {
