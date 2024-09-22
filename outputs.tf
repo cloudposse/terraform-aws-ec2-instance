@@ -107,6 +107,6 @@ output "instance_lifecycle" {
 }
 
 output "spot_instance_request_id" {
-  value       = length(var.spot_options_attributes[*]) != 0 && var.market_type == "spot" ? aws_instance.default[*].spot_instance_request_id : null
+  value       = try(one(aws_instance.default[*].spot_instance_request_id), null)
   description = "ID of the Spot Instance request"
 }
