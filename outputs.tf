@@ -102,7 +102,7 @@ output "security_group_name" {
 }
 
 output "instance_lifecycle" {
-  value       = length(var.spot_options_attributes[*]) != 0 ? aws_instance.default[*].instance_lifecycle : null
+  value       = try(one(aws_instance.default[*].instance_lifecycle), null)
   description = "Indicates whether this is a Spot Instance or a Scheduled Instance"
 }
 
