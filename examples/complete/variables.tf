@@ -63,16 +63,23 @@ variable "market_type" {
   default     = null
 }
 
-variable "spot_options_attributes" {
-  type = list(object({
-    instance_interruption_behavior = string
-    max_price                      = number
-    spot_instance_type             = string
-    valid_until                    = string
-  }))
+variable "instance_market_options" {
+  type = object({
+    market_type = string
+    spot_options = optional(object({
+      instance_interruption_behavior = optional(string)
+      max_price                      = optional(number)
+      spot_instance_type             = optional(string)
+      valid_until                    = optional(string)
+    }))
+  })
   description = <<-EOT
     Describes the market (purchasing) option for the instances.
-    To get more info see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options .
+    See [docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options) for more information.
   EOT
-  default     = []
+  default     = null
+  validation {
+    condition     = contains(["spot", "capacity-block"], var.instance_market_options.market_type)
+    error_message = "The value of market_type must be one of the following: \"spot\" and \"capacity-block\"."
+  }
 }

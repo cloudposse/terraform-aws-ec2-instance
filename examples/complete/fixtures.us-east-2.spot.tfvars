@@ -58,11 +58,12 @@ ssh_public_key_path = "/secrets"
 
 metric_treat_missing_data = "notBreaching"
 
-market_type = "spot"
-
-spot_options_attributes = [{
-  instance_interruption_behavior = "terminate"
-  max_price                      = null
-  spot_instance_type             = "one-time"
-  valid_until                    = null
-}]
+instance_market_options = {
+  market_type = "spot"
+  spot_options = {
+    instance_interruption_behavior = "terminate"
+    max_price                      = null
+    spot_instance_type             = "one-time"
+    valid_until                    = null
+  }
+}

@@ -168,16 +168,20 @@ resource "aws_instance" "default" {
     cpu_credits = var.burstable_mode
   }
 
-  instance_market_options {
-    market_type = var.market_type
+  dynamic "instance_market_options" {
+    for_each = var.instance_market_options != null ? [var.instance_market_options] : []
+    content {
+      market_type = lookup(instance_market_options.value, "market_type", null)
 
-    dynamic "spot_options" {
-      for_each = var.market_type == "spot" ? var.spot_options_attributes : []
-      content {
-        instance_interruption_behavior = spot_options.value.instance_interruption_behavior
-        max_price                      = spot_options.value.max_price
-        spot_instance_type             = spot_options.value.spot_instance_type
-        valid_until                    = spot_options.value.valid_until
+      dynamic "spot_options" {
+        for_each = (instance_market_options.value.spot_options != null ?
+        [instance_market_options.value.spot_options] : [])
+        content {
+          instance_interruption_behavior = lookup(spot_options.value, "instance_interruption_behavior", null)
+          max_price                      = lookup(spot_options.value, "max_price", null)
+          spot_instance_type             = lookup(spot_options.value, "spot_instance_type", null)
+          valid_until                    = lookup(spot_options.value, "valid_until", null)
+        }
       }
     }
   }
