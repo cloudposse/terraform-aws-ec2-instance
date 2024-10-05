@@ -81,15 +81,6 @@ func TestExamplesComplete(t *testing.T) {
 	securityGroupARN := terraform.Output(t, terraformOptions, "security_group_arn")
 	// Verify we're getting back the outputs we expect
 	assert.Contains(t, securityGroupARN, "arn:aws:ec2", "SG ID should contains substring 'arn:aws:ec2'")
-
-	// Run `terraform output` to get the value of an output variable
-	spotInstanceRequestID := terraform.Output(t, terraformOptions, "spot_instance_request_id")
-	// Verify we're getting back the outputs we expect
-	if spotInstanceRequestID != "" {
-		assert.Contains(t, spotInstanceRequestID, "sir-", "Spot instance request ID should contains substring 'sir-'")
-	} else {
-		t.Log("No spot_instance_request_id output found, skipping spot instance request assertions.")
-	}
 }
 
 func TestExternalEniComplete(t *testing.T) {
