@@ -73,7 +73,7 @@ variable "instance_market_options" {
   EOT
   default     = null
   validation {
-    condition     = contains(["spot", "capacity-block"], var.instance_market_options.market_type)
+    condition     = var.instance_market_options != null ? contains(["spot", "capacity-block"], var.instance_market_options.market_type) : true
     error_message = "The value of market_type must be one of the following: \"spot\" and \"capacity-block\"."
   }
 }
