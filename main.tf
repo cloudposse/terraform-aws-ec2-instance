@@ -193,8 +193,10 @@ resource "aws_ebs_volume" "default" {
 }
 
 resource "aws_volume_attachment" "default" {
-  count       = local.volume_count
-  device_name = var.ebs_device_name[count.index]
-  volume_id   = aws_ebs_volume.default[count.index].id
-  instance_id = one(aws_instance.default[*].id)
+  count                          = local.volume_count
+  device_name                    = var.ebs_device_name[count.index]
+  volume_id                      = aws_ebs_volume.default[count.index].id
+  instance_id                    = one(aws_instance.default[*].id)
+  force_detach                   = var.force_detach_ebs
+  stop_instance_before_detaching = var.stop_ec2_before_detaching_vol
 }

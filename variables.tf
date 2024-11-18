@@ -435,3 +435,15 @@ variable "external_network_interfaces" {
   description = "The external interface definitions to attach to the instances. This depends on the instance type"
   default     = null
 }
+
+variable "force_detach_ebs" {
+  type        = bool
+  default     = false
+  description = "force the volume/s to detach from the instance."
+}
+
+variable "stop_ec2_before_detaching_vol" {
+  type        = bool
+  default     = false
+  description = "Set this to true to ensure that the target instance is stopped before trying to detach the volume/s."
+}
