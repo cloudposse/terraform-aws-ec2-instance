@@ -100,3 +100,13 @@ output "security_group_name" {
   value       = module.security_group.name
   description = "EC2 instance Security Group name"
 }
+
+output "instance_lifecycle" {
+  value       = try(one(aws_instance.default[*].instance_lifecycle), null)
+  description = "Indicates whether this is a Spot Instance or a Scheduled Instance"
+}
+
+output "spot_instance_request_id" {
+  value       = try(one(aws_instance.default[*].spot_instance_request_id), null)
+  description = "ID of the Spot Instance request"
+}

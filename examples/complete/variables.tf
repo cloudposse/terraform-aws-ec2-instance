@@ -56,3 +56,24 @@ variable "metric_treat_missing_data" {
     error_message = "The value of metric_treat_missing_data must be one of the following: \"missing\", \"ignore\", \"breaching\", and \"notBreaching\"."
   }
 }
+
+variable "instance_market_options" {
+  type = object({
+    market_type = string
+    spot_options = optional(object({
+      instance_interruption_behavior = optional(string)
+      max_price                      = optional(number)
+      spot_instance_type             = optional(string)
+      valid_until                    = optional(string)
+    }))
+  })
+  description = <<-EOT
+    Describes the market (purchasing) option for the instances.
+    See [docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#spot-options) for more information.
+  EOT
+  default     = null
+  validation {
+    condition     = var.instance_market_options != null ? contains(["spot", "capacity-block"], var.instance_market_options.market_type) : true
+    error_message = "The value of market_type must be one of the following: \"spot\" and \"capacity-block\"."
+  }
+}

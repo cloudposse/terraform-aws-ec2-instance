@@ -86,6 +86,7 @@ module "ec2_instance" {
   instance_profile            = aws_iam_instance_profile.test.name
   tenancy                     = var.tenancy
   metric_treat_missing_data   = var.metric_treat_missing_data
+  instance_market_options     = var.instance_market_options
 
   depends_on = [aws_iam_instance_profile.test]
 
