@@ -38,7 +38,7 @@ data "aws_partition" "default" {
 
 data "aws_subnet" "default" {
   count = local.enabled ? 1 : 0
-  id = var.subnet
+  id    = var.subnet
 }
 
 data "aws_iam_policy_document" "default" {
