@@ -1,7 +1,8 @@
 
 locals {
   ssm_patch_log_bucket_enabled = local.ssm_enabled && var.ssm_patch_manager_s3_log_bucket != "" && var.ssm_patch_manager_s3_log_bucket != null
-  ssm_policy_arn               = var.ssm_patch_manager_iam_policy_arn == null || var.ssm_patch_manager_iam_policy_arn == "" ? "arn:${data.aws_partition.default.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy_arn
+  partition                    = module.this.enabled ? one(data.aws_partition.default[*].partition) : ""
+  ssm_policy_arn               = var.ssm_patch_manager_iam_policy_arn == null || var.ssm_patch_manager_iam_policy_arn == "" ? "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore" : var.ssm_patch_manager_iam_policy_arn
   ssm_enabled                  = local.enabled && var.ssm_patch_manager_enabled
 }
 
@@ -25,8 +26,8 @@ data "aws_iam_policy_document" "ssm_patch_s3_log_policy" {
       "s3:GetEncryptionConfiguration",
     ]
     resources = [
-      "arn:${data.aws_partition.default.partition}:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
-      "arn:${data.aws_partition.default.partition}:s3:::${var.ssm_patch_manager_s3_log_bucket}",
+      "arn:${try(data.aws_partition.default[0].partition, null)}:s3:::${var.ssm_patch_manager_s3_log_bucket}/*",
+      "arn:${try(data.aws_partition.default[0].partition, null)}:s3:::${var.ssm_patch_manager_s3_log_bucket}",
     ]
   }
 }

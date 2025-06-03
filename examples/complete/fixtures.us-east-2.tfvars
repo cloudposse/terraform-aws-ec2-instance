@@ -1,4 +1,4 @@
-enabled = true
+# enabled = true
 
 region = "us-east-2"
 
@@ -54,6 +54,6 @@ security_group_rules = [
   },
 ]
 
-ssh_public_key_path = "/secrets"
+ssh_public_key_path = "/tmp/secrets"
 
 metric_treat_missing_data = "notBreaching"
