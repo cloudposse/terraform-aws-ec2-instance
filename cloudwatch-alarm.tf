@@ -4,7 +4,7 @@ resource "null_resource" "check_alarm_action" {
   count = var.disable_alarm_action ? 0 : local.instance_count
 
   triggers = {
-    action = "arn:${data.aws_partition.default.partition}:swf:${local.region}:${data.aws_caller_identity.default.account_id}:${var.default_alarm_action}"
+    action = "arn:${try(data.aws_partition.default[0].partition, null)}:swf:${local.region}:${try(data.aws_caller_identity.default[0].account_id, null)}:${var.default_alarm_action}"
   }
 }
 

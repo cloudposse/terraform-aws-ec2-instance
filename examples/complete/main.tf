@@ -11,6 +11,8 @@ module "aws_key_pair" {
   attributes          = module.this.attributes
   ssh_public_key_path = var.ssh_public_key_path
   generate_ssh_key    = true
+
+  context = module.this.context
 }
 
 module "vpc" {
@@ -24,7 +26,7 @@ module "vpc" {
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "2.3.0"
+  version = "2.4.2"
 
   availability_zones   = var.availability_zones
   vpc_id               = module.vpc.vpc_id
@@ -46,6 +48,7 @@ module "instance_profile_label" {
 }
 
 data "aws_iam_policy_document" "test" {
+  count = module.this.enabled ? 1 : 0
   statement {
     effect = "Allow"
 
@@ -61,15 +64,19 @@ data "aws_iam_policy_document" "test" {
 }
 
 resource "aws_iam_role" "test" {
+  count = module.this.enabled ? 1 : 0
+
   name               = module.instance_profile_label.id
-  assume_role_policy = data.aws_iam_policy_document.test.json
+  assume_role_policy = one(data.aws_iam_policy_document.test[*].json)
   tags               = module.instance_profile_label.tags
 }
 
 # https://github.com/hashicorp/terraform-guides/tree/master/infrastructure-as-code/terraform-0.13-examples/module-depends-on
 resource "aws_iam_instance_profile" "test" {
+  count = module.this.enabled ? 1 : 0
+
   name = module.instance_profile_label.id
-  role = aws_iam_role.test.name
+  role = aws_iam_role.test[0].name
 }
 
 module "ec2_instance" {
@@ -77,13 +84,13 @@ module "ec2_instance" {
 
   ssh_key_pair                = module.aws_key_pair.key_name
   vpc_id                      = module.vpc.vpc_id
-  subnet                      = module.subnets.private_subnet_ids[0]
+  subnet                      = module.this.enabled ? module.subnets.private_subnet_ids[0] : null
   security_groups             = [module.vpc.vpc_default_security_group_id]
   assign_eip_address          = var.assign_eip_address
   associate_public_ip_address = var.associate_public_ip_address
   instance_type               = var.instance_type
   security_group_rules        = var.security_group_rules
-  instance_profile            = aws_iam_instance_profile.test.name
+  instance_profile            = module.this.enabled ? aws_iam_instance_profile.test[0].name : null
   tenancy                     = var.tenancy
   metric_treat_missing_data   = var.metric_treat_missing_data
 

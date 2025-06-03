@@ -3,41 +3,47 @@ locals {
   instance_count = local.enabled ? 1 : 0
   volume_count   = var.ebs_volume_count > 0 && local.instance_count > 0 ? var.ebs_volume_count : 0
   # create an instance profile if the instance is enabled and we aren't given one to use
-  instance_profile_count = module.this.enabled && var.instance_profile_enabled && var.instance_profile == "" ? 1 : 0
+  instance_profile_count = local.enabled && var.instance_profile_enabled && var.instance_profile == "" ? 1 : 0
   instance_profile       = var.instance_profile_enabled && var.instance_profile != "" ? var.instance_profile : (var.instance_profile_enabled ? one(aws_iam_instance_profile.default[*].name) : "")
-  security_group_enabled = module.this.enabled && var.security_group_enabled
-  region                 = var.region != "" ? var.region : data.aws_region.default.name
+  security_group_enabled = local.enabled && var.security_group_enabled
+  region                 = local.enabled ? coalesce(var.region, one(data.aws_region.default[*].name)) : ""
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
   ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : null
   root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : null
   ebs_throughput         = var.ebs_volume_type == "gp3" ? var.ebs_throughput : null
-  availability_zone      = var.availability_zone != "" ? var.availability_zone : data.aws_subnet.default.availability_zone
+  availability_zone      = var.availability_zone != "" ? var.availability_zone : try(data.aws_subnet.default[0].availability_zone, null)
   ami                    = var.ami != "" ? var.ami : one(data.aws_ami.default[*].image_id)
   ami_owner              = var.ami != "" ? var.ami_owner : one(data.aws_ami.default[*].owner_id)
   root_volume_type       = var.root_volume_type != "" ? var.root_volume_type : one(data.aws_ami.info[*].root_device_type)
 
   region_domain  = local.region == "us-east-1" ? "compute-1.amazonaws.com" : "${local.region}.compute.amazonaws.com"
-  eip_public_dns = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}" : ""
+  eip_public_dns = var.associate_public_ip_address && var.assign_eip_address && local.enabled ? "ec2-${replace(one(aws_eip.default[*].public_ip), ".", "-")}.${local.region_domain}" : ""
   public_dns = (
-    var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ?
+    var.associate_public_ip_address && var.assign_eip_address && local.enabled ?
     local.eip_public_dns : one(aws_instance.default[*].public_dns)
   )
 }
 
 data "aws_caller_identity" "default" {
+  count = local.enabled ? 1 : 0
 }
 
 data "aws_region" "default" {
+  count = local.enabled ? 1 : 0
 }
 
 data "aws_partition" "default" {
+  count = local.enabled ? 1 : 0
 }
 
 data "aws_subnet" "default" {
-  id = var.subnet
+  count = local.enabled ? 1 : 0
+  id    = var.subnet
 }
 
 data "aws_iam_policy_document" "default" {
+  count = local.enabled ? 1 : 0
+
   statement {
     sid = ""
 
@@ -54,12 +60,12 @@ data "aws_iam_policy_document" "default" {
   }
 }
 data "aws_ami" "default" {
-  count       = var.ami == "" ? 1 : 0
+  count       = local.enabled && var.ami == "" ? 1 : 0
   most_recent = "true"
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
   filter {
@@ -71,7 +77,7 @@ data "aws_ami" "default" {
 }
 
 data "aws_ami" "info" {
-  count = var.root_volume_type != "" ? 0 : 1
+  count = local.enabled && var.root_volume_type == "" ? 1 : 0
 
   filter {
     name   = "image-id"
@@ -95,10 +101,10 @@ resource "aws_iam_instance_profile" "default" {
 }
 
 resource "aws_iam_role" "default" {
-  count                = var.instance_profile_enabled ? local.instance_profile_count : 0
+  count                = local.enabled && var.instance_profile_enabled ? local.instance_profile_count : 0
   name                 = module.this.id
   path                 = "/"
-  assume_role_policy   = data.aws_iam_policy_document.default.json
+  assume_role_policy   = one(data.aws_iam_policy_document.default[*].json)
   permissions_boundary = var.permissions_boundary_arn
   tags                 = module.this.tags
 }
@@ -175,7 +181,7 @@ resource "aws_instance" "default" {
 
 resource "aws_eip" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_48: Skiping `Ensure all EIP addresses allocated to a VPC are attached to EC2 instances` because it is incorrectly flagging that this instance does not belong to a VPC even though subnet_id is configured.
-  count    = var.associate_public_ip_address && var.assign_eip_address && module.this.enabled ? 1 : 0
+  count    = var.associate_public_ip_address && var.assign_eip_address && local.enabled ? 1 : 0
   instance = one(aws_instance.default[*].id)
   tags     = module.this.tags
 }

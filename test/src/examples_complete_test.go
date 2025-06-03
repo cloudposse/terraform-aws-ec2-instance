@@ -3,6 +3,7 @@ package test
 import (
 	"math/rand"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -12,8 +13,6 @@ import (
 
 // Test the Terraform module in examples/complete using Terratest.
 func TestExamplesComplete(t *testing.T) {
-	t.Parallel()
-
 	rand.Seed(time.Now().UnixNano())
 
 	randId := strconv.Itoa(rand.Intn(100000))
@@ -27,6 +26,7 @@ func TestExamplesComplete(t *testing.T) {
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Vars: map[string]interface{}{
 			"attributes": attributes,
+			"enabled":    "true",
 		},
 	}
 
@@ -84,8 +84,6 @@ func TestExamplesComplete(t *testing.T) {
 }
 
 func TestExternalEniComplete(t *testing.T) {
-	t.Parallel()
-
 	rand.Seed(time.Now().UnixNano())
 
 	randId := strconv.Itoa(rand.Intn(100000))
@@ -148,4 +146,36 @@ func TestExternalEniComplete(t *testing.T) {
 	securityGroupARN := terraform.Output(t, terraformOptions, "security_group_arn")
 	// Verify we're getting back the outputs we expect
 	assert.Contains(t, securityGroupARN, "arn:aws:ec2", "SG ID should contains substring 'arn:aws:ec2'")
+}
+
+// Test the Terraform module in examples/complete using Terratest.
+func TestDisabled(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+
+	randId := strconv.Itoa(rand.Intn(100000))
+	attributes := []string{randId}
+
+	terraformOptions := &terraform.Options{
+		// The path to where our Terraform code is located
+		TerraformDir: "../../examples/complete",
+		Upgrade:      true,
+		// Variables to pass to our Terraform code using -var-file options
+		VarFiles: []string{"fixtures.us-east-2.tfvars"},
+		Vars: map[string]interface{}{
+			"attributes": attributes,
+			"enabled":    "false",
+		},
+	}
+
+	// At the end of the test, run `terraform destroy` to clean up any resources that were created
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.Init(t, terraformOptions)
+	plan := terraform.Plan(t, terraformOptions)
+	planContainsNoChanges := strings.Contains(plan, "No changes.") || strings.Contains(plan, "0 to add, 0 to change, 0 to destroy.") || !strings.Contains(plan, "Plan")
+
+	assert.True(t, planContainsNoChanges)
+
+	planContainsNoAMIsearch := !strings.Contains(plan, "module.ec2_instance.data.aws_ami.default[0]: Reading...") && !strings.Contains(plan, "module.ec2_instance.data.aws_ami.info[0]: Reading...")
+	assert.True(t, planContainsNoAMIsearch)
 }
