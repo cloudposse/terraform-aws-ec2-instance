@@ -6,7 +6,7 @@ locals {
   instance_profile_count = local.enabled && var.instance_profile_enabled && var.instance_profile == "" ? 1 : 0
   instance_profile       = var.instance_profile_enabled && var.instance_profile != "" ? var.instance_profile : (var.instance_profile_enabled ? one(aws_iam_instance_profile.default[*].name) : "")
   security_group_enabled = local.enabled && var.security_group_enabled
-  region                 = local.enabled ? coalesce(var.region, one(data.aws_region.default[*].name)) : ""
+  region                 = local.enabled ? coalesce(var.region, one(data.aws_region.default[*].region)) : ""
   root_iops              = contains(["io1", "io2", "gp3"], var.root_volume_type) ? var.root_iops : null
   ebs_iops               = contains(["io1", "io2", "gp3"], var.ebs_volume_type) ? var.ebs_iops : null
   root_throughput        = var.root_volume_type == "gp3" ? var.root_throughput : null
